@@ -1,6 +1,7 @@
 package com.example.softwareproject.controller;
 
 import com.example.softwareproject.entity.Customer;
+import com.example.softwareproject.entity.RequestInfo;
 import com.example.softwareproject.mapper.CustomerMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,13 +53,15 @@ public class CustomerController {
     }
     @PostMapping("/requestRecharge")
     @ResponseBody
+    //使用ResponseBody，且返回String先去resource里面找是否存在视图，不存在的话封装为json数据回传给前端
+    //可以用于ajax的success函数
     public  String requestRecharge()
     {
 
     }
     @PostMapping("/enterChargeField")
     @ResponseBody
-    public  String enterChargeField()
+    public  String enterChargeField(@ModelAttribute RequestInfo requestInfo)
     {
 
     }
