@@ -3,6 +3,8 @@ package com.example.softwareproject.controller;
 import com.example.softwareproject.entity.Customer;
 import com.example.softwareproject.entity.RequestInfo;
 import com.example.softwareproject.mapper.CustomerMapper;
+import com.example.softwareproject.service.ChargingStation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpSession;
 public class CustomerController {
     @Resource
     CustomerMapper customerMapper;
+    @Autowired
+    ChargingStation chargingStation;
 
     @GetMapping("/register")
     public String register(){
@@ -55,13 +59,13 @@ public class CustomerController {
     @ResponseBody
     //使用ResponseBody，且返回String先去resource里面找是否存在视图，不存在的话封装为json数据回传给前端
     //可以用于ajax的success函数
-    public  String requestRecharge()
+    public  String requestRecharge(@ModelAttribute RequestInfo requestInfo)
     {
-
+        chargingStation.requestRecharge(requestInfo);
     }
     @PostMapping("/enterChargeField")
     @ResponseBody
-    public  String enterChargeField(@ModelAttribute RequestInfo requestInfo)
+    public  String enterChargeField()
     {
 
     }
