@@ -20,7 +20,7 @@ public class FastChargingPile implements ChargingPile {
         chargingQueue.add(car);
         return true;
     }
-    public Car changeRequest(long id)
+    public Car cancelRequest(long id)
     {
         for(int i=0;i<chargingQueue.size();++i)
             if(chargingQueue.get(i).getId()==id)

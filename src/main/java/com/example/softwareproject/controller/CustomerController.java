@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/customer")
@@ -150,12 +151,7 @@ public class CustomerController {
         //不在则说明在充电区
         if(car.equals(null))
         {
-            if(chargingField.changeRequestMode(requestInfo.getId(),requestInfo.getChargingMode())==false)
-            {
                 return "changeRequestModeFailed";
-            }
-            //重新加入等候区
-
         }
         requestInfo.setChargingMode(newMode);
         QueryWrapper queryWrapper=new QueryWrapper();
@@ -167,24 +163,58 @@ public class CustomerController {
     }
     @PostMapping("/cancelRecharge")
     @ResponseBody
-    public  String cancelRecharge()
+    public  String cancelRecharge(@ModelAttribute RequestInfo requestInfo)
     {
+        //需要判断是从等候区还是从充电区取消，以及取消订单和详单
+        Car car=chargingStation.getCarByUserId(requestInfo.getId(),requestInfo.getChargingMode());
+        if(car.equals(null))
+        {
+            if(chargingField.cancelRequest(requestInfo.getId(),requestInfo.getChargingMode())==false)
+            {
+                return "cancelRequestModeFailed";
+            }
+        }
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userId",requestInfo.getId());
+        billMapper.delete(queryWrapper);
+        detailBillMapper.delete(queryWrapper);
 
         return "secondpages";
     }
+    @GetMapping("/requestQueue")
+    public String requestQueuePages()
+    {
+        return "thirdpages";
+    }
     @PostMapping("/requestQueue")
     @ResponseBody
-    public  String requestQueue()
+    public List<Car> requestQueue(@ModelAttribute RequestInfo requestInfo)
     {
         //需要配合前端界面
-
-        return "thirdpages";
+        if(requestInfo.getCarState().equals("waiting"))
+        {
+            if(requestInfo.getChargingMode().equals("fast"))
+            return chargingStation.getWaitingQueue().getFastWaitingQueue();
+            else
+                return chargingStation.getWaitingQueue().getSlowWaitingQueue();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    @GetMapping("/requestBill")
+    public String requestBillPage()
+    {
+        return "billpages";
     }
     @PostMapping("/requestBill")
     @ResponseBody
-    public  String requestBill()
+    public  Bill requestBill(@ModelAttribute RequestInfo requestInfo)
     {
         //需要配合前端界面
-        return "billpages";
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userId",requestInfo.getId());
+        return billMapper.selectOne(queryWrapper);
     }
 }
