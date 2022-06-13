@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-@Data
 @Service
+@Data
 public class ChargingField {
     private int maxChargingNum;
     private int maxFastPileNum;
@@ -61,7 +61,7 @@ public class ChargingField {
             slowChargingPile.dequeue();
         }
     }
-    public boolean changeRequestMode(long userid,String oldMode)
+    public boolean cancelRequest(long userid, String oldMode)
     {
         if(oldMode.equals("fast"))
         {
@@ -72,7 +72,7 @@ public class ChargingField {
                 {
                     if(cars.get(j).getId()==userid)
                     {
-                        Car car=fastChargingPiles.get(i).changeRequest(userid);
+                        Car car=fastChargingPiles.get(i).cancelRequest(userid);
                         if(car.equals(null))
                         {
                             return false;

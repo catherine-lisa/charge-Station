@@ -2,6 +2,7 @@ package com.example.softwareproject.service;
 
 import com.example.softwareproject.entity.Car;
 import com.example.softwareproject.entity.RequestInfo;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Queue;
 
 @Service
+@Data
 public class WaitingQueue {
     private int maxWaitingNum;
     List<Car> fastWaitingQueue=new LinkedList<>();
@@ -71,4 +73,5 @@ public class WaitingQueue {
             return slowWaitingQueue.remove(0);
         }
     }
+
 }
