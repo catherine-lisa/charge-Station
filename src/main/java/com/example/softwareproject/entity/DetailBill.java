@@ -1,7 +1,9 @@
 package com.example.softwareproject.entity;
 
-import java.util.Date;
+import lombok.Data;
 
+import java.util.Date;
+@Data
 public class DetailBill {
     private long billId;
     private long userId;

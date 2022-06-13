@@ -61,54 +61,53 @@ public class CustomerController {
     //可以用于ajax的success函数
     public  String requestRecharge(@ModelAttribute RequestInfo requestInfo)
     {
-        chargingStation.requestRecharge(requestInfo);
+        return chargingStation.requestRecharge(requestInfo);
     }
     @PostMapping("/enterChargeField")
     @ResponseBody
     public  String enterChargeField()
     {
-
+        return chargingStation.updateWaitingQueue();
     }
     @PostMapping("/startRecharge")
     @ResponseBody
     public  String startRecharge()
     {
-
+        return "success";
     }
     @PostMapping("/endRecharge")
     @ResponseBody
     public  String endRecharge()
     {
-
+        return "success";
     }
     @PostMapping("/payBill")
-    @ResponseBody
     public  String payBill()
     {
-
+        return "secondpages";
     }
     @PostMapping("/changeRequestMode")
     @ResponseBody
     public  String changeRequestMode()
     {
-
+        return "success";
     }
     @PostMapping("/cancelRecharge")
     @ResponseBody
     public  String cancelRecharge()
     {
-
+        return "secondpages";
     }
     @PostMapping("/requestQueue")
     @ResponseBody
     public  String requestQueue()
     {
-
+        return "thirdpages";
     }
     @PostMapping("/requestBill")
     @ResponseBody
     public  String requestBill()
     {
-
+        return "billpages";
     }
 }
