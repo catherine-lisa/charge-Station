@@ -4,22 +4,27 @@ package com.example.softwareproject.service;
 import com.example.softwareproject.entity.Car;
 import com.example.softwareproject.entity.FastChargingPile;
 import com.example.softwareproject.entity.SlowChargingPile;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Data
 @Service
 public class ChargingField {
     private int maxChargingNum;
     private int maxFastPileNum;
     private int maxSlowPileNum;
+    private int fastPilePower;
+    private int slowPilePower;
     private ArrayList<FastChargingPile> fastChargingPiles;
     private ArrayList<SlowChargingPile> slowChargingPiles;
     public ChargingField(){
         maxChargingNum=5;
         maxFastPileNum=2;
         maxSlowPileNum=2;
+        fastPilePower=30;
+        slowPilePower=10;
         fastChargingPiles=new ArrayList<>();
         slowChargingPiles=new ArrayList<>();
         for(int i=0;i<maxFastPileNum;++i)
