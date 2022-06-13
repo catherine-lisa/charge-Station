@@ -12,15 +12,16 @@ import java.util.Queue;
 @Service
 public class WaitingQueue {
     private int maxWaitingNum;
-    Queue<Car> waitingQueue=new LinkedList<>();
+    Queue<Car> fastWaitingQueue=new LinkedList<>();
+    Queue<Car> slowWaitingQueue=new LinkedList<>();
     public boolean isAvailabe(){
-        if(waitingQueue.size()<maxWaitingNum)
+        if(slowWaitingQueue.size()+fastWaitingQueue.size()<maxWaitingNum)
         {
             return true;
         }
         else return false;
     }
-    public String join(RequestInfo requestInfo)
+    public String fastJoin(RequestInfo requestInfo)
     {
         if(isAvailabe())
         {
@@ -30,13 +31,19 @@ public class WaitingQueue {
             car.setCarType(requestInfo.getCarType());
             car.setLocation(requestInfo.getLocation());
             car.setNowCapacity(requestInfo.getNowCapacity());
-            waitingQueue.add(car);
+            if(requestInfo.getChargingMode().equals("fast"))
+            fastWaitingQueue.add(car);
+            else slowWaitingQueue.add(car);
         }
         else return "joinFailed";
         return "success";
     }
-    public Car updateWaitingQueue()
+    public Car updateWaitingQueue(String mode)
     {
-        return waitingQueue.remove();
+        if(mode.equals("fast"))
+        return fastWaitingQueue.remove();
+        else{
+            return slowWaitingQueue.remove();
+        }
     }
 }

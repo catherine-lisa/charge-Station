@@ -11,4 +11,5 @@ public class Car {
     public String carType;
     public float carCapacity;
     public float nowCapacity;
+    public String carState;//标注是否正处于充电状态
 }

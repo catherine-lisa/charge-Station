@@ -12,8 +12,8 @@ public class ChargingField {
     private int maxChargingNum;
     private int maxFastPileNum;
     private int maxSlowPileNum;
-    ArrayList<FastChargingPile> fastChargingPiles;
-    ArrayList<SlowChargingPile> slowChargingPiles;
+    private ArrayList<FastChargingPile> fastChargingPiles;
+    private ArrayList<SlowChargingPile> slowChargingPiles;
     public ChargingField(){
         maxChargingNum=5;
         maxFastPileNum=2;
@@ -35,5 +35,25 @@ public class ChargingField {
             slowChargingPiles.add(chargingPile);
         }
     }
+    public FastChargingPile getFastChargingPileById(int id){
+        return fastChargingPiles.get(id);
+    }
+    public SlowChargingPile getSlowChargingPileById(int id){
+        return slowChargingPiles.get(id);
+    }
+    public void endRecharge(int chargingPileId,String chargingType)
+    {
+        if(chargingType.equals("fast"))
+        {
+            FastChargingPile fastChargingPile=fastChargingPiles.get(chargingPileId);
+            fastChargingPile.dequeue();
+        }
+        else
+        {
+            SlowChargingPile slowChargingPile=slowChargingPiles.get(chargingPileId);
+            slowChargingPile.dequeue();
+        }
+    }
+
 
 }

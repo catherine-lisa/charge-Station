@@ -13,13 +13,14 @@ public class ChargingStation {
     public String requestRecharge(RequestInfo requestInfo)
     {
 //        调用join，让传入的信息加入到等待队列
-        return waitingQueue.join(requestInfo);
+        return waitingQueue.fastJoin(requestInfo);
     }
-    public String updateWaitingQueue()
+    public String updateWaitingQueue(String chargingType)
     {
-        Car car=waitingQueue.updateWaitingQueue();
+        Car car=waitingQueue.updateWaitingQueue(chargingType);
         //schedule(),需要实现调度的工作
-        //向充电桩中插入Car的信息
+        //通过调度获取到要插入的目标充电桩，向充电桩中插入Car的信息
         return "success";
     }
+
 }
