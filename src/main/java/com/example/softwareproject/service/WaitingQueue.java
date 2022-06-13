@@ -32,7 +32,6 @@ public class WaitingQueue {
                 {
                     Car car=fastWaitingQueue.get(i);
                     fastWaitingQueue.remove(i);
-                    slowWaitingQueue.add(car);
                     return car;
                 }
         }
@@ -42,7 +41,6 @@ public class WaitingQueue {
                 {
                     Car car=slowWaitingQueue.get(i);
                     slowWaitingQueue.remove(i);
-                    fastWaitingQueue.add(car);
                     return car;
                 }
         return null;

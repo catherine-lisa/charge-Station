@@ -150,6 +150,11 @@ public class CustomerController {
         //不在则说明在充电区
         if(car.equals(null))
         {
+            if(chargingField.changeRequestMode(requestInfo.getId(),requestInfo.getChargingMode())==false)
+            {
+                return "changeRequestModeFailed";
+            }
+            //重新加入等候区
 
         }
         requestInfo.setChargingMode(newMode);
@@ -157,25 +162,29 @@ public class CustomerController {
         queryWrapper.eq("userId",requestInfo.getId());
         DetailBill detailBill=detailBillMapper.selectOne(queryWrapper);
         detailBill.setChargingType(newMode);
-
+        chargingStation.requestRecharge(requestInfo);
         return "success";
     }
     @PostMapping("/cancelRecharge")
     @ResponseBody
     public  String cancelRecharge()
     {
+
         return "secondpages";
     }
     @PostMapping("/requestQueue")
     @ResponseBody
     public  String requestQueue()
     {
+        //需要配合前端界面
+
         return "thirdpages";
     }
     @PostMapping("/requestBill")
     @ResponseBody
     public  String requestBill()
     {
+        //需要配合前端界面
         return "billpages";
     }
 }

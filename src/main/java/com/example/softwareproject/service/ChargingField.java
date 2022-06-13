@@ -1,11 +1,13 @@
 package com.example.softwareproject.service;
 
 
+import com.example.softwareproject.entity.Car;
 import com.example.softwareproject.entity.FastChargingPile;
 import com.example.softwareproject.entity.SlowChargingPile;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ChargingField {
@@ -54,6 +56,46 @@ public class ChargingField {
             slowChargingPile.dequeue();
         }
     }
-
+    public boolean changeRequestMode(long userid,String oldMode)
+    {
+        if(oldMode.equals("fast"))
+        {
+            for(int i=0;i<fastChargingPiles.size();++i)
+            {
+                List<Car>cars=fastChargingPiles.get(i).getChargingQueue();
+                for(int j=0;j<cars.size();++j)
+                {
+                    if(cars.get(j).getId()==userid)
+                    {
+                        Car car=fastChargingPiles.get(i).changeRequest(userid);
+                        if(car.equals(null))
+                        {
+                            return false;
+                        }else
+                            return true;
+                    }
+                }
+            }
+        }else
+        {
+            for(int i=0;i<slowChargingPiles.size();++i)
+            {
+                List<Car>cars=slowChargingPiles.get(i).getChargingQueue();
+                for(int j=0;j<cars.size();++j)
+                {
+                    if(cars.get(j).getId()==userid)
+                    {
+                        Car car=slowChargingPiles.get(i).changeRequest(userid);
+                        if(car.equals(null))
+                        {
+                            return false;
+                        }else
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 }
