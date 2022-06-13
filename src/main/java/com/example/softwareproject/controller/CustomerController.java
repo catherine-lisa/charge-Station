@@ -76,15 +76,13 @@ public class CustomerController {
         detailBill.setUserId(requestInfo.getId());
         detailBill.setStartRquestTime(new Date());
         detailBill.setChargingType(requestInfo.chargingMode);
-
         return chargingStation.requestRecharge(requestInfo);
     }
     @PostMapping("/enterChargeField")
     @ResponseBody
     public  String enterChargeField(@ModelAttribute RequestInfo requestInfo)
     {
-
-        return chargingStation.updateWaitingQueue(requestInfo.getChargingMode());
+        return chargingStation.updateWaitingQueue(requestInfo);
     }
     @PostMapping("/startRecharge")
     @ResponseBody
@@ -104,7 +102,6 @@ public class CustomerController {
         Bill bill=new Bill();
         bill.setStartDate(new Date());
         bill.setUserid(car.getId());
-        //还需要插入到数据库中进行保存
         billMapper.insert(bill);
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userId",car.getId());
@@ -148,7 +145,18 @@ public class CustomerController {
     @ResponseBody
     public  String changeRequestMode(@ModelAttribute RequestInfo requestInfo,@PathVariable String newMode)
     {
+        //如果car不是null，说明在等候区
+        Car car=chargingStation.getCarByUserId(requestInfo.getId(),requestInfo.getChargingMode());
+        //不在则说明在充电区
+        if(car.equals(null))
+        {
+
+        }
         requestInfo.setChargingMode(newMode);
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userId",requestInfo.getId());
+        DetailBill detailBill=detailBillMapper.selectOne(queryWrapper);
+        detailBill.setChargingType(newMode);
 
         return "success";
     }

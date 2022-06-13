@@ -7,19 +7,45 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 @Service
 public class WaitingQueue {
     private int maxWaitingNum;
-    Queue<Car> fastWaitingQueue=new LinkedList<>();
-    Queue<Car> slowWaitingQueue=new LinkedList<>();
+    List<Car> fastWaitingQueue=new LinkedList<>();
+    List<Car> slowWaitingQueue=new LinkedList<>();
     public boolean isAvailabe(){
         if(slowWaitingQueue.size()+fastWaitingQueue.size()<maxWaitingNum)
         {
             return true;
         }
         else return false;
+    }
+    public Car getCarByUserId(long id,String chargingMode)
+    {
+        //将对应队列中车辆信息取出放到另一个队列中
+        if(chargingMode.equals("fast"))
+        {
+            for(int i=0;i<fastWaitingQueue.size();++i)
+                if(fastWaitingQueue.get(i).getId()==id)
+                {
+                    Car car=fastWaitingQueue.get(i);
+                    fastWaitingQueue.remove(i);
+                    slowWaitingQueue.add(car);
+                    return car;
+                }
+        }
+        else
+            for(int i=0;i<slowWaitingQueue.size();++i)
+                if(slowWaitingQueue.get(i).getId()==id)
+                {
+                    Car car=slowWaitingQueue.get(i);
+                    slowWaitingQueue.remove(i);
+                    fastWaitingQueue.add(car);
+                    return car;
+                }
+        return null;
     }
     public String fastJoin(RequestInfo requestInfo)
     {
@@ -41,9 +67,9 @@ public class WaitingQueue {
     public Car updateWaitingQueue(String mode)
     {
         if(mode.equals("fast"))
-        return fastWaitingQueue.remove();
+        return fastWaitingQueue.remove(0);
         else{
-            return slowWaitingQueue.remove();
+            return slowWaitingQueue.remove(0);
         }
     }
 }
