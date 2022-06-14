@@ -12,21 +12,14 @@ import java.util.List;
 @Service
 @Data
 public class ChargingField {
-    private int maxChargingNum;
-    private int maxFastPileNum;
-    private int maxSlowPileNum;
-    private int fastPilePower;
-    private int slowPilePower;
-    private ArrayList<FastChargingPile> fastChargingPiles;
-    private ArrayList<SlowChargingPile> slowChargingPiles;
+    private int maxChargingNum=5;
+    private int maxFastPileNum=2;
+    private int maxSlowPileNum=2;
+    private int fastPilePower=30;
+    private int slowPilePower=10;
+    private ArrayList<FastChargingPile> fastChargingPiles=new ArrayList<>();
+    private ArrayList<SlowChargingPile> slowChargingPiles=new ArrayList<>();
     public ChargingField(){
-        maxChargingNum=5;
-        maxFastPileNum=2;
-        maxSlowPileNum=2;
-        fastPilePower=30;
-        slowPilePower=10;
-        fastChargingPiles=new ArrayList<>();
-        slowChargingPiles=new ArrayList<>();
         for(int i=0;i<maxFastPileNum;++i)
         {
             FastChargingPile chargingPile=new FastChargingPile();

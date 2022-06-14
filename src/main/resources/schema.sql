@@ -1,3 +1,4 @@
+drop table `CUSTOMER`;
 create table if not exists `CUSTOMER`(
     `id` bigint(20) not null AUTO_INCREMENT,
     `username` varchar(255) not null ,
@@ -5,14 +6,24 @@ create table if not exists `CUSTOMER`(
     `jurisdiction` int(32) not null,
     primary key(`id`)
 );
-create table if not exists `DETAILBILL`(
-    `billId` bigint(20) not null AUTO_INCREMENT,
-    `userId` bigint(20),
-    `isPay`  boolean,
-    `chargingType` varchar (255),
-     `startRquestTime`Timestamp default null,
-     `startDate`Timestamp default null,
-     `endDate`Timestamp default null,
-     `totalFee` float(32),
-    primary key(`billId`)
+drop table `DETAIL`;
+create table if not exists `DETAIL`(
+    `billid` bigint(20) not null AUTO_INCREMENT,
+    `userid` bigint(20),
+    `ispay`  boolean,
+    `chargingtype` varchar (255),
+     `startrequesttime`Timestamp default null,
+     `startdate`Timestamp default null,
+     `enddate`Timestamp default null,
+     `totalfee` float(32),
+    primary key(`billid`)
+);
+drop table `BILL`;
+create table if not exists `BILL`(
+    `billid` bigint(20) not null AUTO_INCREMENT,
+    `userid` bigint(20),
+    `startdate`Timestamp default null,
+    `enddate`Timestamp default null,
+    `totalfee` float(32),
+    primary key(`billid`)
 );

@@ -15,6 +15,7 @@ import java.util.List;
 public class ChargingStation {
     @Autowired
     WaitingQueue waitingQueue;
+    @Autowired
     ChargingField chargingField;
     public String requestRecharge(RequestInfo requestInfo)
     {
@@ -24,6 +25,7 @@ public class ChargingStation {
     public String updateWaitingQueue(RequestInfo requestInfo)
     {
         Car car=waitingQueue.updateWaitingQueue(requestInfo.getChargingMode());//从等待区队列中对应的充电类型移除第一辆车
+        System.out.println(car);
         //获取对应充电类型的所有等待桩队列信息
         //对应匹配充电模式下（快充/慢充），被调度车辆完成充电所需时长（等待时间+自己充电时间）最短。（等待时间=选定充电桩队列中所有车辆完成充电时间之和；自己充电时间=请求充电量/充电桩功率）
         //获取对应充电类型的所有等待桩队列信息，以判断插入哪一桩
