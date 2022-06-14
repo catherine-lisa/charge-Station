@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="./css/Charge.css">
+    <title>充电</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <form action="/goodslist" method="get">
+                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">首页</button>
+                    </form>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <form action="/release" method="get">
+                        <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <div class="box" id="bigbox">
+            <h1 style="margin-top: 3px;">充电中....</h1>
+            <!-- <div style="margin-left: 50px;">充电类型：
+                <input id="user" style="margin-left: 24px;" type="text" placeholder="请输入用户名">
+            </div> -->
+        </div>
+        <div class="box2">
+            <div style="width: 15vw; margin-left: 10vw; margin-top: 10px;">
+                <div style="display: flex; justify-content:space-between;">
+                    <div> 订单编号：</div>
+                    <div> XXX</div>
+                </div>
+            </div>
+            <div style="width: 15vw; margin-left: 10vw; margin-top: 10px;">
+                <div style="display: flex; justify-content:space-between;">
+                    <div> 充电类型：</div>
+                    <div> 快充</div>
+                </div>
+            </div>
+            <div style="width: 15vw; margin-left: 10vw; margin-top: 10px;">
+                <div style="display: flex; justify-content:space-between;">
+                    <div> 已充电时长：</div>
+                    <div> X </div>
+                    <div> 小时 </div>
+                    <div> Y </div>
+                    <div> 分钟 </div>
+                </div>
+            </div>
+            <div style="width: 15vw; margin-left: 10vw; margin-top: 10px;">
+                <div style="display: flex; justify-content:space-between;">
+                    <div> 费用：</div>
+                    <div> X </div>
+                    <div> 元</div>
+                </div>
+            </div>
+
+            <!-- <div>
+                <label>充电类型：</label>
+                <input  style="margin-left: 40px;" name='subject' type="checkbox" value="fast" οnclick="test1(this)"><label>快充</label>
+                <input name='subject' type="checkbox" value="slow" οnclick="test2(this)"><label>慢充</label>
+            </div>
+            <div style="margin-left: 42px; margin-top: 10px;">充电时长：
+                <input id="password" style="margin-left: 20px;" type="password" placeholder="单位：小时">
+            </div> -->
+            <button style="margin-top:40px;" onclick="window.location.href='Bill.html'" class="bot">结束充电</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

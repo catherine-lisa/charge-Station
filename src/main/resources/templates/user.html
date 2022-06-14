@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="./css/log_in.css">
+    <title>用户</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <form action="/goodslist" method="get">
+                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">首页</button>
+                    </form>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <form action="/release" method="get">
+                        <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="box" id="bigbox">
+        <h1 style="margin-top: 40px;">用户中心</h1>
+        <div style="width: 15vw; margin-left: 10vw; margin-top: 10px;    font-size: large;
+        font-weight: bold;">
+            <div style="display: flex; justify-content:space-between;">
+                <div> 用户名 ：</div>
+                <div> XXX </div>
+            </div>
+        </div>
+        <div>
+            <button style="margin-top:20px; margin-right: 7vw;" onclick="window.location.href='submitRequest.html'"
+                class="bot">提交充电请求</button>
+        </div>
+        <div>
+            <button style="margin-top:20px; margin-right: 7vw;" onclick="window.location.href='log_in.html'"
+                class="bot">退出登录</button>
+        </div>
+        <!-- <div style="margin-left: 50px;">密码：
+            <input id="password" style="margin-left: 40px;" type="password" placeholder="请输入密码">
+        </div>
+        <button onclick="submit()" class="bot">登录</button>
+        <script type="text/javascript" src="./js/log_in.js"></script>
+        <a style="margin-left: 50px;" onclick= "window.location.href='register.html'"><u>用户注册</u></a> -->
+    </div>
+</body>
+
+</html>
