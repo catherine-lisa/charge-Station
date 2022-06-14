@@ -14,9 +14,12 @@
         <div style="margin-left: 50px;">密码：
             <input id="password" style="margin-left: 40px;" type="password" placeholder="请输入密码">
         </div>
-        <button onclick="submit()" class="bot">登录</button>
-        <script type="text/javascript" src="./js/log_in.js"></script>
-        <a style="margin-left: 50px;" onclick= "window.location.href='register.html'"><u>用户注册</u></a>
+        <button onclick="submit()" style="margin-left: 30px" class="bot">登录</button>
+        <script type="text/javascript" src="../static/js/log_in.js"></script>
+        <form action="/register" method="get">
+            <button type="submit" style="margin-left: 30px" class="bot">用户注册</button>
+        </form>
+<!--        <a style="margin-left: 50px;" onclick= "window.location.href='register.html'"><u>用户注册</u></a>-->
     </div>
 </body>
 </html>

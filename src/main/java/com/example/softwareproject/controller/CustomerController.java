@@ -52,6 +52,11 @@ public class CustomerController {
         customerMapper.insert(newCustomer);
         return "success";
     }
+
+    @GetMapping("/logIn")
+    public String logIn(){
+        return "log_in";
+    }
     @PostMapping("/logIn")
     @ResponseBody
     public  String logIn(Model model, @RequestParam String username, @RequestParam String password,
@@ -69,6 +74,11 @@ public class CustomerController {
             return "success";
         }
         return "logInFailed";
+    }
+
+    @GetMapping("/requestRecharge")
+    public String requestRecharge(){
+        return "submitRequest";
     }
     @PostMapping("/requestRecharge")
     @ResponseBody
