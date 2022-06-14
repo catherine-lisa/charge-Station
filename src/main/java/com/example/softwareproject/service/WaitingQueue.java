@@ -14,7 +14,7 @@ import java.util.Queue;
 @Service
 @Data
 public class WaitingQueue {
-    private int maxWaitingNum;
+    private int maxWaitingNum=10;
     List<Car> fastWaitingQueue=new LinkedList<>();
     List<Car> slowWaitingQueue=new LinkedList<>();
     public boolean isAvailabe(){
@@ -58,6 +58,7 @@ public class WaitingQueue {
             car.setLocation(requestInfo.getLocation());
             car.setNowCapacity(requestInfo.getNowCapacity());
             car.setChargingNum(requestInfo.getChargingNum());
+            System.out.println(car);
             if(requestInfo.getChargingMode().equals("fast"))
             fastWaitingQueue.add(car);
             else slowWaitingQueue.add(car);

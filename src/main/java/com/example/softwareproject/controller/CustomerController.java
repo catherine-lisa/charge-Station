@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.softwareproject.entity.*;
 import com.example.softwareproject.mapper.BillMapper;
 import com.example.softwareproject.mapper.CustomerMapper;
-import com.example.softwareproject.mapper.DetailBillMapper;
+import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.service.ChargingField;
 import com.example.softwareproject.service.ChargingStation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,13 @@ import java.util.List;
 public class CustomerController {
     @Resource
     CustomerMapper customerMapper;
-    DetailBillMapper detailBillMapper;
+    @Resource
+    DetailMapper detailMapper;
+    @Resource
     BillMapper billMapper;
     @Autowired
     ChargingStation chargingStation;
+    @Autowired
     ChargingField chargingField;
 
 
@@ -73,10 +76,12 @@ public class CustomerController {
     //可以用于ajax的success函数
     public  String requestRecharge(@ModelAttribute RequestInfo requestInfo)
     {
-        DetailBill detailBill=new DetailBill();
-        detailBill.setUserId(requestInfo.getId());
-        detailBill.setStartRquestTime(new Date());
-        detailBill.setChargingType(requestInfo.chargingMode);
+        Detail detail =new Detail();
+        detail.setUserid(requestInfo.getId());
+        detail.setStartrequesttime(new Date());
+        detail.setChargingtype(requestInfo.chargingMode);
+        detailMapper.insert(detail);
+        System.out.println(requestInfo);
         return chargingStation.requestRecharge(requestInfo);
     }
     @PostMapping("/enterChargeField")
@@ -87,49 +92,58 @@ public class CustomerController {
     }
     @PostMapping("/startRecharge")
     @ResponseBody
-    public  String startRecharge(@PathVariable int chargingPileId,@PathVariable String chargingType)
+    public  String startRecharge(@ModelAttribute RequestInfo requestInfo, @RequestParam int chargingPileId)
     {
         Car car;
-        if(chargingType.equals("fast")) {
+        if(requestInfo.getChargingMode().equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
+            fastChargingPile.startCharging(requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
+            slowChargingPile.startCharging(requestInfo,detailMapper,billMapper);
         }
         car.setCarState("charging");
         Bill bill=new Bill();
-        bill.setStartDate(new Date());
+        bill.setStartdate(new Date());
         bill.setUserid(car.getId());
         billMapper.insert(bill);
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userId",car.getId());
-        DetailBill detailBill=detailBillMapper.selectOne(queryWrapper);
-        detailBill.setStartDate(new Date());
-        detailBillMapper.updateById(detailBill);
-
-        //开始充电函数
+        queryWrapper.eq("userid",car.getId());
+        Detail detail = detailMapper.selectOne(queryWrapper);
+        detail.setStartdate(new Date());
+        detailMapper.updateById(detail);
         return "success";
     }
+    //主动结束充电
     @PostMapping("/endRecharge")
     @ResponseBody
-    public  String endRecharge(@PathVariable int chargingPileId,@PathVariable String chargingType)
+    public  String endRecharge(@ModelAttribute RequestInfo requestInfo,@PathVariable int chargingPileId,@PathVariable String chargingType)
     {
         Car car;
         if(chargingType.equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
+            fastChargingPile.endCharging(requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
+            slowChargingPile.endCharging(requestInfo,detailMapper,billMapper);
         }
         car.setCarState("endcharging");
-        Bill bill=billMapper.selectById(car.getId());
-        bill.setEndDate(new Date());
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userid",car.getId());
+        Bill bill=billMapper.selectOne(queryWrapper);
+        bill.setEnddate(new Date());
+        billMapper.updateById(bill);
+        Detail detail=detailMapper.selectOne(queryWrapper);
+        detail.setEnddate(new Date());
+        detailMapper.updateById(detail);
         chargingField.endRecharge(chargingPileId,chargingType);
 
         //结束充电函数
@@ -138,8 +152,11 @@ public class CustomerController {
     @PostMapping("/payBill")
     public  String payBill(@ModelAttribute RequestInfo requestInfo)
     {
-        Bill bill=billMapper.selectById(requestInfo.getId());
-
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userid",requestInfo.getId());
+        Detail detail=detailMapper.selectOne(queryWrapper);
+        detail.setIspay(true);
+        detailMapper.updateById(detail);
         return "secondpages";
     }
     @PostMapping("/changeRequestMode")
@@ -155,9 +172,9 @@ public class CustomerController {
         }
         requestInfo.setChargingMode(newMode);
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userId",requestInfo.getId());
-        DetailBill detailBill=detailBillMapper.selectOne(queryWrapper);
-        detailBill.setChargingType(newMode);
+        queryWrapper.eq("userid",requestInfo.getId());
+        Detail detail = detailMapper.selectOne(queryWrapper);
+        detail.setChargingtype(newMode);
         chargingStation.requestRecharge(requestInfo);
         return "success";
     }
@@ -175,9 +192,9 @@ public class CustomerController {
             }
         }
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userId",requestInfo.getId());
+        queryWrapper.eq("userid",requestInfo.getId());
         billMapper.delete(queryWrapper);
-        detailBillMapper.delete(queryWrapper);
+        detailMapper.delete(queryWrapper);
 
         return "secondpages";
     }
@@ -210,11 +227,12 @@ public class CustomerController {
     }
     @PostMapping("/requestBill")
     @ResponseBody
-    public  Bill requestBill(@ModelAttribute RequestInfo requestInfo)
+    public  List<Bill> requestBill(@ModelAttribute RequestInfo requestInfo)
     {
         //需要配合前端界面
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userId",requestInfo.getId());
-        return billMapper.selectOne(queryWrapper);
+        queryWrapper.eq("userid",requestInfo.getId());
+        List<Bill> bills= billMapper.selectList(queryWrapper);
+        return bills;
     }
 }
