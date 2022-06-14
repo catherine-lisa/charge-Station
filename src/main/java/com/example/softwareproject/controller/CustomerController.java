@@ -59,9 +59,8 @@ public class CustomerController {
     }
     @PostMapping("/logIn")
     @ResponseBody
-    public  String logIn(Model model, @RequestParam String username, @RequestParam String password,
+    public  String logIn(@RequestParam("username") String username, @RequestParam("password") String password,
                          HttpSession session) {
-
         int id = username.hashCode();
         Customer targetCustomer =customerMapper.selectById(id);
         if (targetCustomer == null) {

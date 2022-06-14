@@ -2,23 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../static/css/register.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/register.css}">
     <title>注册</title>
 </head>
 <body>
-    <div class="box" id="bigbox">
-        <h1 style="margin-top: 40px;">智能充电桩调度计费系统注册</h1>
-        <div style="margin-left: 50px;">用户名：
-            <input id="user" style="margin-left: 24px;" type="text" placeholder="请输入用户名">
-        </div>
-        <div style="margin-left: 50px;">密码：
-            <input id="password" style="margin-left: 40px;" type="password" placeholder="请输入密码">
-        </div>
-        <script type="text/javascript" src="../static/js/register.js"></script>
-        <button onclick="submit()" class="bot">注册</button>
-        <form action="/logIn" method="get">
-            <button type="submit" style="margin-left: 30px" class="btn btn-info">返回</button>
-        </form>
+<div class="box" id="bigbox">
+    <h1 style="margin-top: 40px;">智能充电桩调度计费系统注册</h1>
+    <div style="margin-left: 50px;">用户名：
+        <input name="username" style="margin-left: 24px;" type="text" placeholder="请输入用户名" required>
     </div>
+    <div style="margin-left: 50px;">密码：
+        <input name="password" style="margin-left: 40px;" type="password" placeholder="请输入密码" required>
+    </div>
+    <button onclick="submit()" class="bot">注册</button>
+    <form action="/customer/logIn" method="get">
+        <button type="submit" style="margin-left: 30px" class="btn btn-info">返回</button>
+    </form>
+</div>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+
+<script>
+    function submit() {
+        let userName = document.getElementsByName("username")[0].value;
+        let password = document.getElementsByName("password")[0].value;
+        if(userName == "" || password == ""){
+            alert("用户名或密码不能为空！");
+            return;
+        }
+        $.ajax({
+            url: "/customer/register",
+            type: "POST",
+            data: {"username": userName, "password": password},
+            success: function (result) {
+                if (result == "success") {
+                    alert("注册成功！");
+                } else if(result == "userexist") {
+                    alert("用户已存在！");
+                }
+            }
+        });
+    }
+    // function submit() {
+    //     const a = document.getElementById('password');
+    //     const b = document.getElementById('bigbox');
+    //     const c = document.getElementById('user')
+    //     if(c.value === ""){
+    //         alert("请输入用户名！");
+    //     }else{
+    //         alert("注册成功！")
+    //         setTimeout(jump, 0);
+    //     }
+    // }
+    // function jump() {
+    //     top.location.href = ("log_in.html");
+    // }
+</script>
 </body>
 </html>
