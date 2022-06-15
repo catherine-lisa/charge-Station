@@ -7,7 +7,9 @@ import com.example.softwareproject.mapper.CustomerMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.service.ChargingField;
 import com.example.softwareproject.service.ChargingStation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -53,14 +55,17 @@ public class CustomerController {
         return "success";
     }
 
+
     @GetMapping("/logIn")
-    public String logIn(){
+    public String logIn()
+    {
         return "log_in";
     }
     @PostMapping("/logIn")
     @ResponseBody
-    public  String logIn(@RequestParam("username") String username, @RequestParam("password") String password,
+    public  String logIn(Model model, @RequestParam String username, @RequestParam String password,
                          HttpSession session) {
+
         int id = username.hashCode();
         Customer targetCustomer =customerMapper.selectById(id);
         if (targetCustomer == null) {
@@ -72,7 +77,7 @@ public class CustomerController {
             session.setAttribute("userid",targetCustomer.getId());
             return "success";
         }
-        return "logInFailed";
+        return "log_in_failed";
     }
 
     @GetMapping("/requestRecharge")
@@ -99,11 +104,15 @@ public class CustomerController {
         return "waitingQueue";
     }
 
-    @PostMapping("/enterChargeField")
+    @Operation(summary = "前端周期性问询，直到更新为readyCharge")
+    @PostMapping("/checkCarState")
     @ResponseBody
-    public  String enterChargeField(@ModelAttribute RequestInfo requestInfo)
+    public  String checkCarState(@ModelAttribute RequestInfo requestInfo)
     {
-        return chargingStation.updateWaitingQueue(requestInfo);
+        Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
+        if(car.equals(null)==false)
+            return car.getCarState();
+        else return "error";
     }
     @PostMapping("/startRecharge")
     @ResponseBody
@@ -179,11 +188,11 @@ public class CustomerController {
     public  String changeRequestMode(@ModelAttribute RequestInfo requestInfo,@PathVariable String newMode)
     {
         //如果car不是null，说明在等候区
-        Car car=chargingStation.getCarByUserId(requestInfo.getId(),requestInfo.getChargingMode());
+        Car car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
         //不在则说明在充电区
         if(car.equals(null))
         {
-                return "changeRequestModeFailed";
+            return "changeRequestModeFailed";
         }
         requestInfo.setChargingMode(newMode);
         QueryWrapper queryWrapper=new QueryWrapper();
@@ -198,12 +207,21 @@ public class CustomerController {
     public  String cancelRecharge(@ModelAttribute RequestInfo requestInfo)
     {
         //需要判断是从等候区还是从充电区取消，以及取消订单和详单
-        Car car=chargingStation.getCarByUserId(requestInfo.getId(),requestInfo.getChargingMode());
+        Car car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
         if(car.equals(null))
         {
-            if(chargingField.cancelRequest(requestInfo.getId(),requestInfo.getChargingMode())==false)
+            if(chargingField.cancelRequest(requestInfo,detailMapper,billMapper)==false)
             {
-                return "cancelRequestModeFailed";
+                car.setCarState("endcharging");
+                QueryWrapper queryWrapper=new QueryWrapper();
+                queryWrapper.eq("userid",car.getId());
+                Bill bill=billMapper.selectOne(queryWrapper);
+                bill.setEnddate(new Date());
+                billMapper.updateById(bill);
+                Detail detail=detailMapper.selectOne(queryWrapper);
+                detail.setEnddate(new Date());
+                detailMapper.updateById(detail);
+                return "cancelRechargeSuccessAndCreatedBill";
             }
         }
         QueryWrapper queryWrapper=new QueryWrapper();
@@ -211,7 +229,7 @@ public class CustomerController {
         billMapper.delete(queryWrapper);
         detailMapper.delete(queryWrapper);
 
-        return "secondpages";
+        return "submitRequest";
     }
     @GetMapping("/requestQueue")
     public String requestQueuePages()
@@ -226,7 +244,7 @@ public class CustomerController {
         if(requestInfo.getCarState().equals("waiting"))
         {
             if(requestInfo.getChargingMode().equals("fast"))
-            return chargingStation.getWaitingQueue().getFastWaitingQueue();
+                return chargingStation.getWaitingQueue().getFastWaitingQueue();
             else
                 return chargingStation.getWaitingQueue().getSlowWaitingQueue();
         }
