@@ -78,6 +78,7 @@ public class ChargingStation {
             //保证加入的桩的充电队列一定有空位。
             if(minPileId==-1)
                 return "failed";//没有桩有空位。异常请求
+            car.carState="chargingField_fast";//新增，改变汽车的属性
             chargingField.getFastChargingPileById(minPileId).insert(car);//向充电桩中插入Car的信息
         }
         else{
@@ -105,6 +106,7 @@ public class ChargingStation {
             //保证加入的桩的充电队列一定有空位。
             if(minPileId==-1)
                 return "failed";//没有桩有空位。异常请求
+            car.carState="chargingField_slow";//新增，改变汽车的属性
             chargingField.getSlowChargingPileById(minPileId).insert(car);//向充电桩中插入Car的信息
         }
 
