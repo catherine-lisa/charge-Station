@@ -3,7 +3,10 @@ package com.example.softwareproject.service;
 
 import com.example.softwareproject.entity.Car;
 import com.example.softwareproject.entity.FastChargingPile;
+import com.example.softwareproject.entity.RequestInfo;
 import com.example.softwareproject.entity.SlowChargingPile;
+import com.example.softwareproject.mapper.BillMapper;
+import com.example.softwareproject.mapper.DetailMapper;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -54,18 +57,18 @@ public class ChargingField {
             slowChargingPile.dequeue();
         }
     }
-    public boolean cancelRequest(long userid, String oldMode)
+    public boolean cancelRequest(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
-        if(oldMode.equals("fast"))
+        if(requestInfo.getChargingMode().equals("fast"))
         {
             for(int i=0;i<fastChargingPiles.size();++i)
             {
                 List<Car>cars=fastChargingPiles.get(i).getChargingQueue();
                 for(int j=0;j<cars.size();++j)
                 {
-                    if(cars.get(j).getId()==userid)
+                    if(cars.get(j).getId()==requestInfo.getId())
                     {
-                        Car car=fastChargingPiles.get(i).cancelRequest(userid);
+                        Car car=fastChargingPiles.get(i).cancelRequest(requestInfo,detailMapper,billMapper);
                         if(car.equals(null))
                         {
                             return false;
@@ -81,9 +84,9 @@ public class ChargingField {
                 List<Car>cars=slowChargingPiles.get(i).getChargingQueue();
                 for(int j=0;j<cars.size();++j)
                 {
-                    if(cars.get(j).getId()==userid)
+                    if(cars.get(j).getId()==requestInfo.getId())
                     {
-                        Car car=slowChargingPiles.get(i).changeRequest(userid);
+                        Car car=slowChargingPiles.get(i).cancelRequest(requestInfo,detailMapper,billMapper);
                         if(car.equals(null))
                         {
                             return false;

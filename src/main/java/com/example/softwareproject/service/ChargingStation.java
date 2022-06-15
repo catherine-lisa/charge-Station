@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 @Data
 @Service
 public class ChargingStation {
@@ -22,14 +25,34 @@ public class ChargingStation {
 //        调用join，让传入的信息加入到等待队列
         return waitingQueue.fastJoin(requestInfo);
     }
-    public String updateWaitingQueue(RequestInfo requestInfo)
+    public ChargingStation(){
+        //设置定时器，用来不断检测等候区来加入到充电去
+        TimerTask timerTask=new TimerTask() {
+            @Override
+            public void run() {
+                if(waitingQueue.getFastWaitingQueue().size()>0) {
+                    System.out.println("开始调度fast队列");
+                    if (updateWaitingQueue("fast") == "success")
+                        System.out.println("调度fast队列成功");
+                }
+                else System.out.println("fast等待队列无车辆");
+                if(waitingQueue.getSlowWaitingQueue().size()>0) {
+                    System.out.println("开始调度slow队列");
+                    updateWaitingQueue("slow");
+                }else System.out.println("slow等待队列无车辆");
+            }
+        };
+        Timer timer=new Timer();
+        timer.schedule(timerTask,1,2000);
+    }
+    public String updateWaitingQueue(String chargingMode)
     {
-        Car car=waitingQueue.updateWaitingQueue(requestInfo.getChargingMode());//从等待区队列中对应的充电类型移除第一辆车
+        Car car=waitingQueue.updateWaitingQueue(chargingMode);//从等待区队列中对应的充电类型移除第一辆车
         System.out.println(car);
         //获取对应充电类型的所有等待桩队列信息
         //对应匹配充电模式下（快充/慢充），被调度车辆完成充电所需时长（等待时间+自己充电时间）最短。（等待时间=选定充电桩队列中所有车辆完成充电时间之和；自己充电时间=请求充电量/充电桩功率）
         //获取对应充电类型的所有等待桩队列信息，以判断插入哪一桩
-        if(requestInfo.getChargingMode().equals("fast")){
+        if(chargingMode.equals("fast")){
             int minPileId=-1;//加入的桩
             float minTime=10000;//按小时记
             //遍历所有同类型桩
@@ -89,9 +112,9 @@ public class ChargingStation {
         //通过调度获取到要插入的目标充电桩，向充电桩中插入Car的信息
         return "success";
     }
-    public Car getCarByUserId(long id,String chargingMode)
+    public Car changeChargeMode(long id, String chargingMode)
     {
-        return waitingQueue.getCarByUserId(id,chargingMode);
+        return waitingQueue.changeChargeMode(id,chargingMode);
     }
 
 }

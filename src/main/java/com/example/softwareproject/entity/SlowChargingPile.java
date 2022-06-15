@@ -62,7 +62,7 @@ public class SlowChargingPile implements ChargingPile {
         chargingQueue.add(car);
         return true;
     }
-    public Car changeRequest(long id)
+    public Car cancelRequest(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
         for(int i=0;i<chargingQueue.size();++i)
             if(chargingQueue.get(i).getId()==id)
@@ -70,6 +70,8 @@ public class SlowChargingPile implements ChargingPile {
                 if(i==0)
                 {
                     //当前车辆正在充电，无法改变充电模式
+                    endCharging(requestInfo,detailMapper,billMapper);
+                    Car car=chargingQueue.remove(i);
                     return null;
                 }
                 else

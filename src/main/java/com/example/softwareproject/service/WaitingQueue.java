@@ -17,6 +17,7 @@ public class WaitingQueue {
     private int maxWaitingNum=10;
     List<Car> fastWaitingQueue=new LinkedList<>();
     List<Car> slowWaitingQueue=new LinkedList<>();
+
     public boolean isAvailabe(){
         if(slowWaitingQueue.size()+fastWaitingQueue.size()<maxWaitingNum)
         {
@@ -24,9 +25,25 @@ public class WaitingQueue {
         }
         else return false;
     }
-    public Car getCarByUserId(long id,String chargingMode)
+    public Car getCarByInfo(RequestInfo requestInfo)
     {
-        //将对应队列中车辆信息取出放到另一个队列中
+        if(requestInfo.getChargingMode().equals("fast"))
+        {
+            for(int i=0;i<fastWaitingQueue.size();++i)
+                if(fastWaitingQueue.get(i).getId()==requestInfo.getId())
+                    return fastWaitingQueue.get(i);
+        }
+        else
+        {
+            for(int i=0;i<slowWaitingQueue.size();++i)
+                if(slowWaitingQueue.get(i).getId()==requestInfo.getId())
+                    return slowWaitingQueue.get(i);
+        }
+        return null;
+    }
+    public Car changeChargeMode(long id, String chargingMode)
+    {
+        //取出对应车辆
         if(chargingMode.equals("fast"))
         {
             for(int i=0;i<fastWaitingQueue.size();++i)
@@ -60,7 +77,7 @@ public class WaitingQueue {
             car.setChargingNum(requestInfo.getChargingNum());
             System.out.println(car);
             if(requestInfo.getChargingMode().equals("fast"))
-            fastWaitingQueue.add(car);
+                fastWaitingQueue.add(car);
             else slowWaitingQueue.add(car);
         }
         else return "joinFailed";
@@ -68,10 +85,15 @@ public class WaitingQueue {
     }
     public Car updateWaitingQueue(String mode)
     {
-        if(mode.equals("fast"))
-        return fastWaitingQueue.remove(0);
+        if(mode.equals("fast")) {
+            if(fastWaitingQueue.size()>0)
+                return fastWaitingQueue.remove(0);
+            else return null;
+        }
         else{
-            return slowWaitingQueue.remove(0);
+            if(slowWaitingQueue.size()>0)
+                return slowWaitingQueue.remove(0);
+            else return null;
         }
     }
 

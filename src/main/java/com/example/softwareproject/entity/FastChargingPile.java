@@ -27,6 +27,7 @@ public class FastChargingPile implements ChargingPile {
             @Override
             public void run() {
                 System.out.println(car.getId()+"充电完成"+new Date());
+                //判断用户是否提前结束充电
                 if(car.getId()==chargingQueue.get(0).getId()) {
                     endCharging(requestInfo,detailMapper,billMapper);
                 }//结束充电
@@ -117,14 +118,15 @@ public class FastChargingPile implements ChargingPile {
         chargingQueue.add(car);
         return true;
     }
-    public Car cancelRequest(long id)
+    public Car cancelRequest(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
         for(int i=0;i<chargingQueue.size();++i)
             if(chargingQueue.get(i).getId()==id)
             {
                 if(i==0)
                 {
-                    //当前车辆正在充电，无法改变充电模式
+                    endCharging(requestInfo,detailMapper,billMapper);
+                    Car car=chargingQueue.remove(i);
                     return null;
                 }
                 else
@@ -138,6 +140,7 @@ public class FastChargingPile implements ChargingPile {
     public void dequeue()
     {
         chargingQueue.remove(0);
+        chargingQueue.get(0).setCarState("readyToCharge");
     }
     public Car getFirstCar(){
         return chargingQueue.get(0);
