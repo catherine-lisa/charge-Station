@@ -1,4 +1,4 @@
-drop table `CUSTOMER`;
+-- drop table `CUSTOMER`;
 create table if not exists `CUSTOMER`(
     `id` bigint(20) not null AUTO_INCREMENT,
     `username` varchar(255) not null ,

@@ -26,7 +26,7 @@ public class ChargingStation {
         return waitingQueue.fastJoin(requestInfo);
     }
     public ChargingStation(){
-        //设置定时器，用来不断检测等候区来加入到充电去
+        //设置定时器，用来不断检测等候区来加入到充电区
         TimerTask timerTask=new TimerTask() {
             @Override
             public void run() {
@@ -109,7 +109,6 @@ public class ChargingStation {
             car.carState="chargingField_slow";//新增，改变汽车的属性
             chargingField.getSlowChargingPileById(minPileId).insert(car);//向充电桩中插入Car的信息
         }
-
         //schedule(),需要实现调度的工作
         //通过调度获取到要插入的目标充电桩，向充电桩中插入Car的信息
         return "success";

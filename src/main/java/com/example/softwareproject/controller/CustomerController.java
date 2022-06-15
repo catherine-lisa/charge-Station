@@ -107,12 +107,12 @@ public class CustomerController {
     @Operation(summary = "前端周期性问询，直到更新为readyCharge")
     @PostMapping("/checkCarState")
     @ResponseBody
-    public  String checkCarState(@ModelAttribute RequestInfo requestInfo)
+    public  RequestInfo checkCarState(@ModelAttribute RequestInfo requestInfo)
     {
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
-        if(car.equals(null)==false)
-            return car.getCarState();
-        else return "error";
+        if(car.equals(null)==false)//还在等候区
+            return requestInfo;
+        else return requestInfo;
     }
     @PostMapping("/startRecharge")
     @ResponseBody

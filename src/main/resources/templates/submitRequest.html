@@ -65,6 +65,8 @@
     <script>
         function submit() {
             let chargingMode = document.getElementsByName("chargingMode")[0].value;
+            if(chargingMode=="快充")
+                chargingMode="fast";
             let chargingNum = document.getElementsByName("chargingNum")[0].value;
             if(chargingNum == ""){
                 alert("充电量不能为空！");
