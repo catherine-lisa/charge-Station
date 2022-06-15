@@ -114,6 +114,11 @@ public class CustomerController {
             return requestInfo;
         else return requestInfo;
     }
+
+    @GetMapping("/startRecharge")
+    public String startRecharge(){
+        return "Charge";
+    }
     @PostMapping("/startRecharge")
     @ResponseBody
     public  String startRecharge(@ModelAttribute RequestInfo requestInfo, @RequestParam int chargingPileId)
