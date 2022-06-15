@@ -87,13 +87,13 @@
 
     function getStatus() {
         $.ajax({
-            url: "/customer/getStatus",
+            url: "/customer/checkCarState",
             type: "GET",
             data: {},
             success: function (result) {
                 let status = result;
                 let msg = "";
-                if (status['carState'] == "charging") { //充电中
+                if (status['carState'] == "readyCharge") { //充电中
                     window.location.href = "/customer/startRecharge";
                 } else if (status['carState'] == "waiting") { //排队中
                     let location = status['location'];

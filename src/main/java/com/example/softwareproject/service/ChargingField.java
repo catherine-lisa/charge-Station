@@ -51,6 +51,7 @@ public class ChargingField {
                     {
                         requestInfo.setCarState(cars.get(j).getCarState());
                         requestInfo.setQueue_num("Fast"+j);
+                        requestInfo.setLocation("充电区");
                         return requestInfo;
                     }
                 }
