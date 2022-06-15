@@ -22,6 +22,8 @@ public class SlowChargingPile implements ChargingPile {
     public int maxChargingNum;
     private int slowPilePower=10;
     private double basePrice=0.8;//服务费
+
+    public String state = "关闭"; //充电桩状态
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
         if (nowTime.getTime() == startTime.getTime()
                 || nowTime.getTime() == endTime.getTime()) {
