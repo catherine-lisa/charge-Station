@@ -18,6 +18,7 @@ public class FastChargingPile implements ChargingPile {
     private int fastPilePower=30;
     private double basePrice=0.8;//服务费
     private List<Car> chargingQueue=new LinkedList<>();
+
     public boolean startCharging(RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
     {
         Car car =chargingQueue.get(0);
@@ -116,6 +117,7 @@ public class FastChargingPile implements ChargingPile {
         if(chargingQueue.size()>maxChargingNum)
             return false;
         chargingQueue.add(car);
+        chargingQueue.get(0).setCarState("readyCharge");
         return true;
     }
     public Car cancelRequest(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
@@ -140,7 +142,8 @@ public class FastChargingPile implements ChargingPile {
     public void dequeue()
     {
         chargingQueue.remove(0);
-        chargingQueue.get(0).setCarState("readyToCharge");
+        if(chargingQueue.size()>0)
+        chargingQueue.get(0).setCarState("readyCharge");
     }
     public Car getFirstCar(){
         return chargingQueue.get(0);
