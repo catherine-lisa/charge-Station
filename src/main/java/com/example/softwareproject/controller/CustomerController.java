@@ -65,7 +65,7 @@ public class CustomerController {
     }
     @PostMapping("/logIn")
     @ResponseBody
-    public  String logIn(Model model, @RequestParam String username, @RequestParam String password,
+    public  String logIn( @RequestParam String username, @RequestParam String password,
                          HttpSession session) {
 
         int id = username.hashCode();
@@ -90,8 +90,9 @@ public class CustomerController {
     @ResponseBody
     //使用ResponseBody，且返回String先去resource里面找是否存在视图，不存在的话封装为json数据回传给前端
     //可以用于ajax的success函数
-    public String requestRecharge(@ModelAttribute RequestInfo requestInfo)
+    public String requestRecharge(Model model,@ModelAttribute RequestInfo requestInfo)
     {
+        model.addAttribute(requestInfo);
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
         detail.setStartrequesttime(myTime.getDate());
@@ -111,6 +112,7 @@ public class CustomerController {
     @ResponseBody
     public  RequestInfo checkCarState(@ModelAttribute RequestInfo requestInfo)
     {
+        System.out.println("checking");
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car.equals(null)==false)//还在等候区
             return requestInfo;

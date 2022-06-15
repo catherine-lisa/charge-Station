@@ -27,7 +27,7 @@ public class MyTime {
                 long time=date.getTime();
                 time=time+10*1000;
                 date=new Date(time);
-                System.out.println(date);
+//                System.out.println(date);
             }
         };
         Timer timer=new Timer();

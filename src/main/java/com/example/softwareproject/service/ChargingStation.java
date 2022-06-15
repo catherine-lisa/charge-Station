@@ -32,14 +32,15 @@ public class ChargingStation {
             public void run() {
                 if(waitingQueue.getFastWaitingQueue().size()>0) {
                     System.out.println("开始调度fast队列");
-                    if (updateWaitingQueue("fast") == "success")
-                        System.out.println("调度fast队列成功");
+                    updateWaitingQueue("fast");
+//                        System.out.println("调度fast队列成功");
                 }
-                else System.out.println("fast等待队列无车辆");
+//                else System.out.println("fast等待队列无车辆");
                 if(waitingQueue.getSlowWaitingQueue().size()>0) {
                     System.out.println("开始调度slow队列");
                     updateWaitingQueue("slow");
-                }else System.out.println("slow等待队列无车辆");
+                }
+//                else System.out.println("slow等待队列无车辆");
             }
         };
         Timer timer=new Timer();
