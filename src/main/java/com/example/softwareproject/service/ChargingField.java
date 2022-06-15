@@ -38,6 +38,40 @@ public class ChargingField {
             slowChargingPiles.add(chargingPile);
         }
     }
+    public RequestInfo findTargetCarState(RequestInfo requestInfo)
+    {
+        if(requestInfo.getChargingMode().equals("fast"))
+        {
+            for(int i=0;i<fastChargingPiles.size();++i)
+            {
+                List<Car>cars=fastChargingPiles.get(i).getChargingQueue();
+                for(int j=0;j<cars.size();++j)
+                {
+                    if(requestInfo.getId()==cars.get(j).getId())
+                    {
+                        requestInfo.setCarState(cars.get(j).getCarState());
+                        requestInfo.setQueue_num("Fast"+j);
+                        return requestInfo;
+                    }
+                }
+            }
+        }
+        else
+            for(int i=0;i<slowChargingPiles.size();++i)
+            {
+                List<Car>cars=slowChargingPiles.get(i).getChargingQueue();
+                for(int j=0;j<cars.size();++j)
+                {
+                    if(requestInfo.getId()==cars.get(j).getId())
+                    {
+                        requestInfo.setCarState(cars.get(j).getCarState());
+                        requestInfo.setQueue_num("Slow"+j);
+                        return requestInfo;
+                    }
+                }
+            }
+            return null;
+    }
     public FastChargingPile getFastChargingPileById(int id){
         return fastChargingPiles.get(id);
     }
