@@ -14,5 +14,5 @@ public class RequestInfo {
     public float chargingNum;
     public Date requestDate;
     public String carState;//标注是否正处于充电状态
-    public int queue_num;
+    public String queue_num;
 }
