@@ -83,7 +83,7 @@ public class CustomerController {
     @ResponseBody
     //使用ResponseBody，且返回String先去resource里面找是否存在视图，不存在的话封装为json数据回传给前端
     //可以用于ajax的success函数
-    public  String requestRecharge(@ModelAttribute RequestInfo requestInfo)
+    public String requestRecharge(@ModelAttribute RequestInfo requestInfo)
     {
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
@@ -93,6 +93,12 @@ public class CustomerController {
         System.out.println(requestInfo);
         return chargingStation.requestRecharge(requestInfo);
     }
+
+    @GetMapping("/enterQueue")
+    public String enterQueue(){
+        return "waitingQueue";
+    }
+
     @PostMapping("/enterChargeField")
     @ResponseBody
     public  String enterChargeField(@ModelAttribute RequestInfo requestInfo)
