@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.softwareproject.mapper.BillMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.myinterface.ChargingPile;
+import com.example.softwareproject.service.MyTime;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +15,8 @@ import java.util.*;
 @Data
 public class FastChargingPile implements ChargingPile {
 
+    @Autowired
+    MyTime myTime;
     public long id;
     public int maxChargingNum;
     private int fastPilePower=30;
@@ -27,7 +31,7 @@ public class FastChargingPile implements ChargingPile {
         TimerTask timerTask=new TimerTask() {
             @Override
             public void run() {
-                System.out.println(car.getId()+"充电完成"+new Date());
+                System.out.println(car.getId()+"充电完成"+myTime.getDate());
                 //判断用户是否提前结束充电
                 if(car.getId()==chargingQueue.get(0).getId()) {
                     endCharging(requestInfo,detailMapper,billMapper);
@@ -96,7 +100,7 @@ public class FastChargingPile implements ChargingPile {
         queryWrapper.eq("userid",requestInfo.getId());
         Bill bill=billMapper.selectOne(queryWrapper);
         Detail detail=detailMapper.selectOne(queryWrapper);
-        bill.setEnddate(new Date());
+        bill.setEnddate(myTime.getDate());
         //计算费用
         double chargePrice;
         if(getChargePrice(bill.getStartdate())>getChargePrice(bill.getEnddate()))
@@ -107,7 +111,7 @@ public class FastChargingPile implements ChargingPile {
         detail.setTotalfee((float) totalFee);
         billMapper.updateById(bill);
 
-        detail.setEnddate(new Date());
+        detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         return true;
     }

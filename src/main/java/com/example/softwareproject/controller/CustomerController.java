@@ -7,6 +7,7 @@ import com.example.softwareproject.mapper.CustomerMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.service.ChargingField;
 import com.example.softwareproject.service.ChargingStation;
+import com.example.softwareproject.service.MyTime;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableMBeanExport;
@@ -32,7 +33,8 @@ public class CustomerController {
     ChargingStation chargingStation;
     @Autowired
     ChargingField chargingField;
-
+    @Autowired
+    MyTime myTime;
 
     @GetMapping("/register")
     public String register(){
@@ -92,7 +94,7 @@ public class CustomerController {
     {
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
-        detail.setStartrequesttime(new Date());
+        detail.setStartrequesttime(myTime.getDate());
         detail.setChargingtype(requestInfo.chargingMode);
         detailMapper.insert(detail);
         System.out.println(requestInfo);
@@ -137,13 +139,13 @@ public class CustomerController {
         }
         car.setCarState("charging");
         Bill bill=new Bill();
-        bill.setStartdate(new Date());
+        bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         billMapper.insert(bill);
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",car.getId());
         Detail detail = detailMapper.selectOne(queryWrapper);
-        detail.setStartdate(new Date());
+        detail.setStartdate(myTime.getDate());
         detailMapper.updateById(detail);
         return "success";
     }
@@ -168,10 +170,10 @@ public class CustomerController {
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",car.getId());
         Bill bill=billMapper.selectOne(queryWrapper);
-        bill.setEnddate(new Date());
+        bill.setEnddate(myTime.getDate());
         billMapper.updateById(bill);
         Detail detail=detailMapper.selectOne(queryWrapper);
-        detail.setEnddate(new Date());
+        detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         chargingField.endRecharge(chargingPileId,chargingType);
 
@@ -221,10 +223,10 @@ public class CustomerController {
                 QueryWrapper queryWrapper=new QueryWrapper();
                 queryWrapper.eq("userid",car.getId());
                 Bill bill=billMapper.selectOne(queryWrapper);
-                bill.setEnddate(new Date());
+                bill.setEnddate(myTime.getDate());
                 billMapper.updateById(bill);
                 Detail detail=detailMapper.selectOne(queryWrapper);
-                detail.setEnddate(new Date());
+                detail.setEnddate(myTime.getDate());
                 detailMapper.updateById(detail);
                 return "cancelRechargeSuccessAndCreatedBill";
             }

@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.softwareproject.mapper.BillMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.myinterface.ChargingPile;
+import com.example.softwareproject.service.MyTime;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
@@ -14,11 +16,8 @@ import java.util.*;
 @Data
 public class SlowChargingPile implements ChargingPile {
 
-    @Resource
-    BillMapper billMapper;
-
-    @Resource
-    DetailMapper detailMapper;
+    @Autowired
+    MyTime myTime;
     public long id;
     public int maxChargingNum;
     private int slowPilePower=10;
@@ -78,7 +77,7 @@ public class SlowChargingPile implements ChargingPile {
         TimerTask timerTask=new TimerTask() {
             @Override
             public void run() {
-                System.out.println(car.getId()+"充电完成"+new Date());
+                System.out.println(car.getId()+"充电完成"+myTime.getDate());
                 if(car.getId()==chargingQueue.get(0).getId())
                     endCharging(requestInfo,detailMapper,billMapper);//结束充电
             }
@@ -102,12 +101,12 @@ public class SlowChargingPile implements ChargingPile {
             chargePrice=getChargePrice(bill.getStartdate());
         else chargePrice=getChargePrice(bill.getEnddate());
         double totalFee=(basePrice+chargePrice)*slowPilePower*(bill.getEnddate().getTime()-bill.getStartdate().getTime())/1000/3600;//获取充电度数,再乘以服务费
-        bill.setEnddate(new Date());
+        bill.setEnddate(myTime.getDate());
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
         billMapper.updateById(bill);
 
-        detail.setEnddate(new Date());
+        detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         return true;
     }
