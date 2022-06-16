@@ -338,7 +338,7 @@ public class CustomerController {
         billMapper.delete(queryWrapper);
         detailMapper.delete(queryWrapper);
 
-        return "submitRequest";
+        return "success";
     }
     @GetMapping("/requestQueue")
     public String requestQueuePages()

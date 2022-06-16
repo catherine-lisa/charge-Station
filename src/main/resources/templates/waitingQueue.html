@@ -126,7 +126,18 @@
     setInterval("getStatus()", 1000); //定时每1秒获取一次消息
 
     function cancelRecharge() {
-        
+        $.ajax({
+            url: "/customer/cancelRecharge",
+            type: "POST",
+            data: {},
+            success: function (result) {
+                if (result == "success") {
+                    window.location.href = "/customer/requestRecharge";
+                } else {
+                    alert("取消排队失败！");
+                }
+            }
+        });
     }
 
     function getQueueInfo() {
