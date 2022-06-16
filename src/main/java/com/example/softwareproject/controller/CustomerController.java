@@ -90,9 +90,10 @@ public class CustomerController {
     @ResponseBody
     //使用ResponseBody，且返回String先去resource里面找是否存在视图，不存在的话封装为json数据回传给前端
     //可以用于ajax的success函数
-    public String requestRecharge(Model model,@ModelAttribute RequestInfo requestInfo)
+    public String requestRecharge(Model model,@ModelAttribute RequestInfo requestInfo,HttpSession session)
     {
         model.addAttribute(requestInfo);
+        session.setAttribute("requestInfo",requestInfo);
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
         detail.setStartrequesttime(myTime.getDate());
@@ -103,7 +104,9 @@ public class CustomerController {
     }
 
     @GetMapping("/enterQueue")
-    public String enterQueue(){
+    public String enterQueue(HttpSession session,Model model){
+        System.out.println("enterQUe"+session.getAttribute("requestInfo"));
+        model.addAttribute(session.getAttribute("requestInfo"));
         return "waitingQueue";
     }
 

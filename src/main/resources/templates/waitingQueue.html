@@ -82,11 +82,13 @@
         crossorigin="anonymous"></script>
 <script>
     window.onload = function () {
-        let RequestInfo = [[${requestInfo}]]
+
         getStatus();
     }
 
     function getStatus() {
+        let RequestInfo = [[${requestInfo}]]
+        alert(RequestInfo);
         $.ajax({
             url: "/customer/checkCarState",
             type: "POST",
@@ -120,7 +122,7 @@
             }
         })
     }
-    setInterval("getStatus()", 10000); //定时每10秒获取一次消息
+    setInterval("getStatus()", 1000); //定时每10秒获取一次消息
 </script>
 </body>
 
