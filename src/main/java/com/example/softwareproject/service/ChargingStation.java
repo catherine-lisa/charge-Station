@@ -109,7 +109,7 @@ public class ChargingStation {
             chargingField.getFastChargingPileById(minPileId).insert(car);//向充电桩中插入Car的信息
         } else {
             int minPileId = -1;
-            float minTime = 0;
+            float minTime = 10000;
             for (int i = chargingField.getMaxFastPileNum(); i < chargingField.getMaxChargingNum(); ++i) {
 
                 float sumTime = 0;
