@@ -113,6 +113,7 @@ public class CustomerController {
     public  RequestInfo checkCarState(@ModelAttribute RequestInfo requestInfo)
     {
         System.out.println("checking");
+        System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car.equals(null)==false)//还在等候区
             return requestInfo;

@@ -39,14 +39,14 @@
 </div>
 <div class="box2">
     <div id="location">
-        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">
-            <div> 目前位于 ：</div>
-            <div> 等待区</div>
-        </div>
-        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">
-            <div> 所在充电桩 ：</div>
-            <div> 快充A</div>
-        </div>
+<!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
+<!--            <div> 目前位于 ：</div>-->
+<!--            <div> 等待区</div>-->
+<!--        </div>-->
+<!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
+<!--            <div> 所在充电桩 ：</div>-->
+<!--            <div> 快充A</div>-->
+<!--        </div>-->
     </div>
     <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">
         <div> 充电类型 ：</div>
@@ -82,6 +82,7 @@
         crossorigin="anonymous"></script>
 <script>
     window.onload = function () {
+        let RequestInfo = [[${requestInfo}]]
         getStatus();
     }
 
@@ -89,7 +90,7 @@
         $.ajax({
             url: "/customer/checkCarState",
             type: "POST",
-            data: {},
+            data: {requestInfo : RequestInfo},
             success: function (result) {
                 let status = result;
                 let msg = "";
