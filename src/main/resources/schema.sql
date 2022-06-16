@@ -10,11 +10,15 @@ drop table `DETAIL`;
 create table if not exists `DETAIL`(
     `billid` bigint(20) not null AUTO_INCREMENT,
     `userid` bigint(20),
+    `chargingpileid` bigint(20),
     `ispay`  boolean,
     `chargingtype` varchar (255),
      `startrequesttime`Timestamp default null,
      `startdate`Timestamp default null,
      `enddate`Timestamp default null,
+     `chargevol` float,
+     `chargefee` float,
+     `servicefee` float,
      `totalfee` float(32),
     primary key(`billid`)
 );
