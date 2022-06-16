@@ -65,7 +65,7 @@ public class FastChargingPile implements ChargingPile {
         double totalChargeTime = 0;
         int size = detailList.size();
         for (int i = 0; i < size; ++i) {
-            totalChargeTime += detailList.get(i).getChargingTotalTime();
+            totalChargeTime += detailList.get(i).getChargingtotaltime();
         }
         return totalChargeTime;
     }
@@ -182,7 +182,7 @@ public class FastChargingPile implements ChargingPile {
         if (getChargePrice(bill.getStartdate()) > getChargePrice(bill.getEnddate()))
             chargePrice = getChargePrice(bill.getStartdate());
         else chargePrice = getChargePrice(bill.getEnddate());
-        detail.setChargingTotalTime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
+        detail.setChargingtotaltime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
         detail.setChargevol(fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
         double serviceFee = basePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee = chargePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;

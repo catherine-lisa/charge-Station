@@ -183,10 +183,25 @@ public class CustomerController {
     //主动结束充电
     @PostMapping("/endRecharge")
     @ResponseBody
-    public  String endRecharge(HttpSession session,@PathVariable int chargingPileId,@PathVariable String chargingType)
+    public  String endRecharge(HttpSession session)
     {
         Car car;
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userid",requestInfo.getId());
+        Detail detail = detailMapper.selectOne(queryWrapper);
+        int chargingPileId=(int)detail.getChargingpileid();
+        String chargingType=requestInfo.getChargingMode();
+        if(requestInfo.getCarState()=="chargingDone")
+        {
+            Date now=myTime.getDate();
+
+            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60;
+            double timeoutFee=timeout*1;//设置超时费
+            detail.setTimeoutfee((float) timeoutFee);
+            detailMapper.updateById(detail);
+            return "success";
+        }
         if(chargingType.equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
@@ -199,12 +214,10 @@ public class CustomerController {
             slowChargingPile.endCharging(session,requestInfo,detailMapper,billMapper);
         }
         car.setCarState("endcharging");
-        QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",car.getId());
+
         Bill bill=billMapper.selectOne(queryWrapper);
         bill.setEnddate(myTime.getDate());
         billMapper.updateById(bill);
-        Detail detail=detailMapper.selectOne(queryWrapper);
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         chargingField.endRecharge(chargingPileId,chargingType);

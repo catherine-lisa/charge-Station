@@ -19,6 +19,7 @@ public class Detail {
     private float chargevol; //充电量
     private float chargefee; //充电费用
     private float servicefee; //服务费用
+    private float timeoutfee; //超时费
     private float totalfee;
 
 }

@@ -20,6 +20,7 @@ create table if not exists `DETAIL`(
      `chargingtotaltime` double,
      `chargefee` float,
      `servicefee` float,
+     `timeoutfee` float,
      `totalfee` float(32),
     primary key(`billid`)
 );
