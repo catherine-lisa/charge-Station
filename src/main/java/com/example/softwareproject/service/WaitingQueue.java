@@ -41,6 +41,29 @@ public class WaitingQueue {
         }
         return null;
     }
+    public Car changeChargingNum(long id,float num,String chargingMode)
+    {
+        //取出对应车辆
+        if(chargingMode.equals("fast"))
+        {
+            for(int i=0;i<fastWaitingQueue.size();++i)
+                if(fastWaitingQueue.get(i).getId()==id)
+                {
+                    fastWaitingQueue.get(i).setChargingNum(num);
+                    return fastWaitingQueue.get(i);
+                }
+        }
+        else
+            for(int i=0;i<slowWaitingQueue.size();++i)
+                if(slowWaitingQueue.get(i).getId()==id)
+                {
+                    slowWaitingQueue.get(i).setChargingNum(num);
+                    return slowWaitingQueue.get(i);
+
+                }
+        return null;
+    }
+
     public Car changeChargeMode(long id, String chargingMode)
     {
         //取出对应车辆

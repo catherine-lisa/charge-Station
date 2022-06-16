@@ -100,6 +100,7 @@ public class SlowChargingPile implements ChargingPile {
         Timer timer=new Timer();
         int delay= (int) (requestInfo.getChargingNum()*3600/slowPilePower);
         timer.schedule(timerTask,delay);
+        timer.schedule(timerTask1,0,6*1000);
         return true;
     }
     public boolean endCharging(RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
