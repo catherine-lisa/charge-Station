@@ -99,6 +99,12 @@ public class SlowChargingPile implements ChargingPile {
     {
         Car car =chargingQueue.get(0);
         Timer timer1=new Timer();
+        Timer timer=new Timer();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("userid", requestInfo.getId());
+        Detail detail = detailMapper.selectOne(queryWrapper);
+        detail.setChargingpileid(id);
+        detailMapper.updateById(detail);
         if(car.getId()!=requestInfo.getId())
             return false;
         TimerTask timerTask=new TimerTask() {
@@ -121,7 +127,7 @@ public class SlowChargingPile implements ChargingPile {
                     timer1.cancel();
             }
         };
-        Timer timer=new Timer();
+
         int delay= (int) (requestInfo.getChargingNum()*3600*1000/slowPilePower);
         timer.schedule(timerTask,delay);
         timer.schedule(timerTask1,0,6*1000);
@@ -140,15 +146,21 @@ public class SlowChargingPile implements ChargingPile {
         if(getChargePrice(bill.getStartdate())>getChargePrice(bill.getEnddate()))
             chargePrice=getChargePrice(bill.getStartdate());
         else chargePrice=getChargePrice(bill.getEnddate());
-        double totalFee=(basePrice+chargePrice)*slowPilePower*(bill.getEnddate().getTime()-bill.getStartdate().getTime())/1000/3600;//获取充电度数,再乘以服务费
-        bill.setEnddate(myTime.getDate());
+        detail.setChargingTotalTime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
+        detail.setChargevol(slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
+        double serviceFee=basePrice* slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double chargeFee=chargePrice* slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double totalFee = serviceFee+chargeFee;//获取充电度数,再乘以服务费
+
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
+        detail.setServicefee((float)serviceFee);
+        detail.setChargefee((float)chargeFee);
         billMapper.updateById(bill);
-        session.removeAttribute("requestInfo");
-        session.setAttribute("requestInfo",requestInfo);//更新到session中
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
+        session.removeAttribute("requestInfo");
+        session.setAttribute("requestInfo", requestInfo);//更新到session中
         return true;
     }
     private List<Car> chargingQueue=new LinkedList<>();

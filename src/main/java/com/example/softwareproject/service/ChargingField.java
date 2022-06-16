@@ -180,7 +180,7 @@ public class ChargingField {
                 List<Car> cars = slowChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
                     if (cars.get(j).getId() == requestInfo.getId()) {
-                        Car car = slowChargingPiles.get(i).cancelRequest(requestInfo, detailMapper, billMapper);
+                        Car car = slowChargingPiles.get(i).cancelRequest(session,requestInfo, detailMapper, billMapper);
                         if (car.equals(null)) {
                             return false;
                         } else

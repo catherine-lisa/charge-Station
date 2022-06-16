@@ -54,6 +54,11 @@ public class FastChargingPile implements ChargingPile {
         Car car = chargingQueue.get(0);
         Timer timer = new Timer();
         Timer timer1 = new Timer();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("userid", requestInfo.getId());
+        Detail detail = detailMapper.selectOne(queryWrapper);
+        detail.setChargingpileid(id);
+        detailMapper.updateById(detail);
         if (car.getId() != requestInfo.getId())
             return false;
         TimerTask timerTask = new TimerTask() {
@@ -145,9 +150,15 @@ public class FastChargingPile implements ChargingPile {
         if (getChargePrice(bill.getStartdate()) > getChargePrice(bill.getEnddate()))
             chargePrice = getChargePrice(bill.getStartdate());
         else chargePrice = getChargePrice(bill.getEnddate());
-        double totalFee = (basePrice + chargePrice) * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;//获取充电度数,再乘以服务费
+        detail.setChargingTotalTime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
+        detail.setChargevol(fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
+        double serviceFee=basePrice* fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double chargeFee=chargePrice* fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double totalFee = serviceFee+chargeFee;//获取充电度数,再乘以服务费
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
+        detail.setServicefee((float)serviceFee);
+        detail.setChargefee((float)chargeFee);
         billMapper.updateById(bill);
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
