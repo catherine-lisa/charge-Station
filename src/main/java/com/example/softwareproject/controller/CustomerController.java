@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/customer")
@@ -213,10 +214,42 @@ public class CustomerController {
         detailMapper.updateById(detail);
         return "secondpages";
     }
+    @PostMapping("/changeChargingNum")
+    @ResponseBody
+    public String changChargingNum(HttpSession session,@RequestParam float newChargingNum){
+        RequestInfo requestInfo=(RequestInfo)session.getAttribute("requestInfo");
+        Car car=chargingStation.getWaitingQueue().changeChargingNum(requestInfo.getId(),newChargingNum,requestInfo.getChargingMode());
+        if(car==null)
+        {
+            return "failed";
+        }
+        else return "success";
+    }
+    @PostMapping("/changeRequest")
+    @ResponseBody
+    public String changChargingNum(HttpSession session,@RequestParam float newChargingNum,@RequestParam String newMode){
+        RequestInfo requestInfo=(RequestInfo)session.getAttribute("requestInfo");
+        Car car=chargingStation.getWaitingQueue().changeChargingNum(requestInfo.getId(),newChargingNum,requestInfo.getChargingMode());
+        if(car==null)
+        {
+            return "failed";
+        }
+
+        if(!Objects.equals(newMode, requestInfo.getChargingMode()))
+        {
+            car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
+        }
+        requestInfo.setChargingNum(newChargingNum);
+        requestInfo.setChargingMode(newMode);
+        session.removeAttribute("requestInfo");
+        session.setAttribute("requestInfo",requestInfo);
+        return "success";
+    }
     @PostMapping("/changeRequestMode")
     @ResponseBody
-    public  String changeRequestMode(@ModelAttribute RequestInfo requestInfo,@PathVariable String newMode)
+    public  String changeRequestMode(HttpSession session,@RequestParam String newMode)
     {
+        RequestInfo requestInfo=(RequestInfo)session.getAttribute("requestInfo");
         //如果car不是null，说明在等候区
         Car car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
         //不在则说明在充电区
