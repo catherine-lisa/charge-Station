@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +30,9 @@ public class ChargingStation {
         chargingField.changeChargingPileState("关闭");
     }
 
+    public Map<String, Object> checkChargingPile(int id) {
+        return chargingField.checkChargingPile(id);
+    }
     public String requestRecharge(RequestInfo requestInfo) {
 //        调用join，让传入的信息加入到等待队列
         return waitingQueue.fastJoin(requestInfo);
