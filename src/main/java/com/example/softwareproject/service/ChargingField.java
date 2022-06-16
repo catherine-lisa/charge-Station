@@ -145,7 +145,7 @@ public class ChargingField {
                     }
                 }
             }
-        } else
+        } else {
             for (int i = 0; i < slowChargingPiles.size(); ++i) {
                 List<Car> cars = slowChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
@@ -159,6 +159,7 @@ public class ChargingField {
                     }
                 }
             }
+        }
         return null;
     }
 
