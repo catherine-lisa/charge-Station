@@ -61,14 +61,14 @@
             return;
         }
         $.ajax({
-            url: "/customer/requestRecharge",
+            url: "/customer/changeRecharge",
             type: "POST",
-            data: {"chargingMode": chargingMode, "chargingNum": chargingNum},
+            data: {"newMode": chargingMode, "newChargingNum": chargingNum},
             success: function (result) {
                 if (result == "success") {
                     window.location.href = "/customer/enterQueue";
-                } else if(result == "joinFailed") {
-                    alert("充电申请失败！");
+                } else if(result == "failed") {
+                    alert("充电区不允许修改充电请求！");
                 }
             }
         });
