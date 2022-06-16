@@ -9,80 +9,30 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
 </head>
+
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <form action="/release" method="get">
-                        <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
-                    </form>
-                </ul>
-                <ul class="nav navbar-nav navbar-right" id="naviInfo">
-                    <form action="/release" method="get">
-                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">退出登录</button>
-                    </form>
-                </ul>
-            </div>
+<div class="littlebox">
+    当前用户：jst
+</div>
+<div class="box" id="bigbox">
+    <h1 style="margin-top: 50px;">提交充电请求</h1>
+    <div style="display: flex;">
+        <div style="display: flex; flex-direction:column;" class="lie1">
+            <div>充电类型：</div>
+            <div>充电时长：</div>
         </div>
-    </nav>
-<!--    <div class="littlebox">-->
-<!--        当前用户：jst-->
-<!--    </div>-->
-    <div class="box" id="bigbox">
-        <h1 style="margin-top: 50px;">提交充电请求</h1>
-        <!-- <div style="margin-left: 50px;">充电类型：
-            <input id="user" style="margin-left: 24px;" type="text" placeholder="请输入用户名">
-        </div> -->
-        <div>
-<!--            <label>充电类型：</label>-->
-            充电类型：
-            <select name="chargingMode">
+        <div style="display: flex; flex-direction:column; " class="lie2">
+            <select style="line-height: 30px; width: 15vw; margin-top: 10px;">
                 <option>快充</option>
                 <option>慢充</option>
             </select>
-<!--            <input  style="margin-left: 40px;" name='subject' type="checkbox" value="fast" οnclick="test1(this)"><label>快充</label>-->
-<!--            <input name='subject' type="checkbox" value="slow" οnclick="test2(this)"><label>慢充</label>-->
-        </div>
-        <div style="margin-left: 30px; margin-top: 10px;">充电量：
-            <input name="chargingNum" style="margin-left: 0px;width: 50px;height: 30px" type="text" placeholder="单位：度"> 度
-        </div>
-        <button style="margin-top:20px;" onclick="submit()" class="bot">提交</button>
-    </div>
-    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"
-            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
-            crossorigin="anonymous"></script>
-    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
-            crossorigin="anonymous"></script>
+            <input id="password" type="text" style="line-height: 25px; margin-top: 15px;width: 15vw;"  placeholder="单位：小时">
 
-    <script>
-        function submit() {
-            let chargingMode = document.getElementsByName("chargingMode")[0].value;
-            if(chargingMode=="快充")
-                chargingMode="fast";
-            else
-                chargingMode="slow";
-            let chargingNum = document.getElementsByName("chargingNum")[0].value;
-            if(chargingNum == ""){
-                alert("充电量不能为空！");
-                return;
-            }
-            $.ajax({
-                url: "/customer/requestRecharge",
-                type: "POST",
-                data: {"chargingMode": chargingMode, "chargingNum": chargingNum},
-                success: function (result) {
-                    if (result == "success") {
-                        window.location.href = "/customer/enterQueue";
-                    } else if(result == "joinFailed") {
-                        alert("充电申请失败！");
-                    }
-                }
-            });
-        }
-    </script>
+        </div>
+    </div>
+    <button style="margin-top:20px;" onclick="window.location.href='waitingQueue.html'" class="bot">提交</button>
+</div>
 </body>
+
+
 </html>
