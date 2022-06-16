@@ -63,7 +63,7 @@ public class ChargingField {
                     if(requestInfo.getId()==cars.get(j).getId())
                     {
                         requestInfo.setCarState(cars.get(j).getCarState());
-                        requestInfo.setQueue_num("Fast"+j);
+                        requestInfo.setQueue_num("快充电桩第"+i+"第"+j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
                         return requestInfo;
@@ -80,7 +80,7 @@ public class ChargingField {
                     if(requestInfo.getId()==cars.get(j).getId())
                     {
                         requestInfo.setCarState(cars.get(j).getCarState());
-                        requestInfo.setQueue_num("Slow"+j);
+                        requestInfo.setQueue_num("慢充电桩第"+i+"第"+j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
                         return requestInfo;

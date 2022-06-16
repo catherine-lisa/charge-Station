@@ -51,7 +51,7 @@ public class FastChargingPile implements ChargingPile {
                 {
                     chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+fastPilePower/60);
                 }
-                else
+                else//当前车辆变化
                     timer1.cancel();
             }
         };
