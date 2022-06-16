@@ -65,6 +65,7 @@ public class ChargingField {
                         requestInfo.setCarState(cars.get(j).getCarState());
                         requestInfo.setQueue_num("Fast"+j);
                         requestInfo.setLocation("充电区");
+                        requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
                         return requestInfo;
                     }
                 }
@@ -81,6 +82,7 @@ public class ChargingField {
                         requestInfo.setCarState(cars.get(j).getCarState());
                         requestInfo.setQueue_num("Slow"+j);
                         requestInfo.setLocation("充电区");
+                        requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
                         return requestInfo;
                     }
                 }
