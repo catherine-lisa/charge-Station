@@ -39,9 +39,11 @@
     </div>
 
     <div style="display: flex;width: 28vw; margin-left: 4vw;justify-content:space-between;">
-        <button style="margin-top:40px;" onclick="window.location.href='submitRequest.html'" class="bot">修改充电请求</button>
-        <button style="margin-top:40px;" onclick="window.location.href='submitRequest.html'" class="bot">取消排队</button>
-        <button style="margin-top:40px;" onclick="window.location.href='submitRequest.html'" class="bot">查询队列</button>
+        <form action="/customer/changeRequest" method="GET">
+            <button style="margin-top:40px; "type="submit" class="bot">修改充电请求</button>
+        </form>
+        <button style="margin-top:40px;" onclick="cancelRecharge()" class="bot">取消排队</button>
+        <button style="margin-top:40px;" onclick="getQueueInfo()" class="bot">查询队列</button>
     </div>
 </div>
 
@@ -59,20 +61,11 @@
     }
 
     function getStatus() {
-        let RequestInfo = [[${requestInfo}]]
+        //let RequestInfo = [[${requestInfo}]]
         $.ajax({
             url: "/customer/checkCarState",
             type: "POST",
-            data: {id:RequestInfo.id,
-                location:RequestInfo.location,
-                carType:RequestInfo.carType,
-                carCapacity:RequestInfo.carCapacity,
-                nowCapacity:RequestInfo.nowCapacity,
-                chargingMode:RequestInfo.chargingMode,
-                chargingNum:RequestInfo.chargingNum,
-                //requestDate:RequestInfo.requestDate,
-                carState:RequestInfo.carState,
-                queue_num:RequestInfo.queue_num},
+            data: {},
             success: function (result) {
                 let status = result;
                 let msg = "";
@@ -130,6 +123,25 @@
         })
     }
     setInterval("getStatus()", 1000); //定时每10秒获取一次消息
+
+    function cancelRecharge() {
+        
+    }
+
+    function getQueueInfo() {
+        $.ajax({
+            url: "/customer/requestQueue",
+            type: "POST",
+            data: {},
+            success: function (result) {
+                if (result == "success") {
+                    alert("");
+                } else if(result == "failed") {
+                    alert("充电区不允许修改充电请求！");
+                }
+            }
+        });
+    }
 </script>
 </body>
 
