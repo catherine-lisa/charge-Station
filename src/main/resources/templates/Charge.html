@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/css/Charge.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/Charge.css}">
     <title>充电</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -83,20 +84,11 @@
         }
 
         function getStatus() {
-            let RequestInfo = [[${requestInfo}]]
+            //let RequestInfo = [[${requestInfo}]]
             $.ajax({
                 url: "/customer/checkCarState",
                 type: "POST",
-                data: {id:RequestInfo.id,
-                    location:RequestInfo.location,
-                    carType:RequestInfo.carType,
-                    carCapacity:RequestInfo.carCapacity,
-                    nowCapacity:RequestInfo.nowCapacity,
-                    chargingMode:RequestInfo.chargingMode,
-                    chargingNum:RequestInfo.chargingNum,
-                    requestDate:RequestInfo.requestDate,
-                    carState:RequestInfo.carState,
-                    queue_num:RequestInfo.queue_num},
+                data: {},
                 success: function (result) {
                     //根据requestInfo中的nowCapacity和chargingNum计算剩余充电时长和电量
                     let Status = result;
@@ -124,12 +116,6 @@
                         } else if (Status.chargingMode == "slow") {
                             chargingMode = "慢充";
                             msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                                "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                                "                    <div> 订单编号：</div>\n" +
-                                "                    <div>" + Status.id + "</div>\n" +
-                                "                </div>\n" +
-                                "            </div>" +
-                                "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                                 "                <div style=\"display: flex; justify-content:space-between;\">\n" +
                                 "                    <div> 充电类型：</div>\n" +
                                 "                    <div>" + chargingMode + "</div>\n" +

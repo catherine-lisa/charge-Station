@@ -132,7 +132,7 @@ public class CustomerController {
         }
         System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
-        if(car==null)//还在等候区
+        if(car!=null)//还在等候区
         {
             System.out.println("1");
             if(requestInfo.getChargingMode().equals("fast"))
@@ -338,8 +338,9 @@ public class CustomerController {
     }
     @PostMapping("/requestQueue")
     @ResponseBody
-    public List<Car> requestQueue(@ModelAttribute RequestInfo requestInfo)
+    public List<Car> requestQueue(HttpSession session)
     {
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         //需要配合前端界面
         if(requestInfo.getCarState().equals("waiting"))
         {

@@ -140,6 +140,7 @@ public class ChargingField {
                         requestInfo.setQueue_num("快充电桩第" + i + "第" + j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
+                        System.out.println(requestInfo);
                         return requestInfo;
                     }
                 }
@@ -153,6 +154,7 @@ public class ChargingField {
                         requestInfo.setQueue_num("慢充电桩第" + i + "第" + j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
+                        System.out.println(requestInfo);
                         return requestInfo;
                     }
                 }

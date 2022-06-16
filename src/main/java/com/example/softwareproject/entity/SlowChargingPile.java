@@ -63,7 +63,7 @@ public class SlowChargingPile implements ChargingPile {
         double totalChargeTime = 0;
         int size = detailList.size();
         for (int i = 0; i < size; ++i) {
-            totalChargeTime += detailList.get(i).getChargingTotalTime();
+            totalChargeTime += detailList.get(i).getChargingtotaltime();
         }
         return totalChargeTime;
     }
