@@ -118,7 +118,7 @@ public class CustomerController {
         System.out.println("checking");
         System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
-        if(car.equals(null)==false)//还在等候区
+        if(car==null)//还在等候区
             return requestInfo;
         else return chargingField.findTargetCarState(requestInfo);//查看request中的carState来变化前端
     }
