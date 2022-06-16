@@ -33,7 +33,6 @@ body {
     line-height: 40px;
     padding: 10px;
     opacity:0.93;
-
 }
 
 
@@ -53,17 +52,3 @@ body {
     opacity:1;
 }
 
-
-
-
-.lie1{
-    width: 13vw;
-    margin-left: 40px;
-    text-align: right;
-}
-
-.lie2{
-    width: 20vw;
-    margin-left: 10px;
-    text-align: left;
-}
