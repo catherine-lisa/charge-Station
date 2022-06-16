@@ -32,14 +32,10 @@
 <!--            <div> 目前位于 ：</div>-->
 <!--            <div> 等待区</div>-->
 <!--        </div>-->
-<!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
-<!--            <div> 所在充电桩 ：</div>-->
-<!--            <div> 快充A</div>-->
-<!--        </div>-->
-    </div>
-    <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">
-        <div> 充电类型 ：</div>
-        <div id="chargingMode"></div>
+        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">
+            <div> 所在充电桩 ：</div>
+            <div> 快充A</div>
+        </div>
     </div>
 
     <div style="display: flex;width: 28vw; margin-left: 4vw;justify-content:space-between;">
@@ -59,7 +55,6 @@
         crossorigin="anonymous"></script>
 <script th:inline="javascript">
     window.onload = function () {
-
         getStatus();
     }
 
@@ -75,7 +70,7 @@
                 nowCapacity:RequestInfo.nowCapacity,
                 chargingMode:RequestInfo.chargingMode,
                 chargingNum:RequestInfo.chargingNum,
-                requestDate:RequestInfo.requestDate,
+                //requestDate:RequestInfo.requestDate,
                 carState:RequestInfo.carState,
                 queue_num:RequestInfo.queue_num},
             success: function (result) {
@@ -85,12 +80,18 @@
                     window.location.href = "/customer/startRecharge";
                 } else { //排队中
                     let chargingMode;
+                    let queueStatus;
                     if(status.chargingMode == "fast"){
                         chargingMode = "快充";
                     } else if(status.chargingMode == "slow") {
                         chargingMode = "慢充";
                     } else {
-                        chargingMode = "";
+                        chargingMode = "加载中...";
+                    }
+                    if(status.queue_num){
+                        queueStatus = status.queue_num;
+                    } else {
+                        queueStatus = "加载中...";
                     }
                     if (status.location == "充电区") { //位于充电区
                         msg += "<div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
@@ -104,7 +105,11 @@
                             "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                             "        <div> 充电类型 ：</div>\n" +
                             "        <div> " + chargingMode + " </div>\n" +
-                            "    </div>";
+                            "    </div>" +
+                            "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "            <div> 队列情况 ：</div>\n" +
+                            "        <div> " + queueStatus + " </div>\n" +
+                            "   </div>";
                     } else { //位于等待区
                         msg += "<div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                             "                <div> 目前位于 ：</div>\n" +
@@ -113,10 +118,13 @@
                             "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                             "        <div> 充电类型 ：</div>\n" +
                             "        <div> " + chargingMode + " </div>\n" +
-                            "    </div>";
+                            "    </div>" +
+                            "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "            <div> 队列情况 ：</div>\n" +
+                            "        <div> " + queueStatus + " </div>\n" +
+                            "   </div>";
                     }
                     $("#info").html(msg);
-                    $("#chargingMode").html(chargingMode);
                 }
             }
         })

@@ -8,6 +8,7 @@ import com.example.softwareproject.service.MyTime;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,40 +26,58 @@ public class FastChargingPile implements ChargingPile {
     public String state = "关闭"; //充电桩状态
     private List<Car> chargingQueue = new LinkedList<>();
 
+    @Resource
+    DetailMapper detailMapper;
 
-    public boolean startCharging(RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
-    {
-        Car car =chargingQueue.get(0);
-        Timer timer=new Timer();
-        Timer timer1=new Timer();
-        if(car.getId()!=requestInfo.getId())
+    public List<Map<String, Object>> checkChargingPileQueue() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        int size = chargingQueue.size();
+        for (int i = 1; i < size; ++i) {
+            Map<String, Object> map = new HashMap<>();
+            Car car = chargingQueue.get(i);
+            map.put("carId", car.getId());
+            map.put("carCapacity", car.getCarCapacity());
+            map.put("chargingNum", car.getChargingNum());
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("userid", car.getId());
+            queryWrapper.eq("startdate", null);
+            Detail detail = detailMapper.selectOne(queryWrapper);
+            map.put("queueTime", (myTime.getDate().getTime() - detail.getStartrequesttime().getTime()) / 1000 / 60 + "分钟");
+            list.add(map);
+        }
+        return list;
+    }
+
+    public boolean startCharging(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+        Car car = chargingQueue.get(0);
+        Timer timer = new Timer();
+        Timer timer1 = new Timer();
+        if (car.getId() != requestInfo.getId())
             return false;
-        TimerTask timerTask=new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println(car.getId()+"充电完成"+myTime.getDate());
+                System.out.println(car.getId() + "充电完成" + myTime.getDate());
                 //判断用户是否提前结束充电
-                if(car.getId()==chargingQueue.get(0).getId()) {
-                    endCharging(requestInfo,detailMapper,billMapper);
+                if (car.getId() == chargingQueue.get(0).getId()) {
+                    endCharging(requestInfo, detailMapper, billMapper);
                 }//结束充电
             }
         };
-        TimerTask timerTask1=new TimerTask() {
+        TimerTask timerTask1 = new TimerTask() {
             @Override
             public void run() {
-                Car nowCar=chargingQueue.get(0);
-                if(car.getId()==nowCar.getId())
-                {
-                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+fastPilePower/60);
-                }
-                else//当前车辆变化
+                Car nowCar = chargingQueue.get(0);
+                if (car.getId() == nowCar.getId()) {
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + fastPilePower / 60);
+                } else//当前车辆变化
                     timer1.cancel();
             }
         };
-        int delay= (int) (requestInfo.getChargingNum()*3600*1000/fastPilePower);
+        int delay = (int) (requestInfo.getChargingNum() * 3600 * 1000 / fastPilePower);
         System.out.println(delay);
-        timer.schedule(timerTask,delay);
-        timer.schedule(timerTask1,0,6*1000);
+        timer.schedule(timerTask, delay);
+        timer.schedule(timerTask1, 0, 6 * 1000);
         return true;
     }
 
@@ -113,10 +132,10 @@ public class FastChargingPile implements ChargingPile {
     public boolean endCharging(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         requestInfo.setCarState("chargingDone");
         this.dequeue();
-        QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
-        Bill bill=billMapper.selectOne(queryWrapper);
-        Detail detail=detailMapper.selectOne(queryWrapper);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("userid", requestInfo.getId());
+        Bill bill = billMapper.selectOne(queryWrapper);
+        Detail detail = detailMapper.selectOne(queryWrapper);
         bill.setEnddate(myTime.getDate());
         //计算费用
         double chargePrice;
@@ -159,8 +178,8 @@ public class FastChargingPile implements ChargingPile {
 
     public void dequeue() {
         chargingQueue.remove(0);
-        if(chargingQueue.size()>0)
-        chargingQueue.get(0).setCarState("readyCharge");
+        if (chargingQueue.size() > 0)
+            chargingQueue.get(0).setCarState("readyCharge");
     }
 
     public Car getFirstCar() {

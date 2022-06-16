@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/submitRequest2.css">
+    <title>提交请求</title>
+</head>
+
+<body>
+<div class="littlebox">
+    当前用户：jst
+</div>
+<div class="box" id="bigbox">
+    <h1 style="margin-top: 50px;">提交充电请求</h1>
+    <div style="display: flex;">
+        <div style="display: flex; flex-direction:column;" class="lie1">
+            <div>充电类型：</div>
+            <div>充电时长：</div>
+        </div>
+        <div style="display: flex; flex-direction:column; " class="lie2">
+            <select style="line-height: 30px; width: 15vw; margin-top: 10px;">
+                <option>快充</option>
+                <option>慢充</option>
+            </select>
+            <input id="password" type="text" style="line-height: 25px; margin-top: 15px;width: 15vw;"  placeholder="单位：小时">
+
+        </div>
+    </div>
+    <button style="margin-top:20px;" onclick="window.location.href='waitingQueue.html'" class="bot">提交</button>
+</div>
+</body>
+
+</html>

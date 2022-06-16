@@ -1,17 +1,19 @@
 package com.example.softwareproject.service;
 
 
-import com.example.softwareproject.entity.Car;
-import com.example.softwareproject.entity.FastChargingPile;
-import com.example.softwareproject.entity.RequestInfo;
-import com.example.softwareproject.entity.SlowChargingPile;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.softwareproject.entity.*;
 import com.example.softwareproject.mapper.BillMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Data
@@ -23,6 +25,46 @@ public class ChargingField {
     private int slowPilePower = 10;
     private ArrayList<FastChargingPile> fastChargingPiles = new ArrayList<>();
     private ArrayList<SlowChargingPile> slowChargingPiles = new ArrayList<>();
+
+    @Resource
+    BillMapper billMapper;
+
+    @Autowired
+    MyTime myTime;
+
+    public Map<String, Object> checkChargingPile(int id) {
+        Map<String, Object> map = new HashMap<>();
+        Car car;
+        int pilePower;
+        if (id < maxFastPileNum) {
+            FastChargingPile chargingPile = fastChargingPiles.get(id);
+            car = chargingPile.getFirstCar();
+            pilePower = fastPilePower;
+        } else {
+            SlowChargingPile chargingPile = slowChargingPiles.get(id);
+            car = chargingPile.getFirstCar();
+            pilePower = slowPilePower;
+        }
+        map.put("carId", car.getId());
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("userid", car.getId());
+        queryWrapper.ge("enddate", myTime.getDate());
+        Bill bill = billMapper.selectOne(queryWrapper);
+        int chargingTime = (int) car.getChargingNum() * 60 / pilePower;
+        map.put("chargingTime", chargingTime + "分钟");
+        map.put("remainingChargeTime", chargingTime - ((myTime.getDate().getTime() - bill.getStartdate().getTime()) / 1000 / 60) + "分钟");
+        return map;
+    }
+
+    public List<Map<String, Object>> checkChargingPileQueue(int id) {
+        if (id < maxFastPileNum) {
+            FastChargingPile chargingPile = fastChargingPiles.get(id);
+            return chargingPile.checkChargingPileQueue();
+        } else {
+            SlowChargingPile chargingPile = slowChargingPiles.get(id);
+            return chargingPile.checkChargingPileQueue();
+        }
+    }
 
     public void changeChargingPileState(String state) {
         for (int i = 0; i < maxFastPileNum; ++i) {
@@ -51,43 +93,35 @@ public class ChargingField {
             slowChargingPiles.add(chargingPile);
         }
     }
-    public RequestInfo findTargetCarState(RequestInfo requestInfo)
-    {
-        if(requestInfo.getChargingMode().equals("fast"))
-        {
-            for(int i=0;i<fastChargingPiles.size();++i)
-            {
-                List<Car>cars=fastChargingPiles.get(i).getChargingQueue();
-                for(int j=0;j<cars.size();++j)
-                {
-                    if(requestInfo.getId()==cars.get(j).getId())
-                    {
+
+    public RequestInfo findTargetCarState(RequestInfo requestInfo) {
+        if (requestInfo.getChargingMode().equals("fast")) {
+            for (int i = 0; i < fastChargingPiles.size(); ++i) {
+                List<Car> cars = fastChargingPiles.get(i).getChargingQueue();
+                for (int j = 0; j < cars.size(); ++j) {
+                    if (requestInfo.getId() == cars.get(j).getId()) {
                         requestInfo.setCarState(cars.get(j).getCarState());
-                        requestInfo.setQueue_num("快充电桩第"+i+"第"+j);
+                        requestInfo.setQueue_num("快充电桩第" + i + "第" + j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
                         return requestInfo;
                     }
                 }
             }
-        }
-        else
-            for(int i=0;i<slowChargingPiles.size();++i)
-            {
-                List<Car>cars=slowChargingPiles.get(i).getChargingQueue();
-                for(int j=0;j<cars.size();++j)
-                {
-                    if(requestInfo.getId()==cars.get(j).getId())
-                    {
+        } else
+            for (int i = 0; i < slowChargingPiles.size(); ++i) {
+                List<Car> cars = slowChargingPiles.get(i).getChargingQueue();
+                for (int j = 0; j < cars.size(); ++j) {
+                    if (requestInfo.getId() == cars.get(j).getId()) {
                         requestInfo.setCarState(cars.get(j).getCarState());
-                        requestInfo.setQueue_num("慢充电桩第"+i+"第"+j);
+                        requestInfo.setQueue_num("慢充电桩第" + i + "第" + j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
                         return requestInfo;
                     }
                 }
             }
-            return null;
+        return null;
     }
 
     public FastChargingPile getFastChargingPileById(int id) {
