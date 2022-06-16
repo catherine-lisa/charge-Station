@@ -29,6 +29,8 @@ public class FastChargingPile implements ChargingPile {
     public boolean startCharging(RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
     {
         Car car =chargingQueue.get(0);
+        Timer timer=new Timer();
+        Timer timer1=new Timer();
         if(car.getId()!=requestInfo.getId())
             return false;
         TimerTask timerTask=new TimerTask() {
@@ -41,11 +43,22 @@ public class FastChargingPile implements ChargingPile {
                 }//结束充电
             }
         };
-        Timer timer=new Timer();
+        TimerTask timerTask1=new TimerTask() {
+            @Override
+            public void run() {
+                Car nowCar=chargingQueue.get(0);
+                if(car.getId()==nowCar.getId())
+                {
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+fastPilePower/60);
+                }
+                else
+                    timer1.cancel();
+            }
+        };
         int delay= (int) (requestInfo.getChargingNum()*3600*1000/fastPilePower);
         System.out.println(delay);
         timer.schedule(timerTask,delay);
-
+        timer.schedule(timerTask1,0,6*1000);
         return true;
     }
 
