@@ -112,7 +112,7 @@ public class CustomerController {
 
     @GetMapping("/enterQueue")
     public String enterQueue(HttpSession session,Model model){
-        System.out.println("enterQUe"+session.getAttribute("requestInfo"));
+//        System.out.println("enterQUe"+session.getAttribute("requestInfo"));
         model.addAttribute(session.getAttribute("requestInfo"));
         return "waitingQueue";
     }
@@ -122,8 +122,8 @@ public class CustomerController {
     @ResponseBody
     public  RequestInfo checkCarState(@ModelAttribute RequestInfo requestInfo)
     {
-        System.out.println("checking");
-        System.out.println(requestInfo);
+//        System.out.println("checking");
+//        System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car==null)//还在等候区
         {
