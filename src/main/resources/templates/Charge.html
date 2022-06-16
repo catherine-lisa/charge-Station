@@ -72,7 +72,7 @@
             <div style="margin-left: 42px; margin-top: 10px;">充电时长：
                 <input id="password" style="margin-left: 20px;" type="password" placeholder="单位：小时">
             </div> -->
-            <button style="margin-top:40px;" onclick="window.location.href='Bill.html'" class="bot">结束充电</button>
+            <button style="margin-top:40px;" onclick="endRecharge()" class="bot">结束充电</button>
         </div>
     </div>
     <script th:inline="javascript">
@@ -116,7 +116,7 @@
                         "                    <div> 剩余充电时长：</div>\n" +
                         "                    <div>" + hour + "</div>\n" +
                         "                    <div> 小时 </div>\n" +
-                        "                    <div> "+ mintue + "</div>\n" +
+                        "                    <div> "+ minute + "</div>\n" +
                         "                    <div> 分钟 </div>\n" +
                         "                </div>\n" +
                         "            </div>\n" +
@@ -133,6 +133,34 @@
             })
         }
         setInterval("getStatus()", 6000); //定时每一分钟（现实的六秒）获取一次消息
+        //用户主动结束充电
+        function endRecharge() {
+            let RequestInfo = [[${requestInfo}]]
+            $.ajax({
+                url: "/customer/endRecharge",
+                type: "POST",
+                data: {id:RequestInfo.id,
+                    location:RequestInfo.location,
+                    carType:RequestInfo.carType,
+                    carCapacity:RequestInfo.carCapacity,
+                    nowCapacity:RequestInfo.nowCapacity,
+                    chargingMode:RequestInfo.chargingMode,
+                    chargingNum:RequestInfo.chargingNum,
+                    requestDate:RequestInfo.requestDate,
+                    carState:RequestInfo.carState,
+                    queue_num:RequestInfo.queue_num,
+                    //还差充电桩号和充电类型  不知道咋传
+                    },
+                success: function (result) {
+                    if (result == "success") {
+                        window.location.href = "/customer/requestBill";
+                    } else {
+                        alert("结束充电失败");
+                    }
+                }
+            });
+        }
+
     </script>
 </body>
 
