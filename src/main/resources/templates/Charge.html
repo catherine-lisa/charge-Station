@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <form action="/goodslist" method="post" th:action="@{/customer/startRecharge}">
+                    <form action="/customer/startRecharge" method="post">
                         <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">开始充电</button>
                     </form>
                 </ul>
@@ -80,7 +80,7 @@
     </div>
     <script th:inline="javascript">
         window.onload = function () {
-            startRecharge();
+            //startRecharge();
             getStatus();
         };
         function startRecharge(){
@@ -99,6 +99,7 @@
         }
 
         function getStatus() {
+            //alert("222");
             //let RequestInfo = [[${requestInfo}]]
             $.ajax({
                 url: "/customer/checkCarState",
@@ -106,29 +107,29 @@
                 data: {},
                 success: function (result) {
                     //根据requestInfo中的nowCapacity和chargingNum计算剩余充电时长和电量
-                    let Status = result;
+                    let status = result;
                     let msg = "";
-                    let nowCapacity=Status.nowCapacity;
-                    let chargingNum=Status.chargingNum;
-                    let power=0;
-                    if(Status.chargingMode=="fast"){
-                        power=30;//功率
-                    }else {
-                        power=10;
+                    let nowCapacity=status.nowCapacity;
+                    let chargingNum=status.chargingNum;
+                    let power;
+                    if(status.chargingMode == "fast"){
+                        power = 30;//功率
+                    } else {
+                        power = 10;
                     }
                     //判断是否还在充电
-                    if (Status.carState == "chargingDone") { //充电结束，自动跳转请求bill页面
+                    if (status.carState == "chargingDone") { //充电结束，自动跳转请求bill页面
                         window.location.href = "/customer/payBill";
                     }
                     else {
                         //计算剩余充电时长
-                        let totalTime = Math.floor(chargingNum / power);
+                        let totalTime = (chargingNum / power) * 60;
                         let hour = Math.floor((chargingNum - nowCapacity) / power);
                         let minute = ((chargingNum - nowCapacity) / power - hour) * 60;
                         let chargingMode;
-                        if (Status.chargingMode == "fast") {
+                        if (status.chargingMode == "fast") {
                             chargingMode = "快充";
-                        } else if (Status.chargingMode == "slow") {
+                        } else if (status.chargingMode == "slow") {
                             chargingMode = "慢充";
                         }
                         msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
@@ -164,8 +165,7 @@
                             "                    <div> " + nowCapacity + " </div>\n" +
                             "                    <div> 度</div>\n" +
                             "                </div>\n" +
-                            "            </div>"
-                        ;
+                            "            </div>";
                         $("#info").html(msg);
                     }
                 }

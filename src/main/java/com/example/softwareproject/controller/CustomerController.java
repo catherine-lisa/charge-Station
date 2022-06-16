@@ -125,9 +125,9 @@ public class CustomerController {
     @Operation(summary = "前端周期性问询，直到更新为readyCharge")
     @PostMapping("/checkCarState")
     @ResponseBody
-    public  RequestInfo checkCarState(HttpSession session)
+    public RequestInfo checkCarState(HttpSession session)
     {
-        //System.out.println("test"+session.getAttribute("requestInfo"));
+        System.out.println("test"+session.getAttribute("requestInfo"));
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         if(Objects.equals(requestInfo.getCarState(), "chargingDone"))
         {
