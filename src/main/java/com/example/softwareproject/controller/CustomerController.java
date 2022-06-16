@@ -152,10 +152,11 @@ public class CustomerController {
     }
     @PostMapping("/startRecharge")
     @ResponseBody
-    public  String startRecharge(HttpSession session)
+    public String startRecharge(HttpSession session)
     {
         Car car;
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+        System.out.println("Start"+requestInfo);
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",requestInfo.getId());
         Detail detail = detailMapper.selectOne(queryWrapper);

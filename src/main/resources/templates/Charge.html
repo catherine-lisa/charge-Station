@@ -82,18 +82,20 @@
         window.onload = function () {
             startRecharge();
             getStatus();
-        }
+        };
         function startRecharge(){
+            alert("111")
             $.ajax({
                 url: "/customer/startRecharge",
                 type: "POST",
                 data: {},
                 success: function (result) {
+                    alert("111");
                     if (result != "success") {
                         alert("充电失败！");
                     }
                 }
-            })
+            });
         }
 
         function getStatus() {
@@ -129,46 +131,45 @@
                         } else if (Status.chargingMode == "slow") {
                             chargingMode = "慢充";
                         }
-                            msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                                "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                                "                    <div> 充电类型：</div>\n" +
-                                "                    <div>" + chargingMode + "</div>\n" +
-                                "                </div>\n" +
-                                "            </div>\n" +
-                                "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                                "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                                "                    <div> 充电度数：</div>\n" +
-                                "                    <div>" + chargingNum + "</div>\n" +
-                                "                </div>\n" +
-                                "            </div>\n" +
-                                "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                                "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                                "                    <div> 充电时长：</div>\n" +
-                                "                    <div>" + totalTime + "</div>\n" +
-                                "                </div>\n" +
-                                "            </div>" +
-                                "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                                "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                                "                    <div> 剩余充电时长：</div>\n" +
-                                "                    <div>" + hour + "</div>\n" +
-                                "                    <div> 小时 </div>\n" +
-                                "                    <div> " + minute + "</div>\n" +
-                                "                    <div> 分钟 </div>\n" +
-                                "                </div>\n" +
-                                "            </div>\n" +
-                                "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                                "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                                "                    <div> 当前汽车电量：</div>\n" +
-                                "                    <div> " + nowCapacity + " </div>\n" +
-                                "                    <div> 度</div>\n" +
-                                "                </div>\n" +
-                                "            </div>"
-                            ;
-                            $("#info").html(msg);
-                        }
+                        msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                            "                    <div> 充电类型：</div>\n" +
+                            "                    <div>" + chargingMode + "</div>\n" +
+                            "                </div>\n" +
+                            "            </div>\n" +
+                            "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                            "                    <div> 充电度数：</div>\n" +
+                            "                    <div>" + chargingNum + "</div>\n" +
+                            "                </div>\n" +
+                            "            </div>\n" +
+                            "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                            "                    <div> 充电时长：</div>\n" +
+                            "                    <div>" + totalTime + "</div>\n" +
+                            "                </div>\n" +
+                            "            </div>" +
+                            "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                            "                    <div> 剩余充电时长：</div>\n" +
+                            "                    <div>" + hour + "</div>\n" +
+                            "                    <div> 小时 </div>\n" +
+                            "                    <div> " + minute + "</div>\n" +
+                            "                    <div> 分钟 </div>\n" +
+                            "                </div>\n" +
+                            "            </div>\n" +
+                            "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                            "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                            "                    <div> 当前汽车电量：</div>\n" +
+                            "                    <div> " + nowCapacity + " </div>\n" +
+                            "                    <div> 度</div>\n" +
+                            "                </div>\n" +
+                            "            </div>"
+                        ;
+                        $("#info").html(msg);
                     }
                 }
-            })
+            });
         }
         setInterval("getStatus()", 6000); //定时每一分钟（现实的六秒）获取一次消息
 
@@ -177,21 +178,11 @@
             $.ajax({
                 url: "/customer/endRecharge",
                 type: "POST",
-                data: {id:RequestInfo.id,
-                    location:RequestInfo.location,
-                    carType:RequestInfo.carType,
-                    carCapacity:RequestInfo.carCapacity,
-                    nowCapacity:RequestInfo.nowCapacity,
-                    chargingMode:RequestInfo.chargingMode,
-                    chargingNum:RequestInfo.chargingNum,
-                    requestDate:RequestInfo.requestDate,
-                    carState:RequestInfo.carState,
-                    queue_num:RequestInfo.queue_num,
-                    //还差充电桩号和充电类型  不知道咋传
-                    },
+                data: {},
                 success: function (result) {
                     if (result == "success") {
-                        window.location.href = "/customer/payBill";
+                        alert("取消充电成功！");
+                        //window.location.href = "/customer/payBill";
                     } else {
                         alert("取消充电失败！");
                     }
