@@ -124,8 +124,8 @@ public class CustomerController {
     @ResponseBody
     public  RequestInfo checkCarState(HttpSession session)
     {
-//        System.out.println("checking");
-        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requsetInfo");
+        //System.out.println("test"+session.getAttribute("requestInfo"));
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         if(Objects.equals(requestInfo.getCarState(), "chargingDone"))
         {
             return requestInfo;
@@ -242,6 +242,11 @@ public class CustomerController {
         }
         else return "success";
     }
+    @GetMapping("/changeRequest")
+    public String changChargingNum(){
+        return "changeRequest";
+    }
+
     @PostMapping("/changeRequest")
     @ResponseBody
     public String changChargingNum(HttpSession session,@RequestParam float newChargingNum,@RequestParam String newMode){
