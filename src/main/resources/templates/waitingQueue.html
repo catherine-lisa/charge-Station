@@ -15,13 +15,13 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<!--            <ul class="nav navbar-nav">-->
+<!--                <form action="/goodslist" method="get">-->
+<!--                    <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">首页</button>-->
+<!--                </form>-->
+<!--            </ul>-->
             <ul class="nav navbar-nav">
-                <form action="/goodslist" method="get">
-                    <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">首页</button>
-                </form>
-            </ul>
-            <ul class="nav navbar-nav">
-                <form action="/release" method="get">
+                <form action="/customer/user" method="get">
                     <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
                 </form>
             </ul>
@@ -91,16 +91,31 @@
         $.ajax({
             url: "/customer/checkCarState",
             type: "POST",
-            data: {chargingMode:RequestInfo.chargingMode},
+            data: {id:RequestInfo.id,
+                location:RequestInfo.location,
+                carType:RequestInfo.carType,
+                carCapacity:RequestInfo.carCapacity,
+                nowCapacity:RequestInfo.nowCapacity,
+                chargingMode:RequestInfo.chargingMode,
+                chargingNum:RequestInfo.chargingNum,
+                requestDate:RequestInfo.requestDate,
+                carState:RequestInfo.carState,
+                queue_num:RequestInfo.queue_num},
             success: function (result) {
                 let status = result;
                 let msg = "";
-                if (status['carState'] == "readyCharge") { //充电中
+                if (status.carState == "readyCharge") { //充电中
                     window.location.href = "/customer/startRecharge";
-                } else if (status['carState'] == "waiting") { //排队中
-                    let location = status['location'];
-                    let chargingMode = status['chargingMode'];
-                    if (location == "充电区") { //位于充电区
+                } else { //排队中
+                    let chargingMode;
+                    if(status.chargingMode == "fast"){
+                        chargingMode = "快充";
+                    } else if(status.chargingMode == "slow") {
+                        chargingMode = "慢充";
+                    } else {
+                        chargingMode = "";
+                    }
+                    if (status.location == "充电区") { //位于充电区
                         msg += "<div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                             "                <div> 目前位于 ：</div>\n" +
                             "                <div> 充电区 </div>\n" +

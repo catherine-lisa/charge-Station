@@ -57,7 +57,6 @@ public class CustomerController {
         return "success";
     }
 
-
     @GetMapping("/logIn")
     public String logIn()
     {
@@ -81,6 +80,14 @@ public class CustomerController {
         }
         return "log_in_failed";
     }
+
+    @GetMapping("/user")
+    public String user()
+    {
+        return "user";
+    }
+
+
 
     @GetMapping("/requestRecharge")
     public String requestRecharge(){
@@ -119,7 +126,10 @@ public class CustomerController {
         System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car==null)//还在等候区
+        {
+            System.out.println("1");
             return requestInfo;
+        }
         else return chargingField.findTargetCarState(requestInfo);//查看request中的carState来变化前端
     }
 
