@@ -213,8 +213,9 @@ public class CustomerController {
         return "success";
     }
     @PostMapping("/payBill")
-    public  String payBill(@ModelAttribute RequestInfo requestInfo)
+    public  String payBill(HttpSession session)
     {
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",requestInfo.getId());
         Detail detail=detailMapper.selectOne(queryWrapper);
