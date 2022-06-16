@@ -110,7 +110,7 @@
                     }
                     //判断是否还在充电
                     if (carStatus.carState == "chargingDone") { //充电结束，自动跳转请求bill页面
-                        window.location.href = "/customer/requestBill";
+                        window.location.href = "/customer/payBill";
                     }
                     else {
                         //计算剩余充电时长
@@ -159,7 +159,7 @@
                     },
                 success: function (result) {
                     if (result == "success") {
-                        window.location.href = "/customer/requestBill";
+                        window.location.href = "/customer/payBill";
                     } else {
                         alert("结束充电失败");
                     }
