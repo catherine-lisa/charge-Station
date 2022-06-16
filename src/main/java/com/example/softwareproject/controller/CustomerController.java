@@ -128,6 +128,12 @@ public class CustomerController {
         if(car==null)//还在等候区
         {
             System.out.println("1");
+            if(requestInfo.getChargingMode().equals("fast"))
+            {
+                requestInfo.setQueue_num("快充队列"+chargingStation.getWaitingQueue().getFastWaitingQueue().size());
+            }
+            else
+                requestInfo.setQueue_num("慢充队列"+chargingStation.getWaitingQueue().getSlowWaitingQueue().size());
             return requestInfo;
         }
 
