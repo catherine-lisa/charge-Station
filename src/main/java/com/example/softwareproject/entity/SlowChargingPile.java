@@ -24,6 +24,29 @@ public class SlowChargingPile implements ChargingPile {
     private double basePrice=0.8;//服务费
 
     public String state = "关闭"; //充电桩状态
+
+    @Resource
+    DetailMapper detailMapper;
+
+    public List<Map<String, Object>> checkChargingPileQueue() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        int size = chargingQueue.size();
+        for (int i = 1; i < size; ++i) {
+            Map<String, Object> map = new HashMap<>();
+            Car car = chargingQueue.get(i);
+            map.put("carId", car.getId());
+            map.put("carCapacity", car.getCarCapacity());
+            map.put("chargingNum", car.getChargingNum());
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("userid", car.getId());
+            queryWrapper.eq("startdate", null);
+            Detail detail = detailMapper.selectOne(queryWrapper);
+            map.put("queueTime", (myTime.getDate().getTime() - detail.getStartrequesttime().getTime()) / 1000 / 60 + "分钟");
+            list.add(map);
+        }
+        return list;
+    }
+
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
         if (nowTime.getTime() == startTime.getTime()
                 || nowTime.getTime() == endTime.getTime()) {

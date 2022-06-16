@@ -33,6 +33,10 @@ public class ChargingStation {
     public Map<String, Object> checkChargingPile(int id) {
         return chargingField.checkChargingPile(id);
     }
+
+    public List<Map<String,Object>> checkChargingPileQueue(int id) {
+        return chargingField.checkChargingPileQueue(id);
+    }
     public String requestRecharge(RequestInfo requestInfo) {
 //        调用join，让传入的信息加入到等待队列
         return waitingQueue.fastJoin(requestInfo);
