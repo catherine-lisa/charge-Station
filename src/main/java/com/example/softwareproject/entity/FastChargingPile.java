@@ -7,6 +7,7 @@ import com.example.softwareproject.myinterface.ChargingPile;
 import com.example.softwareproject.service.MyTime;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -14,11 +15,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 @Data
 public class FastChargingPile implements ChargingPile {
 
-    @Autowired
-    MyTime myTime;
+
     public long id;
     public int maxChargingNum;
     private int fastPilePower = 30;
@@ -33,7 +34,7 @@ public class FastChargingPile implements ChargingPile {
     @Resource
     DetailMapper detailMapper;
 
-    public List<Map<String, Object>> checkChargingPileQueue() {
+    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime) {
         List<Map<String, Object>> list = new ArrayList<>();
         int size = chargingQueue.size();
         for (int i = 1; i < size; ++i) {
@@ -82,7 +83,7 @@ public class FastChargingPile implements ChargingPile {
         return totalChargeVol;
     }
 
-    public boolean startCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean startCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         Car car = chargingQueue.get(0);
         Timer timer = new Timer();
         Timer timer1 = new Timer();
@@ -96,24 +97,30 @@ public class FastChargingPile implements ChargingPile {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println(car.getId() + "充电完成" + myTime.getDate());
+                System.out.println(car.getId() + "充电完成");
                 //判断用户是否提前结束充电
                 if (car.getId() == chargingQueue.get(0).getId()) {
-                    endCharging(session, requestInfo, detailMapper, billMapper);
+                    endCharging(myTime,session, requestInfo, detailMapper, billMapper);
                 }//结束充电
             }
         };
         TimerTask timerTask1 = new TimerTask() {
             @Override
             public void run() {
+                if(chargingQueue.size()==0)
+                {
+                    timer1.cancel();
+                    return;
+                }
                 Car nowCar = chargingQueue.get(0);
                 if (car.getId() == nowCar.getId()) {
-                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + fastPilePower / 60);
+                chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + ((float)fastPilePower) / 60);
+                    System.out.println(chargingQueue.get(0));
                 } else//当前车辆变化
                     timer1.cancel();
             }
         };
-        int delay = (int) (requestInfo.getChargingNum() * 3600 * 1000 / fastPilePower);
+        int delay = (int) (requestInfo.getChargingNum() * 360 * 1000 / fastPilePower);
         System.out.println(delay);
         timer.schedule(timerTask, delay);
         timer.schedule(timerTask1, 0, 6 * 1000);
@@ -168,7 +175,7 @@ public class FastChargingPile implements ChargingPile {
         return 1.0;
     }
 
-    public boolean endCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean endCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
 
         requestInfo.setCarState("chargingDone");
         this.dequeue();
@@ -182,8 +189,8 @@ public class FastChargingPile implements ChargingPile {
         if (getChargePrice(bill.getStartdate()) > getChargePrice(bill.getEnddate()))
             chargePrice = getChargePrice(bill.getStartdate());
         else chargePrice = getChargePrice(bill.getEnddate());
-        detail.setChargingtotaltime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
-        detail.setChargevol(fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
+        detail.setChargingtotaltime((double) (bill.getEnddate().getTime() - bill.getStartdate().getTime()));
+        detail.setChargevol((float)fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
         double serviceFee = basePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee = chargePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double totalFee = serviceFee + chargeFee;//获取充电度数,再乘以服务费

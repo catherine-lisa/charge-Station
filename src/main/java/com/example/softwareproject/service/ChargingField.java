@@ -93,10 +93,10 @@ public class ChargingField {
     public List<Map<String, Object>> checkChargingPileQueue(int id) {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue();
+            return chargingPile.checkChargingPileQueue(myTime);
         } else {
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue();
+            return chargingPile.checkChargingPileQueue(myTime);
         }
     }
 
@@ -140,7 +140,7 @@ public class ChargingField {
                         requestInfo.setQueue_num("快充电桩第" + i + "第" + j);
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
-                        System.out.println(requestInfo);
+//                        System.out.println(requestInfo);
                         return requestInfo;
                     }
                 }

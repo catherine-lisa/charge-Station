@@ -125,13 +125,13 @@ public class CustomerController {
     @ResponseBody
     public RequestInfo checkCarState(HttpSession session)
     {
-        System.out.println("test"+session.getAttribute("requestInfo"));
+//        System.out.println("test"+session.getAttribute("requestInfo"));
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
-        if(Objects.equals(requestInfo.getCarState(), "chargingDone"))
+        if(Objects.equals(requestInfo.getCarState(), "chargingDone"))//充电完成
         {
             return requestInfo;
         }
-        System.out.println(requestInfo);
+//        System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car!=null)//还在等候区
         {
@@ -166,13 +166,13 @@ public class CustomerController {
         if(requestInfo.getChargingMode().equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
-            fastChargingPile.startCharging(session,requestInfo,detailMapper,billMapper);
+            fastChargingPile.startCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
-            slowChargingPile.startCharging(session,requestInfo,detailMapper,billMapper);
+            slowChargingPile.startCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
         car.setCarState("charging");
         Bill bill=new Bill();
@@ -212,14 +212,15 @@ public class CustomerController {
         if(chargingType.equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
-            fastChargingPile.endCharging(session,requestInfo,detailMapper,billMapper);
+            fastChargingPile.endCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
-            slowChargingPile.endCharging(session,requestInfo,detailMapper,billMapper);
+            slowChargingPile.endCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
+
         car.setCarState("endcharging");
 
         Bill bill=billMapper.selectOne(queryWrapper);

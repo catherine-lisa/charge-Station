@@ -17,8 +17,7 @@ import java.util.*;
 @Data
 public class SlowChargingPile implements ChargingPile {
 
-    @Autowired
-    MyTime myTime;
+
     public long id;
     public int maxChargingNum;
     private int slowPilePower=10;
@@ -31,7 +30,7 @@ public class SlowChargingPile implements ChargingPile {
     @Resource
     DetailMapper detailMapper;
 
-    public List<Map<String, Object>> checkChargingPileQueue() {
+    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime) {
         List<Map<String, Object>> list = new ArrayList<>();
         int size = chargingQueue.size();
         for (int i = 1; i < size; ++i) {
@@ -127,7 +126,7 @@ public class SlowChargingPile implements ChargingPile {
         }
         return 1.0;
     }
-    public boolean startCharging(HttpSession session,RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
+    public boolean startCharging(MyTime myTime,HttpSession session,RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
     {
         Car car =chargingQueue.get(0);
         Timer timer1=new Timer();
@@ -144,16 +143,21 @@ public class SlowChargingPile implements ChargingPile {
             public void run() {
                 System.out.println(car.getId()+"充电完成"+myTime.getDate());
                 if(car.getId()==chargingQueue.get(0).getId())
-                    endCharging(session,requestInfo,detailMapper,billMapper);//结束充电
+                    endCharging(myTime,session,requestInfo,detailMapper,billMapper);//结束充电
             }
         };
         TimerTask timerTask1=new TimerTask() {
             @Override
             public void run() {
+                if(chargingQueue.size()==0)
+                {
+                    timer1.cancel();
+                    return;
+                }
                 Car nowCar=chargingQueue.get(0);
                 if(car.getId()==nowCar.getId())
                 {
-                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+slowPilePower/60);
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+((float)slowPilePower)/60);
                 }
                 else
                     timer1.cancel();
@@ -165,7 +169,7 @@ public class SlowChargingPile implements ChargingPile {
         timer.schedule(timerTask1,0,6*1000);
         return true;
     }
-    public boolean endCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
+    public boolean endCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
         requestInfo.setCarState("chargingDone");
         this.dequeue();
@@ -178,8 +182,8 @@ public class SlowChargingPile implements ChargingPile {
         if(getChargePrice(bill.getStartdate())>getChargePrice(bill.getEnddate()))
             chargePrice=getChargePrice(bill.getStartdate());
         else chargePrice=getChargePrice(bill.getEnddate());
-        detail.setChargingtotaltime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
-        detail.setChargevol(slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
+        detail.setChargingtotaltime((double) (bill.getEnddate().getTime() - bill.getStartdate().getTime()));
+        detail.setChargevol((float)slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
         double serviceFee=basePrice* slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee=chargePrice* slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double totalFee = serviceFee+chargeFee;//获取充电度数,再乘以服务费

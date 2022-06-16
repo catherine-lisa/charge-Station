@@ -1,6 +1,7 @@
 package com.example.softwareproject.controller;
 
 import com.example.softwareproject.service.ChargingStation;
+import com.example.softwareproject.service.MyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,8 @@ import java.util.Map;
 public class AdministratorController {
     @Autowired
     ChargingStation chargingStation;
-
+    @Autowired
+    MyTime myTime;
     @GetMapping("/startChargeStation")
     public void startChargeStation() {
         chargingStation.startStation();
