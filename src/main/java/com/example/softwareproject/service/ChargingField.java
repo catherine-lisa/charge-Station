@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Data
@@ -62,15 +59,33 @@ public class ChargingField {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            //map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
-            //map.put("totalChargeTime", chargingPile.getTotalChargeTime());
-            //map.put("totalChargeVol", chargingPile.getTotalChargeVol());
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate()));
         } else {
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            //map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
-            //map.put("totalChargeTime", chargingPile.getTotalChargeTime());
-            //map.put("totalChargeVol", chargingPile.getTotalChargeVol());
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate()));
+        }
+        return map;
+    }
+
+    public Map<String,Object> createReport(int id, Date startTime, Date endTime) {
+        Map<String, Object> map = new HashMap<>();
+        if (id < maxFastPileNum) {
+            FastChargingPile chargingPile = fastChargingPiles.get(id);
+            map.put("state", chargingPile.getState());
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime));
+        } else {
+            SlowChargingPile chargingPile = slowChargingPiles.get(id);
+            map.put("state", chargingPile.getState());
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime));
         }
         return map;
     }
@@ -89,11 +104,13 @@ public class ChargingField {
         for (int i = 0; i < maxFastPileNum; ++i) {
             FastChargingPile chargingPile = fastChargingPiles.get(i);
             chargingPile.state = state;
+            chargingPile.startTime = myTime.getDate();
             fastChargingPiles.set(i, chargingPile);
         }
         for (int i = maxFastPileNum; i < maxChargingNum; ++i) {
             SlowChargingPile chargingPile = slowChargingPiles.get(i);
             chargingPile.state = state;
+            chargingPile.startTime = myTime.getDate();
             slowChargingPiles.set(i, chargingPile);
         }
     }
@@ -180,7 +197,7 @@ public class ChargingField {
                 List<Car> cars = slowChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
                     if (cars.get(j).getId() == requestInfo.getId()) {
-                        Car car = slowChargingPiles.get(i).cancelRequest(session,requestInfo, detailMapper, billMapper);
+                        Car car = slowChargingPiles.get(i).cancelRequest(session, requestInfo, detailMapper, billMapper);
                         if (car.equals(null)) {
                             return false;
                         } else

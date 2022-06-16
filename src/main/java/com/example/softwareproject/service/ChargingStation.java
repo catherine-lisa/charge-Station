@@ -9,10 +9,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Data
 @Service
@@ -38,16 +35,22 @@ public class ChargingStation {
         return chargingField.checkChargingPile(id);
     }
 
-    public List<Map<String,Object>> checkChargingPileQueue(int id) {
+    public Map<String, Object> createReport(int id, Date startTime, Date endTime) {
+        return chargingField.createReport(id, startTime, endTime);
+    }
+
+    public List<Map<String, Object>> checkChargingPileQueue(int id) {
         return chargingField.checkChargingPileQueue(id);
     }
+
     public String requestRecharge(RequestInfo requestInfo) {
 //        调用join，让传入的信息加入到等待队列
         return waitingQueue.fastJoin(requestInfo);
     }
-    public ChargingStation(){
+
+    public ChargingStation() {
         //设置定时器，用来不断检测等候区来加入到充电区
-        TimerTask timerTask=new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 if (waitingQueue.getFastWaitingQueue().size() > 0) {
@@ -56,7 +59,7 @@ public class ChargingStation {
 //                        System.out.println("调度fast队列成功");
                 }
 //                else System.out.println("fast等待队列无车辆");
-                if(waitingQueue.getSlowWaitingQueue().size()>0) {
+                if (waitingQueue.getSlowWaitingQueue().size() > 0) {
                     System.out.println("开始调度slow队列");
                     updateWaitingQueue("slow");
                 }
@@ -99,7 +102,7 @@ public class ChargingStation {
             //保证加入的桩的充电队列一定有空位。
             if (minPileId == -1)
                 return "failed";//没有桩有空位。异常请求
-            car.carState="chargingField_fast";//新增，改变汽车的属性
+            car.carState = "chargingField_fast";//新增，改变汽车的属性
             chargingField.getFastChargingPileById(minPileId).insert(car);//向充电桩中插入Car的信息
         } else {
             int minPileId = -1;
@@ -126,7 +129,7 @@ public class ChargingStation {
             //保证加入的桩的充电队列一定有空位。
             if (minPileId == -1)
                 return "failed";//没有桩有空位。异常请求
-            car.carState="chargingField_slow";//新增，改变汽车的属性
+            car.carState = "chargingField_slow";//新增，改变汽车的属性
             chargingField.getSlowChargingPileById(minPileId).insert(car);//向充电桩中插入Car的信息
         }
         //schedule(),需要实现调度的工作

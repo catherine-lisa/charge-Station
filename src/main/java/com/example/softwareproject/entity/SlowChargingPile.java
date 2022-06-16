@@ -26,6 +26,8 @@ public class SlowChargingPile implements ChargingPile {
 
     public String state = "关闭"; //充电桩状态
 
+    public Date startTime; //充电桩启动时间
+
     @Resource
     DetailMapper detailMapper;
 
@@ -46,6 +48,36 @@ public class SlowChargingPile implements ChargingPile {
             list.add(map);
         }
         return list;
+    }
+
+    public int getTotalChargeTimes(Date startTime, Date endTime) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        return detailMapper.selectCount(queryWrapper);
+    }
+
+    public double getTotalChargeTime(Date startTime, Date endTime) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        double totalChargeTime = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            totalChargeTime += detailList.get(i).getChargingTotalTime();
+        }
+        return totalChargeTime;
+    }
+
+    public float getTotalChargeVol(Date startTime, Date endTime) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        float totalChargeVol = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            totalChargeVol += detailList.get(i).getChargevol();
+        }
+        return totalChargeVol;
     }
 
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {

@@ -26,6 +26,8 @@ public class FastChargingPile implements ChargingPile {
 
     public String state = "关闭"; //充电桩状态
 
+    public Date startTime; //充电桩启动时间
+
     private List<Car> chargingQueue = new LinkedList<>();
 
     @Resource
@@ -48,6 +50,36 @@ public class FastChargingPile implements ChargingPile {
             list.add(map);
         }
         return list;
+    }
+
+    public int getTotalChargeTimes(Date startTime, Date endTime) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        return detailMapper.selectCount(queryWrapper);
+    }
+
+    public double getTotalChargeTime(Date startTime, Date endTime) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        double totalChargeTime = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            totalChargeTime += detailList.get(i).getChargingTotalTime();
+        }
+        return totalChargeTime;
+    }
+
+    public float getTotalChargeVol(Date startTime, Date endTime) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        float totalChargeVol = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            totalChargeVol += detailList.get(i).getChargevol();
+        }
+        return totalChargeVol;
     }
 
     public boolean startCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
@@ -152,13 +184,13 @@ public class FastChargingPile implements ChargingPile {
         else chargePrice = getChargePrice(bill.getEnddate());
         detail.setChargingTotalTime(bill.getEnddate().getTime() - bill.getStartdate().getTime());
         detail.setChargevol(fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
-        double serviceFee=basePrice* fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
-        double chargeFee=chargePrice* fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
-        double totalFee = serviceFee+chargeFee;//获取充电度数,再乘以服务费
+        double serviceFee = basePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double chargeFee = chargePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double totalFee = serviceFee + chargeFee;//获取充电度数,再乘以服务费
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
-        detail.setServicefee((float)serviceFee);
-        detail.setChargefee((float)chargeFee);
+        detail.setServicefee((float) serviceFee);
+        detail.setChargefee((float) chargeFee);
         billMapper.updateById(bill);
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
