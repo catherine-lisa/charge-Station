@@ -50,9 +50,12 @@ public class ChargingStation {
 
     public ChargingStation() {
         //设置定时器，用来不断检测等候区来加入到充电区
+        Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+                if(waitingQueue==null)
+                    return;
                 if (waitingQueue.getFastWaitingQueue().size() > 0) {
                     System.out.println("开始调度fast队列");
                     updateWaitingQueue("fast");
@@ -66,7 +69,7 @@ public class ChargingStation {
 //                else System.out.println("slow等待队列无车辆");
             }
         };
-        Timer timer = new Timer();
+
         timer.schedule(timerTask, 1, 2000);
     }
 

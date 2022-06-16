@@ -16,8 +16,8 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <form action="/goodslist" method="get">
-                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">首页</button>
+                    <form action="/goodslist" method="post" th:action="@{/customer/startRecharge}">
+                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">开始充电</button>
                     </form>
                 </ul>
                 <ul class="nav navbar-nav">
@@ -84,7 +84,7 @@
             getStatus();
         };
         function startRecharge(){
-            alert("111")
+
             $.ajax({
                 url: "/customer/startRecharge",
                 type: "POST",

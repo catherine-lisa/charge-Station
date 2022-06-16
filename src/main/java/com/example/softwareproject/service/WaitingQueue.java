@@ -11,8 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-@Service
+
 @Data
+@Service
 public class WaitingQueue {
     private int maxWaitingNum=10;
     List<Car> fastWaitingQueue=new LinkedList<>();

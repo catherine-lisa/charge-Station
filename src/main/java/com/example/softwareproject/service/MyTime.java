@@ -9,8 +9,9 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Service
+
 @Data
+@Service
 public class MyTime {
     Date date;
     public MyTime(){

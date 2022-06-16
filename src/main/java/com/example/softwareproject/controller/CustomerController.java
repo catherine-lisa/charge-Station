@@ -9,6 +9,7 @@ import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.service.ChargingField;
 import com.example.softwareproject.service.ChargingStation;
 import com.example.softwareproject.service.MyTime;
+import com.example.softwareproject.service.WaitingQueue;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableMBeanExport;
@@ -32,12 +33,14 @@ public class CustomerController {
     @Resource
     BillMapper billMapper;
     @Autowired
-    ChargingStation chargingStation;
+    WaitingQueue waitingQueue;
     @Autowired
     ChargingField chargingField;
     @Autowired
-    MyTime myTime;
+    ChargingStation chargingStation;
 
+    @Autowired
+    MyTime myTime;
     @GetMapping("/register")
     public String register(){
         return "register";
@@ -134,7 +137,7 @@ public class CustomerController {
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car!=null)//还在等候区
         {
-            System.out.println("1");
+
             if(requestInfo.getChargingMode().equals("fast"))
             {
                 requestInfo.setQueue_num("快充队列"+chargingStation.getWaitingQueue().getFastWaitingQueue().size());
@@ -192,6 +195,7 @@ public class CustomerController {
     {
         Car car;
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+        System.out.println(requestInfo.getCarState()+"startController");
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",requestInfo.getId());
         Detail detail = detailMapper.selectOne(queryWrapper);
