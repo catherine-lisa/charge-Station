@@ -25,6 +25,12 @@ public class FastChargingPile implements ChargingPile {
     private double basePrice = 0.8;//服务费
 
     public String state = "关闭"; //充电桩状态
+
+    private int totalChargeTimes; //充电总次数
+
+    private float totalChargeTime; //充电总时长
+
+    private float totalChargeVol; //充电总电量
     private List<Car> chargingQueue = new LinkedList<>();
 
     @Resource
@@ -49,6 +55,12 @@ public class FastChargingPile implements ChargingPile {
         return list;
     }
 
+    public void start() {
+        totalChargeTimes = 0;
+        totalChargeTime = 0;
+        totalChargeVol = 0;
+    }
+
     public boolean startCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         Car car = chargingQueue.get(0);
         Timer timer = new Timer();
@@ -61,7 +73,7 @@ public class FastChargingPile implements ChargingPile {
                 System.out.println(car.getId() + "充电完成" + myTime.getDate());
                 //判断用户是否提前结束充电
                 if (car.getId() == chargingQueue.get(0).getId()) {
-                    endCharging(session,requestInfo, detailMapper, billMapper);
+                    endCharging(session, requestInfo, detailMapper, billMapper);
                 }//结束充电
             }
         };
@@ -130,7 +142,7 @@ public class FastChargingPile implements ChargingPile {
         return 1.0;
     }
 
-    public boolean endCharging(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean endCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
 
         requestInfo.setCarState("chargingDone");
         this.dequeue();
@@ -151,7 +163,7 @@ public class FastChargingPile implements ChargingPile {
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         session.removeAttribute("requestInfo");
-        session.setAttribute("requestInfo",requestInfo);//更新到session中
+        session.setAttribute("requestInfo", requestInfo);//更新到session中
         return true;
     }
 
@@ -164,11 +176,11 @@ public class FastChargingPile implements ChargingPile {
         return true;
     }
 
-    public Car cancelRequest(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public Car cancelRequest(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         for (int i = 0; i < chargingQueue.size(); ++i)
             if (chargingQueue.get(i).getId() == id) {
                 if (i == 0) {
-                    endCharging(session,requestInfo, detailMapper, billMapper);
+                    endCharging(session, requestInfo, detailMapper, billMapper);
                     Car car = chargingQueue.remove(i);
                     return null;
                 } else {

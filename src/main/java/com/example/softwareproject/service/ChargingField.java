@@ -33,7 +33,7 @@ public class ChargingField {
     @Autowired
     MyTime myTime;
 
-    public Map<String, Object> checkChargingPile(int id) {
+    public Map<String, Object> checkChargingPileService(int id) {
         Map<String, Object> map = new HashMap<>();
         Car car;
         int pilePower;
@@ -57,6 +57,24 @@ public class ChargingField {
         return map;
     }
 
+    public Map<String, Object> checkChargingPile(int id) {
+        Map<String, Object> map = new HashMap<>();
+        if (id < maxFastPileNum) {
+            FastChargingPile chargingPile = fastChargingPiles.get(id);
+            map.put("state", chargingPile.getState());
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime());
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol());
+        } else {
+            SlowChargingPile chargingPile = slowChargingPiles.get(id);
+            map.put("state", chargingPile.getState());
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime());
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol());
+        }
+        return map;
+    }
+
     public List<Map<String, Object>> checkChargingPileQueue(int id) {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
@@ -71,11 +89,17 @@ public class ChargingField {
         for (int i = 0; i < maxFastPileNum; ++i) {
             FastChargingPile chargingPile = fastChargingPiles.get(i);
             chargingPile.state = state;
+            if (state == "开启") {
+                chargingPile.start();
+            }
             fastChargingPiles.set(i, chargingPile);
         }
         for (int i = maxFastPileNum; i < maxChargingNum; ++i) {
             SlowChargingPile chargingPile = slowChargingPiles.get(i);
             chargingPile.state = state;
+            if (state == "开启") {
+                chargingPile.start();
+            }
             slowChargingPiles.set(i, chargingPile);
         }
     }
@@ -143,13 +167,13 @@ public class ChargingField {
         }
     }
 
-    public boolean cancelRequest(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean cancelRequest(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         if (requestInfo.getChargingMode().equals("fast")) {
             for (int i = 0; i < fastChargingPiles.size(); ++i) {
                 List<Car> cars = fastChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
                     if (cars.get(j).getId() == requestInfo.getId()) {
-                        Car car = fastChargingPiles.get(i).cancelRequest(session,requestInfo, detailMapper, billMapper);
+                        Car car = fastChargingPiles.get(i).cancelRequest(session, requestInfo, detailMapper, billMapper);
                         if (car.equals(null)) {
                             return false;
                         } else

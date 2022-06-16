@@ -26,6 +26,12 @@ public class SlowChargingPile implements ChargingPile {
 
     public String state = "关闭"; //充电桩状态
 
+    private int totalChargeTimes; //充电总次数
+
+    private float totalChargeTime; //充电总时长
+
+    private float totalChargeVol; //充电总电量
+
     @Resource
     DetailMapper detailMapper;
 
@@ -46,6 +52,12 @@ public class SlowChargingPile implements ChargingPile {
             list.add(map);
         }
         return list;
+    }
+
+    public void start() {
+        totalChargeTimes = 0;
+        totalChargeTime = 0;
+        totalChargeVol = 0;
     }
 
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {

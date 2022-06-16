@@ -30,6 +30,10 @@ public class ChargingStation {
         chargingField.changeChargingPileState("关闭");
     }
 
+    public Map<String, Object> checkChargingPileService(int id) {
+        return chargingField.checkChargingPileService(id);
+    }
+
     public Map<String, Object> checkChargingPile(int id) {
         return chargingField.checkChargingPile(id);
     }

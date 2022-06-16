@@ -28,6 +28,12 @@ public class AdministratorController {
         chargingStation.stopStation();
     }
 
+    @GetMapping("/checkChargingPile/service/{id}")
+    @ResponseBody
+    public Map<String, Object> checkChargingPileService(@PathVariable int id) {
+        return chargingStation.checkChargingPileService(id);
+    }
+
     @GetMapping("/checkChargingPile/{id}")
     @ResponseBody
     public Map<String, Object> checkChargingPile(@PathVariable int id) {
