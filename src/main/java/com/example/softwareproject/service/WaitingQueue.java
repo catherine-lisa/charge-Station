@@ -73,8 +73,10 @@ public class WaitingQueue {
             car.setCarCapacity(requestInfo.getCarCapacity());
             car.setCarType(requestInfo.getCarType());
             car.setLocation(requestInfo.getLocation());
-            car.setNowCapacity(requestInfo.getNowCapacity());
+           // car.setNowCapacity(requestInfo.getNowCapacity());
             car.setChargingNum(requestInfo.getChargingNum());
+            car.setNowCapacity(0);
+            car.setCarCapacity(150);
             car.setCarState("waitingQueue");
             System.out.println(car);
             if(requestInfo.getChargingMode().equals("fast"))
