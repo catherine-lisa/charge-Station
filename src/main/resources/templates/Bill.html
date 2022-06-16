@@ -37,13 +37,13 @@
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 订单编号 ：</div>
-                <div> XXX</div>
+                <div th:text="${detail.billid}"> XXX</div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 订单生成时间：</div>
-                <div> x</div>
+                <div th:text="${detail.startdate}"> x</div>
                 <div> 月</div>
                 <div> Y</div>
                 <div> 日</div>
@@ -51,15 +51,15 @@
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
-                <div> 充电桩编号：</div>
-                <div> XXX</div>
+                <div > 充电桩编号：</div>
+                <div th:text="${detail.chargingpileid}"> XXX</div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 充电电量：</div>
-                <div> x</div>
-                <div> 度</div>
+                <div th:text="${detail.chargevol}"> x</div>
+                <div > 度</div>
             </div>
         </div>
 
@@ -84,7 +84,7 @@
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 充电时长：</div>
-                <div> X </div>
+                <div th:text="${detail.chargingTotalTime}"> X </div>
                 <div> 时 </div>
                 <div> Y </div>
                 <div> 分 </div>
@@ -93,21 +93,21 @@
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 充电费用：</div>
-                <div> X </div>
+                <div th:text="${detail.chargefee}"> X </div>
                 <div> 元</div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 服务费用：</div>
-                <div> X </div>
+                <div th:text="${detail.servicefee}"> X </div>
                 <div> 元</div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 总共费用：</div>
-                <div> X </div>
+                <div th:text="${detail.totalfee}"> X </div>
                 <div> 元</div>
             </div>
         </div>
@@ -120,7 +120,7 @@
         <div style="margin-left: 42px; margin-top: 10px;">充电时长：
             <input id="password" style="margin-left: 20px;" type="password" placeholder="单位：小时">
         </div> -->
-        <button style="margin-top:25px;" onclick="window.location.href='submitRequest.html'" class="bot">结账</button>
+        <button style="margin-top:25px;" onclick="window.location.href='/customer/requestRecharge'" class="bot">结账</button>
     </div>
 </body>
 
