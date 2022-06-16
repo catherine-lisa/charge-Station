@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="../static/css/Management.css">
-  <title>开关充电桩管理</title>
+  <title>用户</title>
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
         integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
@@ -62,25 +62,57 @@
     <div class="detailedInfo">
       <!-- 是否正常工作、系统启动后累计充电次数、充电总时长、充电总电量 -->
       <div style="display: flex;">
-        <h3 style="margin-left: 20px;">当前充电桩：</h3>
-        <h3 style="margin-left: 85px;"> X </h3>
-        <h3>号</h3>
+        <div style="display: flex;flex-direction:column;" class="lie1">
+          <h3 style="margin-left: 20px;">是否正常工作：</h3>
+          <h3 style="margin-left: 20px;">累计充电次数：</h3>
+          <h3 style="margin-left: 20px;">充电总时长：</h3>
+          <h3 style="margin-left: 20px;">充电总电量：</h3>
+        </div>
+        <div style="display: flex;flex-direction:column;" class="lie2">
+          <h3 style="margin-left: 20px;">是</h3>
+          <div style="margin-left: 20px;">
+            <div style="display: flex;">
+              <h3>X</h3>
+              <h3>时</h3>
+            </div>
+          </div>
+          <div style="margin-left: 20px;">
+            <div style="display: flex;">
+              <h3>X</h3>
+              <h3>次</h3>
+            </div>
+          </div>
+          <div style="margin-left: 20px;">
+            <div style="display: flex;">
+              <h3>X</h3>
+              <h3>度</h3>
+            </div>
+          </div>
+        </div>
       </div>
-      <div style="display: flex;">
-        <h3 style="margin-left: 20px;">是否正常工作：</h3>
-        <h3 style="margin-left: 60px;"> X </h3>
-        <h3>号</h3>
-      </div>
-      <div style="display: flex;">
-        <h3 style="margin-left: 20px;">充电总时长：</h3>
-        <h3 style="margin-left: 85px;"> X </h3>
-        <h3>h</h3>
-      </div>
-      <div style="display: flex;">
-        <h3 style="margin-left: 20px;">充电总电量：</h3>
-        <h3 style="margin-left: 85px;"> X </h3>
-        <h3>度</h3>
-      </div>
+
+      <!--
+
+              <div style="display: flex;">
+                  <h3 style="margin-left: 20px;">当前充电桩：</h3>
+                  <h3 style="margin-left: 85px;"> X </h3>
+                  <h3>号</h3>
+              </div>
+              <div style="display: flex;">
+                  <h3 style="margin-left: 20px;">是否正常工作：</h3>
+                  <h3 style="margin-left: 60px;"> X </h3>
+                  <h3>号</h3>
+              </div>
+              <div style="display: flex;">
+                  <h3 style="margin-left: 20px;">充电总时长：</h3>
+                  <h3 style="margin-left: 85px;"> X </h3>
+                  <h3>h</h3>
+              </div>
+              <div style="display: flex;">
+                  <h3 style="margin-left: 20px;">充电总电量：</h3>
+                  <h3 style="margin-left: 85px;"> X </h3>
+                  <h3>度</h3>
+              </div> -->
     </div>
   </div>
 </div>
