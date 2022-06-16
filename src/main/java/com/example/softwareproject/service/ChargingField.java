@@ -80,6 +80,7 @@ public class ChargingField {
                     {
                         requestInfo.setCarState(cars.get(j).getCarState());
                         requestInfo.setQueue_num("Slow"+j);
+                        requestInfo.setLocation("充电区");
                         return requestInfo;
                     }
                 }
