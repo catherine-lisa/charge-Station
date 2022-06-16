@@ -15,7 +15,7 @@ public class Detail {
     private Date startrequesttime;
     private Date startdate;
     private Date enddate;
-    private double chargingTotalTime;//充电总时间
+    private double chargingtotaltime;//充电总时间
     private float chargevol; //充电量
     private float chargefee; //充电费用
     private float servicefee; //服务费用
