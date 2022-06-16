@@ -140,8 +140,8 @@ public class ChargingStation {
         return "success";
     }
 
-    public Car changeChargeMode(long id, String chargingMode) {
-        return waitingQueue.changeChargeMode(id, chargingMode);
+    public Car removeCarByIdAndMode(long id, String chargingMode) {
+        return waitingQueue.removeCarByIdAndMode(id, chargingMode);
     }
 
 }

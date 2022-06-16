@@ -1,7 +1,6 @@
 package com.example.softwareproject.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.example.softwareproject.entity.*;
 import com.example.softwareproject.mapper.BillMapper;
 import com.example.softwareproject.mapper.CustomerMapper;
@@ -12,7 +11,6 @@ import com.example.softwareproject.service.MyTime;
 import com.example.softwareproject.service.WaitingQueue;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -281,7 +279,7 @@ public class CustomerController {
 
         if(!Objects.equals(newMode, requestInfo.getChargingMode()))
         {
-            car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
+            car=chargingStation.removeCarByIdAndMode(requestInfo.getId(),requestInfo.getChargingMode());
         }
         requestInfo.setChargingNum(newChargingNum);
         requestInfo.setChargingMode(newMode);
@@ -295,7 +293,7 @@ public class CustomerController {
     {
         RequestInfo requestInfo=(RequestInfo)session.getAttribute("requestInfo");
         //如果car不是null，说明在等候区
-        Car car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
+        Car car=chargingStation.removeCarByIdAndMode(requestInfo.getId(),requestInfo.getChargingMode());
         //不在则说明在充电区
         if(car.equals(null))
         {
@@ -315,22 +313,13 @@ public class CustomerController {
     {
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         //需要判断是从等候区还是从充电区取消，以及取消订单和详单
-        Car car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
+        Car car=chargingStation.removeCarByIdAndMode(requestInfo.getId(),requestInfo.getChargingMode());
 
-        if(car==null)
+        if(car==null)//在充电区，不能是充电状态
         {
-            if(chargingField.cancelRequest(session,requestInfo,detailMapper,billMapper)==false)
+            if(chargingField.cancelRequest(session,requestInfo,detailMapper,billMapper)==null)
             {
-                requestInfo.setCarState("endcharging");
-                QueryWrapper queryWrapper=new QueryWrapper();
-                queryWrapper.eq("userid",car.getId());
-                Bill bill=billMapper.selectOne(queryWrapper);
-                bill.setEnddate(myTime.getDate());
-                billMapper.updateById(bill);
-                Detail detail=detailMapper.selectOne(queryWrapper);
-                detail.setEnddate(myTime.getDate());
-                detailMapper.updateById(detail);
-                return "cancelRechargeSuccessAndCreatedBill";
+                return "cancelFailed";
             }
         }
         QueryWrapper queryWrapper=new QueryWrapper();

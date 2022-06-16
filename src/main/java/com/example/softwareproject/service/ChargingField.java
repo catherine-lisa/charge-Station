@@ -180,35 +180,29 @@ public class ChargingField {
         }
     }
 
-    public boolean cancelRequest(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public Car cancelRequest(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         if (requestInfo.getChargingMode().equals("fast")) {
             for (int i = 0; i < fastChargingPiles.size(); ++i) {
                 List<Car> cars = fastChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
                     if (cars.get(j).getId() == requestInfo.getId()) {
-                        Car car = fastChargingPiles.get(i).cancelRequest(session, requestInfo, detailMapper, billMapper);
-                        if (car.equals(null)) {
-                            return false;
-                        } else
-                            return true;
+                        return fastChargingPiles.get(i).cancelRequest(session, requestInfo, detailMapper, billMapper);
+
                     }
                 }
             }
-        } else {
+        }else {
             for (int i = 0; i < slowChargingPiles.size(); ++i) {
                 List<Car> cars = slowChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
                     if (cars.get(j).getId() == requestInfo.getId()) {
-                        Car car = slowChargingPiles.get(i).cancelRequest(session, requestInfo, detailMapper, billMapper);
-                        if (car.equals(null)) {
-                            return false;
-                        } else
-                            return true;
+                        return slowChargingPiles.get(i).cancelRequest(session, requestInfo, detailMapper, billMapper);
+
                     }
                 }
             }
         }
-        return false;
+        return null;
     }
 
 }

@@ -213,9 +213,7 @@ public class SlowChargingPile implements ChargingPile {
             {
                 if(i==0)
                 {
-                    //当前车辆正在充电，无法改变充电模式
-                    endCharging(session,requestInfo,detailMapper,billMapper);
-                    Car car=chargingQueue.remove(i);
+                    //当前车辆正在充电，无法改变充电模式或者取消请求
                     return null;
                 }
                 else

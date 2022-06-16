@@ -65,7 +65,7 @@ public class WaitingQueue {
         return null;
     }
 
-    public Car changeChargeMode(long id, String chargingMode)
+    public Car removeCarByIdAndMode(long id, String chargingMode)
     {
         //取出对应车辆
         if(chargingMode.equals("fast"))
