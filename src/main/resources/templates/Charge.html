@@ -80,7 +80,20 @@
     </div>
     <script th:inline="javascript">
         window.onload = function () {
+            startRecharge();
             getStatus();
+        }
+        function startRecharge(){
+            $.ajax({
+                url: "/customer/startRecharge",
+                type: "POST",
+                data: {},
+                success: function (result) {
+                    if (result != "success") {
+                        alert("充电失败！");
+                    }
+                }
+            })
         }
 
         function getStatus() {

@@ -152,10 +152,14 @@ public class CustomerController {
     }
     @PostMapping("/startRecharge")
     @ResponseBody
-    public  String startRecharge(HttpSession session, @RequestParam int chargingPileId)
+    public  String startRecharge(HttpSession session)
     {
         Car car;
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userid",requestInfo.getId());
+        Detail detail = detailMapper.selectOne(queryWrapper);
+        int chargingPileId=(int)detail.getChargingpileid();
 
         if(requestInfo.getChargingMode().equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
@@ -173,9 +177,9 @@ public class CustomerController {
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         billMapper.insert(bill);
-        QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",car.getId());
-        Detail detail = detailMapper.selectOne(queryWrapper);
+//        QueryWrapper queryWrapper=new QueryWrapper();
+//        queryWrapper.eq("userid",car.getId());
+//        Detail detail = detailMapper.selectOne(queryWrapper);
         detail.setStartdate(myTime.getDate());
         detailMapper.updateById(detail);
         return "success";
