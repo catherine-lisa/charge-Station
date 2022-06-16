@@ -6,7 +6,7 @@ create table if not exists `CUSTOMER`(
     `jurisdiction` int(32) not null,
     primary key(`id`)
 );
-drop table `DETAIL`;
+-- drop table `DETAIL`;
 create table if not exists `DETAIL`(
     `billid` bigint(20) not null AUTO_INCREMENT,
     `userid` bigint(20),
@@ -18,7 +18,7 @@ create table if not exists `DETAIL`(
      `totalfee` float(32),
     primary key(`billid`)
 );
-drop table `BILL`;
+-- drop table `BILL`;
 create table if not exists `BILL`(
     `billid` bigint(20) not null AUTO_INCREMENT,
     `userid` bigint(20),
