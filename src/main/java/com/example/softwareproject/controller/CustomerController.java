@@ -208,9 +208,17 @@ public class CustomerController {
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         chargingField.endRecharge(chargingPileId,chargingType);
-
         //结束充电函数
         return "success";
+    }
+    @GetMapping("/payBill")
+    public String getBill(HttpSession session,Model model){
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("userid",requestInfo.getId());
+        Detail detail=detailMapper.selectOne(queryWrapper);
+        model.addAttribute("detail",detail);
+        return "Bill";
     }
     @PostMapping("/payBill")
     public  String payBill(HttpSession session)
@@ -221,7 +229,7 @@ public class CustomerController {
         Detail detail=detailMapper.selectOne(queryWrapper);
         detail.setIspay(true);
         detailMapper.updateById(detail);
-        return "secondpages";
+        return "success";
     }
     @PostMapping("/changeChargingNum")
     @ResponseBody
@@ -330,7 +338,7 @@ public class CustomerController {
     @GetMapping("/requestBill")
     public String requestBillPage()
     {
-        return "billpages";
+        return "Bill";
     }
     @PostMapping("/requestBill")
     @ResponseBody

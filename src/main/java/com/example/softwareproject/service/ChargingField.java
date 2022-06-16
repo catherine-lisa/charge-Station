@@ -62,15 +62,15 @@ public class ChargingField {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime());
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol());
+            //map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
+            //map.put("totalChargeTime", chargingPile.getTotalChargeTime());
+            //map.put("totalChargeVol", chargingPile.getTotalChargeVol());
         } else {
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime());
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol());
+            //map.put("totalChargeTimes", chargingPile.getTotalChargeTimes());
+            //map.put("totalChargeTime", chargingPile.getTotalChargeTime());
+            //map.put("totalChargeVol", chargingPile.getTotalChargeVol());
         }
         return map;
     }
