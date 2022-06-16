@@ -26,11 +26,6 @@ public class FastChargingPile implements ChargingPile {
 
     public String state = "关闭"; //充电桩状态
 
-    private int totalChargeTimes; //充电总次数
-
-    private float totalChargeTime; //充电总时长
-
-    private float totalChargeVol; //充电总电量
     private List<Car> chargingQueue = new LinkedList<>();
 
     @Resource
@@ -53,12 +48,6 @@ public class FastChargingPile implements ChargingPile {
             list.add(map);
         }
         return list;
-    }
-
-    public void start() {
-        totalChargeTimes = 0;
-        totalChargeTime = 0;
-        totalChargeVol = 0;
     }
 
     public boolean startCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {

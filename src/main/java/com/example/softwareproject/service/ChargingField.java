@@ -89,17 +89,11 @@ public class ChargingField {
         for (int i = 0; i < maxFastPileNum; ++i) {
             FastChargingPile chargingPile = fastChargingPiles.get(i);
             chargingPile.state = state;
-            if (state == "开启") {
-                chargingPile.start();
-            }
             fastChargingPiles.set(i, chargingPile);
         }
         for (int i = maxFastPileNum; i < maxChargingNum; ++i) {
             SlowChargingPile chargingPile = slowChargingPiles.get(i);
             chargingPile.state = state;
-            if (state == "开启") {
-                chargingPile.start();
-            }
             slowChargingPiles.set(i, chargingPile);
         }
     }
