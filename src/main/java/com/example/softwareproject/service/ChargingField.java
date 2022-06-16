@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,13 +143,13 @@ public class ChargingField {
         }
     }
 
-    public boolean cancelRequest(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean cancelRequest(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         if (requestInfo.getChargingMode().equals("fast")) {
             for (int i = 0; i < fastChargingPiles.size(); ++i) {
                 List<Car> cars = fastChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
                     if (cars.get(j).getId() == requestInfo.getId()) {
-                        Car car = fastChargingPiles.get(i).cancelRequest(requestInfo, detailMapper, billMapper);
+                        Car car = fastChargingPiles.get(i).cancelRequest(session,requestInfo, detailMapper, billMapper);
                         if (car.equals(null)) {
                             return false;
                         } else

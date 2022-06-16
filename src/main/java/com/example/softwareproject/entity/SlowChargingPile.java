@@ -9,6 +9,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -94,7 +95,7 @@ public class SlowChargingPile implements ChargingPile {
         }
         return 1.0;
     }
-    public boolean startCharging(RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
+    public boolean startCharging(HttpSession session,RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
     {
         Car car =chargingQueue.get(0);
         Timer timer1=new Timer();
@@ -105,7 +106,7 @@ public class SlowChargingPile implements ChargingPile {
             public void run() {
                 System.out.println(car.getId()+"充电完成"+myTime.getDate());
                 if(car.getId()==chargingQueue.get(0).getId())
-                    endCharging(requestInfo,detailMapper,billMapper);//结束充电
+                    endCharging(session,requestInfo,detailMapper,billMapper);//结束充电
             }
         };
         TimerTask timerTask1=new TimerTask() {
@@ -126,7 +127,7 @@ public class SlowChargingPile implements ChargingPile {
         timer.schedule(timerTask1,0,6*1000);
         return true;
     }
-    public boolean endCharging(RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
+    public boolean endCharging(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
         requestInfo.setCarState("chargingDone");
         this.dequeue();
@@ -144,7 +145,8 @@ public class SlowChargingPile implements ChargingPile {
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
         billMapper.updateById(bill);
-
+        session.removeAttribute("requestInfo");
+        session.setAttribute("requestInfo",requestInfo);//更新到session中
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         return true;
@@ -160,7 +162,7 @@ public class SlowChargingPile implements ChargingPile {
         chargingQueue.get(0).setCarState("readyCharge");
         return true;
     }
-    public Car cancelRequest(RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
+    public Car cancelRequest(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
         for(int i=0;i<chargingQueue.size();++i)
             if(chargingQueue.get(i).getId()==id)
@@ -168,7 +170,7 @@ public class SlowChargingPile implements ChargingPile {
                 if(i==0)
                 {
                     //当前车辆正在充电，无法改变充电模式
-                    endCharging(requestInfo,detailMapper,billMapper);
+                    endCharging(session,requestInfo,detailMapper,billMapper);
                     Car car=chargingQueue.remove(i);
                     return null;
                 }

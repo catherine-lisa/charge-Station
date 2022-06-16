@@ -1,6 +1,7 @@
 package com.example.softwareproject.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.example.softwareproject.entity.*;
 import com.example.softwareproject.mapper.BillMapper;
 import com.example.softwareproject.mapper.CustomerMapper;
@@ -121,9 +122,14 @@ public class CustomerController {
     @Operation(summary = "前端周期性问询，直到更新为readyCharge")
     @PostMapping("/checkCarState")
     @ResponseBody
-    public  RequestInfo checkCarState(@ModelAttribute RequestInfo requestInfo)
+    public  RequestInfo checkCarState(HttpSession session)
     {
 //        System.out.println("checking");
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requsetInfo");
+        if(Objects.equals(requestInfo.getCarState(), "chargingDone"))
+        {
+            return requestInfo;
+        }
         System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car==null)//还在等候区
@@ -137,7 +143,6 @@ public class CustomerController {
                 requestInfo.setQueue_num("慢充队列"+chargingStation.getWaitingQueue().getSlowWaitingQueue().size());
             return requestInfo;
         }
-
         else return chargingField.findTargetCarState(requestInfo);//查看request中的carState来变化前端
     }
 
@@ -147,19 +152,21 @@ public class CustomerController {
     }
     @PostMapping("/startRecharge")
     @ResponseBody
-    public  String startRecharge(@ModelAttribute RequestInfo requestInfo, @RequestParam int chargingPileId)
+    public  String startRecharge(HttpSession session, @RequestParam int chargingPileId)
     {
         Car car;
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+
         if(requestInfo.getChargingMode().equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
-            fastChargingPile.startCharging(requestInfo,detailMapper,billMapper);
+            fastChargingPile.startCharging(session,requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
-            slowChargingPile.startCharging(requestInfo,detailMapper,billMapper);
+            slowChargingPile.startCharging(session,requestInfo,detailMapper,billMapper);
         }
         car.setCarState("charging");
         Bill bill=new Bill();
@@ -176,19 +183,20 @@ public class CustomerController {
     //主动结束充电
     @PostMapping("/endRecharge")
     @ResponseBody
-    public  String endRecharge(@ModelAttribute RequestInfo requestInfo,@PathVariable int chargingPileId,@PathVariable String chargingType)
+    public  String endRecharge(HttpSession session,@PathVariable int chargingPileId,@PathVariable String chargingType)
     {
         Car car;
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         if(chargingType.equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
-            fastChargingPile.endCharging(requestInfo,detailMapper,billMapper);
+            fastChargingPile.endCharging(session,requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
-            slowChargingPile.endCharging(requestInfo,detailMapper,billMapper);
+            slowChargingPile.endCharging(session,requestInfo,detailMapper,billMapper);
         }
         car.setCarState("endcharging");
         QueryWrapper queryWrapper=new QueryWrapper();
@@ -267,15 +275,17 @@ public class CustomerController {
     }
     @PostMapping("/cancelRecharge")
     @ResponseBody
-    public  String cancelRecharge(@ModelAttribute RequestInfo requestInfo)
+    public  String cancelRecharge(HttpSession session)
     {
+        RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         //需要判断是从等候区还是从充电区取消，以及取消订单和详单
         Car car=chargingStation.changeChargeMode(requestInfo.getId(),requestInfo.getChargingMode());
-        if(car.equals(null))
+
+        if(car==null)
         {
-            if(chargingField.cancelRequest(requestInfo,detailMapper,billMapper)==false)
+            if(chargingField.cancelRequest(session,requestInfo,detailMapper,billMapper)==false)
             {
-                car.setCarState("endcharging");
+                requestInfo.setCarState("endcharging");
                 QueryWrapper queryWrapper=new QueryWrapper();
                 queryWrapper.eq("userid",car.getId());
                 Bill bill=billMapper.selectOne(queryWrapper);
