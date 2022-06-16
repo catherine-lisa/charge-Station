@@ -130,6 +130,7 @@ public class CustomerController {
             System.out.println("1");
             return requestInfo;
         }
+
         else return chargingField.findTargetCarState(requestInfo);//查看request中的carState来变化前端
     }
 
