@@ -61,8 +61,6 @@
             alert("充电量不能为空！");
             return;
         }
-        alert(chargingMode);
-        alert(chargingNum);
         $.ajax({
             url: "/customer/changeRequest",
             type: "POST",

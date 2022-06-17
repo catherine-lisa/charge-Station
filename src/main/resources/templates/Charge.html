@@ -25,7 +25,7 @@
 </nav>
 <div>
     <div class="box" id="bigbox">
-        <h1 id="chargeStatus" style="margin-top: 3px;">充电中....</h1>
+        <h1 id="chargeStatus" style="margin-top: 3px;"></h1>
     </div>
     <div class="box2">
         <div id="info">
@@ -95,7 +95,6 @@
             type: "POST",
             data: {},
             success: function (result) {
-                alert("111");
                 if (result != "success") {
                     alert("充电失败！");
                 }
@@ -112,7 +111,7 @@
                 //根据requestInfo中的nowCapacity和chargingNum计算剩余充电时长和电量
                 let status = result;
                 let msg = "";
-                let chargeStatus = "充电中";
+                let chargeStatus = "充电中...";
                 let msgButton = "";
                 let nowCapacity = status.nowCapacity;
                 let chargingNum = status.chargingNum;
@@ -157,7 +156,7 @@
                     "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                     "                <div style=\"display: flex; justify-content:space-between;\">\n" +
                     "                    <div> 充电时长：</div>\n" +
-                    "                    <div>" + totalTime + "</div>\n" +
+                    "                    <div>" + totalTime + "分钟</div>\n" +
                     "                </div>\n" +
                     "            </div>" +
                     "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
@@ -172,7 +171,7 @@
                     "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                     "                <div style=\"display: flex; justify-content:space-between;\">\n" +
                     "                    <div> 当前汽车电量：</div>\n" +
-                    "                    <div> " + nowCapacity + " </div>\n" +
+                    "                    <div> " + nowCapacity.toFixed(1) + " </div>\n" +
                     "                    <div> 度</div>\n" +
                     "                </div>\n" +
                     "            </div>";
