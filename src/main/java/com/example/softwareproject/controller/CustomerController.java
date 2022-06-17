@@ -168,8 +168,8 @@ public class CustomerController {
         queryWrapper.eq("billid",requestInfo.getBillid());
         Detail detail = detailMapper.selectOne(queryWrapper);
         System.out.println(detail);
-        int chargingPileId=(int)detail.getChargingpileid();
-
+        int chargingPileId=(int)chargingField.getPileIdByInfo(requestInfo);
+        detail.setChargingpileid(chargingPileId);
         if(requestInfo.getChargingMode().equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();

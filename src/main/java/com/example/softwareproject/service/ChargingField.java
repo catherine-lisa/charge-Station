@@ -205,5 +205,36 @@ public class ChargingField {
         }
         return null;
     }
+    public long getPileIdByInfo(RequestInfo requestInfo){
+        if(Objects.equals(requestInfo.getChargingMode(), "fast"))
+        {
+            for (int i=0;i<fastChargingPiles.size();++i)
+            {
+                for(int j=0;j<fastChargingPiles.get(i).getChargingQueue().size();++j)
+                {
+                    Car car=fastChargingPiles.get(i).getChargingQueue().get(j);
+                    if(car.getId()==requestInfo.getId())
+                    {
+                        return fastChargingPiles.get(i).getId();
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i=0;i<slowChargingPiles.size();++i)
+            {
+                for(int j=0;j<slowChargingPiles.get(i).getChargingQueue().size();++j)
+                {
+                    Car car=slowChargingPiles.get(i).getChargingQueue().get(j);
+                    if(car.getId()==requestInfo.getId())
+                    {
+                        return slowChargingPiles.get(i).getId();
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 
 }

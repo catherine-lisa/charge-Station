@@ -251,6 +251,7 @@ public class FastChargingPile implements ChargingPile {
     }
 
     public Car getFirstCar() {
+
         return chargingQueue.get(0);
     }
 }
