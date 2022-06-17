@@ -137,11 +137,7 @@
                         alert("充电完成！");
                         flag = 1;
                     }
-
                     chargeStatus = "充电完成！";
-                    msgButton += "<form action=\"/customer/payBill\" method=\"GET\">\n" +
-                        "            <button style=\"margin-top:10px;text-align: center\" type=\"submit\" class=\"bot\">支付账单</button>\n" +
-                        "        </form>";
                     msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                         "                <div style=\"display: flex; justify-content:space-between;\">\n" +
                         "                    <div> 充电类型：</div>\n" +
@@ -167,8 +163,8 @@
                         "                    <div> 度</div>\n" +
                         "                </div>\n" +
                         "            </div>";
+                    msgButton += "<button style=\"margin-top:10px;text-align: center\" onclick=\"endRecharge()\" class=\"bot\">支付账单</button>";
                 } else {
-                    msgButton += "<button style=\"margin-top:10px;text-align: center\" onclick=\"endRecharge()\" class=\"bot\">取消充电</button>";
                     msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
                         "                <div style=\"display: flex; justify-content:space-between;\">\n" +
                         "                    <div> 充电类型：</div>\n" +
@@ -203,6 +199,7 @@
                         "                    <div> 度</div>\n" +
                         "                </div>\n" +
                         "            </div>";
+                    msgButton += "<button style=\"margin-top:10px;text-align: center\" onclick=\"endRecharge()\" class=\"bot\">取消充电</button>";
                 }
                 $("#info").html(msg);
                 $("#msgButton").html(msgButton);
@@ -211,7 +208,7 @@
         });
     }
 
-    setInterval("getStatus()", 1000); //定时每6s（现实的1秒）获取一次消息
+    setInterval("getStatus()", 1000); //定时每1s获取一次消息
 
     function endRecharge() { // 用户主动结束充电
         //let RequestInfo = [[${requestInfo}]]
@@ -221,10 +218,10 @@
             data: {},
             success: function (result) {
                 if (result == "success") {
-                    alert("取消充电成功！");
-                    getStatus();
+                    alert("success");
+                    window.location.href = "/customer/payBill";
                 } else {
-                    alert("取消充电失败！");
+                    alert("error！");
                 }
             }
         });

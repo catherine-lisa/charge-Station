@@ -189,6 +189,7 @@ public class CustomerController {
     @ResponseBody
     public  String endRecharge(HttpSession session)
     {
+        System.out.println("endRecharge");
         Car car;
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         System.out.println(requestInfo.getCarState()+"startController");
@@ -228,6 +229,7 @@ public class CustomerController {
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         chargingField.endRecharge(chargingPileId,chargingType);
+        System.out.println("success");
         //结束充电函数
         return "success";
     }
@@ -243,7 +245,8 @@ public class CustomerController {
         return "Bill";
     }
     @PostMapping("/payBill")
-    public  String payBill(HttpSession session)
+    @ResponseBody
+    public String payBill(HttpSession session)
     {
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         QueryWrapper queryWrapper=new QueryWrapper();

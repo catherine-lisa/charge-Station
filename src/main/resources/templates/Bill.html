@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../static/css/Bill.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/Bill.css}">
     <title>订单详情</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -37,28 +38,25 @@
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 订单编号 ：</div>
-                <div th:text="${detail.billid}"> XXX</div>
+                <div th:text="${detail.billid}"></div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 订单生成时间：</div>
-                <div th:text="${detail.startdate}"> x</div>
-                <div> 月</div>
-                <div> Y</div>
-                <div> 日</div>
+                <div th:text="${detail.startrequesttime}"></div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div > 充电桩编号：</div>
-                <div th:text="${detail.chargingpileid}"> XXX</div>
+                <div th:text="${detail.chargingpileid}"></div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 充电电量：</div>
-                <div th:text="${detail.chargevol}"> x</div>
+                <div th:text="${detail.chargevol}"></div>
                 <div > 度</div>
             </div>
         </div>
@@ -66,62 +64,84 @@
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 启动时间：</div>
-                <div> X </div>
-                <div> 时 </div>
-                <div> Y </div>
-                <div> 分 </div>
+                <div th:text="${detail.startdate}"></div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 停止时间：</div>
-                <div> X </div>
-                <div> 时 </div>
-                <div> Y </div>
-                <div> 分 </div>
+                <div th:text="${detail.enddate}"></div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 充电时长：</div>
-                <div th:text="${detail.chargingtotaltime}"> X </div>
-                <div> 时 </div>
-                <div> Y </div>
-                <div> 分 </div>
+                <div th:text="${detail.chargingtotaltime}"></div>
+                <div> 分钟 </div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 充电费用：</div>
-                <div th:text="${detail.chargefee}"> X </div>
+                <div th:text="${detail.chargefee}"></div>
                 <div> 元</div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
                 <div> 服务费用：</div>
-                <div th:text="${detail.servicefee}"> X </div>
+                <div th:text="${detail.servicefee}"></div>
                 <div> 元</div>
             </div>
         </div>
         <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
             <div style="display: flex; justify-content:space-between;">
-                <div> 总共费用：</div>
-                <div th:text="${detail.totalfee}"> X </div>
+                <div> 超时费用：</div>
+                <div th:text="${detail.timeoutfee}"></div>
                 <div> 元</div>
             </div>
         </div>
-
-        <!-- <div>
-            <label>充电类型：</label>
-            <input  style="margin-left: 40px;" name='subject' type="checkbox" value="fast" οnclick="test1(this)"><label>快充</label>
-            <input name='subject' type="checkbox" value="slow" οnclick="test2(this)"><label>慢充</label>
+        <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+            <div style="display: flex; justify-content:space-between;">
+                <div> 总费用：</div>
+                <div th:text="${detail.totalfee}"></div>
+                <div> 元</div>
+            </div>
         </div>
-        <div style="margin-left: 42px; margin-top: 10px;">充电时长：
-            <input id="password" style="margin-left: 20px;" type="password" placeholder="单位：小时">
-        </div> -->
-        <button style="margin-top:25px;" onclick="window.location.href='/customer/requestRecharge'" class="bot">结账</button>
+        <button onclick="payBill()" type="submit" class="btn btn-info" style="margin-top:25px;">确认支付</button>
+<!--        <form action="/payBill" method="POST">-->
+<!--            <button type="submit" class="btn btn-info" style="margin-top:25px;">确认支付</button>-->
+<!--        </form>-->
     </div>
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            crossorigin="anonymous"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
+    <script>
+        let detail = [[${detail}]];
+        let chargingtotaltime;
+        window.onload = function () {
+            chargingtotaltime = detail.chargingtotaltime;
+            $("#info").html(msg);
+        }
+        function payBill() {
+            $.ajax({
+                url: "/customer/payBill",
+                type: "POST",
+                data: {},
+                success: function (result) {
+                    if (result == "success") {
+                        alert("支付成功！");
+                        window.location.href = "/customer/requestRecharge";
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
