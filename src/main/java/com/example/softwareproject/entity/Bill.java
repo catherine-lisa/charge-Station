@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 @Data
 public class Bill {
-    @TableId(value = "billid",type = IdType.AUTO)
+    @TableId(value = "billid")
     private long billid;
     private long userid;
     private long chargingpileid;

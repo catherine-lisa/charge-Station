@@ -134,8 +134,9 @@ public class CustomerController {
     @ResponseBody
     public RequestInfo checkCarState(HttpSession session)
     {
-//        System.out.println("test"+session.getAttribute("requestInfo"));
+
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
+
         if(Objects.equals(requestInfo.getCarState(), "chargingDone"))//充电完成
         {
             return requestInfo;
@@ -184,6 +185,7 @@ public class CustomerController {
         }
         car.setCarState("charging");
         Bill bill=new Bill();
+        bill.setBillid(detail.getBillid());
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         bill.setChargingpileid(chargingPileId);
@@ -208,15 +210,16 @@ public class CustomerController {
         Detail detail = detailMapper.selectOne(queryWrapper);
         int chargingPileId=(int)detail.getChargingpileid();
         String chargingType=requestInfo.getChargingMode();
-        Bill bill=billMapper.selectOne(queryWrapper);
-        bill.setEnddate(myTime.getDate());
-        billMapper.updateById(bill);
+
+
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
         if(requestInfo.getCarState()=="chargingDone")
         {
             Date now=myTime.getDate();
-
+            Bill bill=billMapper.selectOne(queryWrapper);
+            bill.setEnddate(myTime.getDate());
+            billMapper.updateById(bill);
             double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60;
             double timeoutFee=timeout*1;//设置超时费
             detail.setTimeoutfee((float) timeoutFee);
@@ -239,10 +242,11 @@ public class CustomerController {
             requestInfo.setCarState("chargingDoneByUser");
             slowChargingPile.endCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
-
+        queryWrapper.eq("billid",requestInfo.getBillid());
         car.setCarState("endcharging");
-
-
+        Bill bill=billMapper.selectOne(queryWrapper);
+        bill.setEnddate(myTime.getDate());
+        billMapper.updateById(bill);
 
         System.out.println("success");
         //结束充电函数

@@ -14,6 +14,15 @@ import java.util.TimerTask;
 @Service
 public class MyTime {
     Date date;
+    private String str = "HH:mm:ss";
+
+    //转换为String格式
+    public String DateFormat(){
+        SimpleDateFormat sdf = new SimpleDateFormat(str);
+        String df = sdf.format(date);
+        return df;
+    }
+
     public MyTime(){
         String strTime = "06:00";
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
