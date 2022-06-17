@@ -69,7 +69,6 @@ public class CustomerController {
     @ResponseBody
     public  String logIn( @RequestParam String username, @RequestParam String password,
                          HttpSession session) {
-
         int id = username.hashCode();
         Customer targetCustomer =customerMapper.selectById(id);
         if (targetCustomer == null) {
@@ -82,6 +81,15 @@ public class CustomerController {
             return "success";
         }
         return "log_in_failed";
+    }
+
+    @GetMapping("/logOut")
+    public String logOut(HttpSession session)
+    {
+        session.removeAttribute("login_state");
+        session.removeAttribute("username");
+        session.removeAttribute("userid");
+        return "log_in";
     }
 
     @GetMapping("/user")
@@ -100,7 +108,6 @@ public class CustomerController {
     //可以用于ajax的success函数
     public String requestRecharge(Model model,@ModelAttribute RequestInfo requestInfo,HttpSession session)
     {
-
         session.removeAttribute("requestInfo");
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
