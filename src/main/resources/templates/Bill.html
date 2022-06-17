@@ -108,7 +108,7 @@
                 <div> 元</div>
             </div>
         </div>
-        <button onclick="payBill()" type="submit" class="btn btn-info" style="margin-top:25px;">确认支付</button>
+        <button onclick="payBill()" class="btn btn-info" style="margin-top:25px;">确认支付</button>
 <!--        <form action="/payBill" method="POST">-->
 <!--            <button type="submit" class="btn btn-info" style="margin-top:25px;">确认支付</button>-->
 <!--        </form>-->
@@ -122,12 +122,6 @@
             integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
             crossorigin="anonymous"></script>
     <script>
-        let detail = [[${detail}]];
-        let chargingtotaltime;
-        window.onload = function () {
-            chargingtotaltime = detail.chargingtotaltime;
-            $("#info").html(msg);
-        }
         function payBill() {
             $.ajax({
                 url: "/customer/payBill",
