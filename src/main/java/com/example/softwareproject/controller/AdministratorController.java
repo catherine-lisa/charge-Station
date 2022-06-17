@@ -18,6 +18,21 @@ public class AdministratorController {
     ChargingStation chargingStation;
     @Autowired
     MyTime myTime;
+
+    @GetMapping("/manage")
+    public String manage(){
+        return "Management";
+    }
+
+    @GetMapping("/showInfo")
+    public String showChargerInfo(){
+        return "showChargerInfo";
+    }
+
+    @GetMapping("/showBillList")
+    public String showBillList(){
+        return "HistoryBill";
+    }
     @GetMapping("/startChargeStation")
     public void startChargeStation() {
         chargingStation.startStation();
