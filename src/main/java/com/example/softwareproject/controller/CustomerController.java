@@ -204,6 +204,7 @@ public class CustomerController {
             double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60;
             double timeoutFee=timeout*1;//设置超时费
             detail.setTimeoutfee((float) timeoutFee);
+            detail.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
             detailMapper.updateById(detail);
             return "success";
         }
