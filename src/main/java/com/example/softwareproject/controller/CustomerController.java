@@ -185,6 +185,8 @@ public class CustomerController {
         Bill bill=new Bill();
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
+        bill.setChargingpileid(chargingPileId);
+        bill.setChargingNum(detail.getChargevol());
         billMapper.insert(bill);
 //        QueryWrapper queryWrapper=new QueryWrapper();
 //        queryWrapper.eq("userid",car.getId());
@@ -219,6 +221,8 @@ public class CustomerController {
             detail.setTimeoutfee((float) timeoutFee);
             detail.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
             detailMapper.updateById(detail);
+            bill.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
+            billMapper.updateById(bill);
             return "success";
         }
         if(chargingType.equals("fast")) {
@@ -370,14 +374,14 @@ public class CustomerController {
             return null;
         }
     }
-    @GetMapping("/requestBill")
-    public String requestBillPage()
+    @GetMapping("/requestBillList")
+    public String requestBillList()
     {
-        return "Bill";
+        return "userHistoryBill";
     }
-    @PostMapping("/requestBill")
+    @PostMapping("/requestBillList")
     @ResponseBody
-    public  List<Bill> requestBill(@ModelAttribute RequestInfo requestInfo)
+    public  List<Bill> requestBillList(@ModelAttribute RequestInfo requestInfo)
     {
         //需要配合前端界面
         QueryWrapper queryWrapper=new QueryWrapper();

@@ -10,6 +10,8 @@ public class Bill {
     @TableId(value = "billid",type = IdType.AUTO)
     private long billid;
     private long userid;
+    private long chargingpileid;
+    private float chargingNum;
     private Date startdate;
     private Date enddate;
     private float totalfee;

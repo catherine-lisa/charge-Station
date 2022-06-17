@@ -62,68 +62,41 @@
                     </div>
                 </div>
             </div>
-            <div style="display: flex;flex-direction:column;" class="lie1">
-                <h3 style="margin-left: 20px; font-weight: bold;">充电次数1：</h3>
-            </div>
-            <div style="display: flex;">
-                <div style="display: flex;flex-direction:column;" class="lie1">
-                    <h3 style="margin-left: 20px;">充电站名称：</h3>
-                    <h3 style="margin-left: 20px;">充电时间：</h3>
-                    <h3 style="margin-left: 20px;">充电度数：</h3>
-                    <h3 style="margin-left: 20px;">充电费用：</h3>
-                </div>
-                <div style="display: flex;flex-direction:column;" class="lie2">
-                    <h3 style="margin-left: 20px;">XXX</h3>
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h3>X</h3>
-                            <h3>时</h3>
-                        </div>
+            <div id="billList">
+                <div style="display: flex;">
+                    <div style="display: flex;flex-direction:column;" class="lie1">
+                        <h3 style="margin-left: 20px;font-weight: bold">账单id：</h3>
+                        <h3 style="margin-left: 20px;">充电站id：</h3>
+                        <h3 style="margin-left: 20px;">开始充电时间：</h3>
+                        <h3 style="margin-left: 20px;">结束充电时间：</h3>
+                        <h3 style="margin-left: 20px;">充电度数：</h3>
+                        <h3 style="margin-left: 20px;">充电费用：</h3>
                     </div>
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h3>X</h3>
-                            <h3>度</h3>
-                        </div>
-                    </div>
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h3>X</h3>
-                            <h3>元</h3>
-                        </div>
+                    <div style="display: flex;flex-direction:column;" class="lie2">
+                        <h3 style="margin-left: 20px;">XXX</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
                     </div>
                 </div>
-            </div>
-
-            <div style="display: flex;flex-direction:column;" class="lie1">
-                <h3 style="margin-left: 20px; font-weight: bold;">充电次数2：</h3>
-            </div>
-            <div style="display: flex;">
-                <div style="display: flex;flex-direction:column;" class="lie1">
-                    <h3 style="margin-left: 20px;">充电站名称：</h3>
-                    <h3 style="margin-left: 20px;">充电时间：</h3>
-                    <h3 style="margin-left: 20px;">充电度数：</h3>
-                    <h3 style="margin-left: 20px;">充电费用：</h3>
-                </div>
-                <div style="display: flex;flex-direction:column;" class="lie2">
-                    <h3 style="margin-left: 20px;">XXX</h3>
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h3>X</h3>
-                            <h3>时</h3>
-                        </div>
+                <div style="display: flex;">
+                    <div style="display: flex;flex-direction:column;" class="lie1">
+                        <h3 style="margin-left: 20px;font-weight: bold">账单id：</h3>
+                        <h3 style="margin-left: 20px;">充电站id：</h3>
+                        <h3 style="margin-left: 20px;">开始充电时间：</h3>
+                        <h3 style="margin-left: 20px;">结束充电时间：</h3>
+                        <h3 style="margin-left: 20px;">充电度数：</h3>
+                        <h3 style="margin-left: 20px;">充电费用：</h3>
                     </div>
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h3>X</h3>
-                            <h3>度</h3>
-                        </div>
-                    </div>
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h3>X</h3>
-                            <h3>元</h3>
-                        </div>
+                    <div style="display: flex;flex-direction:column;" class="lie2">
+                        <h3 style="margin-left: 20px;">XXX</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
+                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
                     </div>
                 </div>
             </div>
@@ -141,31 +114,41 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
 <script>
-    function submit() {
-        let chargingMode = document.getElementsByName("chargingMode")[0].value;
-        if (chargingMode == "快充")
-            chargingMode = "fast";
-        else
-            chargingMode = "slow";
-        let chargingNum = document.getElementsByName("chargingNum")[0].value;
-        if (chargingNum == "") {
-            alert("充电量不能为空！");
-            return;
-        }
+    function getBillList() {
         $.ajax({
-            url: "/customer/changeRequest",
+            url: "/comment",
             type: "POST",
-            data: {"newMode": chargingMode, "newChargingNum": chargingNum},
+            data: {},
             success: function (result) {
-                if (result == "success") {
-                    window.location.href = "/customer/enterQueue";
-                } else if (result == "failed") {
-                    alert("充电区不允许修改充电请求！");
+                let msg = "";
+                for (let i in result) {
+                    let bill = result[i];
+                    msg += "<div style=\"display: flex;\">\n" +
+                        "                <div style=\"display: flex;flex-direction:column;\" class=\"lie1\">\n" +
+                        "                    <h3 style=\"margin-left: 20px;font-weight: bold\">账单id：</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;\">充电站id：</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;\">开始充电时间：</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;\">结束充电时间：</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;\">充电度数：</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;\">充电费用：</h3>\n" +
+                        "                </div>\n" +
+                        "                <div style=\"display: flex;flex-direction:column;\" class=\"lie2\">\n" +
+                        "                    <h3 style=\"margin-left: 20px;\">"+ bill['billid'] +"</h3>\n" +
+                        "                   <h3 style=\"margin-left: 20px;display: flex;\">"+ bill['chargingpileid'] +"</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['startdate'] + "</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['enddate'] + "</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['chargingNum'] + "</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['totalfee'] + "</h3>\n" +
+                        "                </div>\n" +
+                        "            </div>";
                 }
+                $("#billList").html(msg);
+            },
+            error: function () {
+                alert("获取账单失败！");
             }
-        });
+        })
     }
 </script>
-
 </body>
 </html>
