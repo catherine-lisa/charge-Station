@@ -122,7 +122,7 @@ public class ChargingField {
             chargingPile.setMaxChargingNum(maxFastPileNum);
             fastChargingPiles.add(chargingPile);
         }
-        for (int i = maxFastPileNum; i < maxChargingNum; ++i) {
+        for (int i = 0; i < maxSlowPileNum; ++i) {
             SlowChargingPile chargingPile = new SlowChargingPile();
             chargingPile.setId(i);
             chargingPile.setMaxChargingNum(maxSlowPileNum);
