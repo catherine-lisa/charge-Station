@@ -110,7 +110,7 @@ public class ChargingStation {
         } else {
             int minPileId = -1;
             float minTime = 10000;
-            for (int i = chargingField.getMaxFastPileNum(); i < chargingField.getMaxChargingNum(); ++i) {
+            for (int i = 0; i < chargingField.getMaxSlowPileNum(); ++i) {
 
                 float sumTime = 0;
                 SlowChargingPile pileTemp = chargingField.getSlowChargingPileById(i);
