@@ -7,22 +7,22 @@ body {
     background-size: cover;
 }
 
-.littlebox{
+.littlebox {
     border-radius: 10px;
     width: 10vw;
     height: 5vh;
-    background-color:#ccffff;
+    background-color: #ccffff;
     border-color: #696969;
     text-align: center;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
     margin-right: 10px;
     margin-top: 10px;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
 }
 
-.box{
+.box {
     margin-top: 100px;
     border-radius: 10px;
     margin-left: 42%;
@@ -32,9 +32,10 @@ body {
     text-align: center;
     line-height: 40px;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
 }
-.box2{
+
+.box2 {
     margin-top: 50px;
     border-radius: 10px;
     margin-left: 30%;
@@ -44,22 +45,22 @@ body {
     text-align: center;
     line-height: 50px;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
     font-size: large;
     font-weight: bold;
 }
 
 
-.bot{
+.bot {
     margin-top: 15px;
-    margin-left:30px;
+    margin-left: 30px;
     width: 10vw;
     height: 5vh;
     background-color: #33ccff;
-    color:honeydew;
+    color: honeydew;
     border-radius: 5px;
     border-color: powderblue;
     font-family: Arial, Helvetica, sans-serif;
-    font-size:large;
-    opacity:1;
+    font-size: large;
+    opacity: 1;
 }

@@ -18,7 +18,7 @@
     <form action="/customer/register" method="get">
         <button type="submit" style="margin-left: 30px" class="bot">用户注册</button>
     </form>
-<!--        <a style="margin-left: 50px;" onclick= "window.location.href='register.html'"><u>用户注册</u></a>-->
+    <!--        <a style="margin-left: 50px;" onclick= "window.location.href='register.html'"><u>用户注册</u></a>-->
 </div>
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
@@ -34,7 +34,7 @@
     function submit() {
         let userName = document.getElementsByName("username")[0].value;
         let password = document.getElementsByName("password")[0].value;
-        if(userName == "" || password == ""){
+        if (userName == "" || password == "") {
             alert("用户名或密码不能为空！");
             return;
         }
@@ -45,9 +45,9 @@
             success: function (result) {
                 if (result == "success") {
                     window.location.href = "/customer/requestRecharge";
-                } else if(result == "usernotexist") {
+                } else if (result == "usernotexist") {
                     alert("用户还未注册！");
-                } else if(result == "logInFailed") {
+                } else if (result == "logInFailed") {
                     alert("登录失败！");
                 }
             }

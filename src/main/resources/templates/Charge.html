@@ -15,11 +15,11 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right" id="naviInfo">
-                <form action="/release" method="get">
-                    <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">退出登录</button>
-                </form>
-            </ul>
+            <!--            <ul class="nav navbar-nav navbar-right" id="naviInfo">-->
+            <!--                <form action="/release" method="get">-->
+            <!--                    <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">退出登录</button>-->
+            <!--                </form>-->
+            <!--            </ul>-->
         </div>
     </div>
 </nav>
@@ -218,7 +218,7 @@
             data: {},
             success: function (result) {
                 if (result == "success") {
-                    alert("success");
+                    alert("充电结束！");
                     window.location.href = "/customer/payBill";
                 } else {
                     alert("error！");

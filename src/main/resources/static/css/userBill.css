@@ -8,7 +8,7 @@ body {
     padding: 70px;
 }
 
-.box{
+.box {
     margin-top: 2vh;
     border-radius: 10px;
     width: 90vw;
@@ -16,43 +16,44 @@ body {
     text-align: center;
     line-height: 40px;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
 }
 
-.bot{
+.bot {
     margin-top: 15px;
     margin-left: 85px;
     height: 5vh;
     line-height: 5vh;
     width: 8vw;
     background-color: #87CEFA;
-    color:honeydew;
+    color: honeydew;
     border-radius: 5px;
     border-color: powderblue;
     font-family: Arial, Helvetica, sans-serif;
-    font-size:medium;
-    opacity:1;
+    font-size: medium;
+    opacity: 1;
 }
 
-.detailedInfo{
+.detailedInfo {
     margin-left: 8vw;
     margin-top: 2vh;
-    border:1px solid;
+    border: 1px solid;
     border-radius: 10px;
     border-color: black;
     width: 74vw;
     line-height: 40px;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
     margin-bottom: 40px;
 }
 
-.lie1{
+.lie1 {
     width: 20vw;
     margin-left: 40px;
     text-align: left;
 }
-.lie2{
+
+.lie2 {
     width: 60vw;
     margin-left: 10px;
     text-align: left;

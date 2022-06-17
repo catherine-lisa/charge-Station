@@ -33,7 +33,7 @@
     function submit() {
         let userName = document.getElementsByName("username")[0].value;
         let password = document.getElementsByName("password")[0].value;
-        if(userName == "" || password == ""){
+        if (userName == "" || password == "") {
             alert("用户名或密码不能为空！");
             return;
         }
@@ -44,12 +44,13 @@
             success: function (result) {
                 if (result == "success") {
                     alert("注册成功！");
-                } else if(result == "userexist") {
+                } else if (result == "userexist") {
                     alert("用户已存在！");
                 }
             }
         });
     }
+
     // function submit() {
     //     const a = document.getElementById('password');
     //     const b = document.getElementById('bigbox');

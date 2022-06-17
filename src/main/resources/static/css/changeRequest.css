@@ -7,22 +7,22 @@ body {
     background-size: cover;
 }
 
-.littlebox{
+.littlebox {
     border-radius: 10px;
     width: 10vw;
     height: 3vh;
-    background-color:#ccffff;
+    background-color: #ccffff;
     border-color: black;
     text-align: center;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
     margin-right: 10px;
     margin-top: 10px;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
 }
 
-.box{
+.box {
     margin-top: 160px;
     border-radius: 10px;
     margin-left: 27vw;
@@ -32,37 +32,33 @@ body {
     text-align: center;
     line-height: 40px;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
 
 }
 
 
-
-
-.bot{
+.bot {
     margin-top: 15px;
-    margin-left:30px;
+    margin-left: 30px;
     width: 10vw;
     height: 5vh;
     background-color: aquamarine;
-    color:honeydew;
+    color: honeydew;
     border-radius: 5px;
     border-color: powderblue;
     font-family: Arial, Helvetica, sans-serif;
-    font-size:large;
-    opacity:1;
+    font-size: large;
+    opacity: 1;
 }
 
 
-
-
-.lie1{
+.lie1 {
     width: 13vw;
     margin-left: 40px;
     text-align: right;
 }
 
-.lie2{
+.lie2 {
     width: 20vw;
     margin-left: 10px;
     text-align: left;

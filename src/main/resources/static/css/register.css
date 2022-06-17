@@ -7,7 +7,7 @@ body {
     background-size: cover;
 }
 
-.box{
+.box {
     margin-top: 200px;
     border-radius: 10px;
     margin-left: 27vw;
@@ -17,21 +17,21 @@ body {
     text-align: center;
     line-height: 40px;
     padding: 10px;
-    opacity:0.93;
+    opacity: 0.93;
 }
 
-.bot{
+.bot {
     margin-top: 15px;
-    margin-left:30px;
+    margin-left: 30px;
     width: 10vw;
     height: 5vh;
     background-color: aquamarine;
-    color:honeydew;
+    color: honeydew;
     border-radius: 5px;
     border-color: powderblue;
     font-family: Arial, Helvetica, sans-serif;
-    font-size:large;
-    opacity:1;
+    font-size: large;
+    opacity: 1;
 }
 
 @keyframes myAnimation {

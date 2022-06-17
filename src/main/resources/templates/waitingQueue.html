@@ -37,11 +37,11 @@
     </div>
 
     <div id="msgButton" style="display: flex;width: 28vw; margin-left: 4vw;justify-content:space-between;">
-<!--        <form action="/customer/changeRequest" method="GET">-->
-<!--            <button style="margin-top:40px; " type="submit" class="bot">修改充电请求</button>-->
-<!--        </form>-->
-<!--        <button style="margin-top:40px;" onclick="cancelRecharge()" class="bot">取消排队</button>-->
-<!--        <button style="margin-top:40px;" onclick="getQueueInfo()" class="bot">查询队列</button>-->
+        <!--        <form action="/customer/changeRequest" method="GET">-->
+        <!--            <button style="margin-top:40px; " type="submit" class="bot">修改充电请求</button>-->
+        <!--        </form>-->
+        <!--        <button style="margin-top:40px;" onclick="cancelRecharge()" class="bot">取消排队</button>-->
+        <!--        <button style="margin-top:40px;" onclick="getQueueInfo()" class="bot">查询队列</button>-->
     </div>
 </div>
 
@@ -60,7 +60,6 @@
     }
 
     function getStatus() {
-        //let RequestInfo = [[${requestInfo}]]
         $.ajax({
             url: "/customer/checkCarState",
             type: "POST",

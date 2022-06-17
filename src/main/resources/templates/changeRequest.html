@@ -35,7 +35,8 @@
                 <option>快充</option>
                 <option>慢充</option>
             </select>
-            <input name="chargingNum" type="text" style="line-height: 25px; margin-top: 15px;width: 15vw;"  placeholder="单位：度">
+            <input name="chargingNum" type="text" style="line-height: 25px; margin-top: 15px;width: 15vw;"
+                   placeholder="单位：度">
         </div>
     </div>
     <button style="margin-top:20px;" onclick="submit()" class="bot">提交</button>
@@ -52,12 +53,12 @@
 <script>
     function submit() {
         let chargingMode = document.getElementsByName("chargingMode")[0].value;
-        if(chargingMode=="快充")
-            chargingMode="fast";
+        if (chargingMode == "快充")
+            chargingMode = "fast";
         else
-            chargingMode="slow";
+            chargingMode = "slow";
         let chargingNum = document.getElementsByName("chargingNum")[0].value;
-        if(chargingNum == ""){
+        if (chargingNum == "") {
             alert("充电量不能为空！");
             return;
         }
@@ -68,7 +69,7 @@
             success: function (result) {
                 if (result == "success") {
                     window.location.href = "/customer/enterQueue";
-                } else if(result == "failed") {
+                } else if (result == "failed") {
                     alert("充电区不允许修改充电请求！");
                 }
             }
