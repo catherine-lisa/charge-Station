@@ -15,14 +15,9 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <form action="/customer/startRecharge" method="post">
-                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">开始充电</button>
-                    </form>
-                </ul>
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav navbar-right" id="naviInfo">
                     <form action="/release" method="get">
-                        <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
+                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">退出登录</button>
                     </form>
                 </ul>
             </div>
@@ -182,7 +177,7 @@
         setInterval("getStatus()", 6000); //定时每一分钟（现实的六秒）获取一次消息
 
         function endRecharge() { // 用户主动结束充电
-            let RequestInfo = [[${requestInfo}]]
+            //let RequestInfo = [[${requestInfo}]]
             $.ajax({
                 url: "/customer/endRecharge",
                 type: "POST",

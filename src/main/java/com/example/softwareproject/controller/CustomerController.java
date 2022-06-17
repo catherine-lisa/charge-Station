@@ -270,6 +270,8 @@ public class CustomerController {
     @ResponseBody
     public String changChargingNum(HttpSession session,@RequestParam float newChargingNum,@RequestParam String newMode){
         RequestInfo requestInfo=(RequestInfo)session.getAttribute("requestInfo");
+        System.out.println(newChargingNum);
+        System.out.println(newMode);
         Car car=chargingStation.getWaitingQueue().changeChargingNum(requestInfo.getId(),newChargingNum,requestInfo.getChargingMode());
         if(car==null)
         {

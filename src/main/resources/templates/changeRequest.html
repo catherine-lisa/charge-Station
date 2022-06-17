@@ -16,8 +16,8 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <form action="/release" method="get">
-                    <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
+                <form action="/customer/enterQueue" method="get">
+                    <button type="submit" class="btn btn-info" style="margin-top: 8px">返回排队界面</button>
                 </form>
             </ul>
         </div>
@@ -61,8 +61,10 @@
             alert("充电量不能为空！");
             return;
         }
+        alert(chargingMode);
+        alert(chargingNum);
         $.ajax({
-            url: "/customer/changeRecharge",
+            url: "/customer/changeRequest",
             type: "POST",
             data: {"newMode": chargingMode, "newChargingNum": chargingNum},
             success: function (result) {
