@@ -18,7 +18,7 @@ import java.util.*;
 public class ChargingField {
     private int maxChargingNum = 5;
     private int maxFastPileNum = 2;
-    private int maxSlowPileNum = 2;
+    private int maxSlowPileNum = 3;
     private int fastPilePower = 30;
     private int slowPilePower = 10;
     private ArrayList<FastChargingPile> fastChargingPiles = new ArrayList<>();
