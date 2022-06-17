@@ -84,6 +84,7 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
 <script th:inline="javascript">
+    let flag = 0;
     window.onload = function () {
         startRecharge();
         getStatus();
@@ -121,17 +122,6 @@
                 } else {
                     power = 10;
                 }
-                //判断是否还在充电
-                if (status.carState == "chargingDone") { //充电结束
-                    alert("充电完成！");
-                    chargeStatus = "充电完成！";
-                    msgButton += "<form action=\"/customer/payBill\" method=\"GET\">\n" +
-                        "            <button style=\"margin-top:10px;text-align: center\" type=\"submit\" class=\"bot\">支付账单</button>\n" +
-                        "        </form>";
-                } else {
-                    msgButton += "<button style=\"margin-top:10px;text-align: center\" onclick=\"endRecharge()\" class=\"bot\">取消充电</button>";
-                }
-                //计算剩余充电时长
                 let totalTime = (chargingNum / power) * 60;
                 let hour = Math.floor((chargingNum - nowCapacity) / power);
                 let minute = ((chargingNum - nowCapacity) / power - hour) * 60;
@@ -141,40 +131,79 @@
                 } else if (status.chargingMode == "slow") {
                     chargingMode = "慢充";
                 }
-                msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                    "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                    "                    <div> 充电类型：</div>\n" +
-                    "                    <div>" + chargingMode + "</div>\n" +
-                    "                </div>\n" +
-                    "            </div>\n" +
-                    "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                    "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                    "                    <div> 充电度数：</div>\n" +
-                    "                    <div>" + chargingNum + "</div>\n" +
-                    "                </div>\n" +
-                    "            </div>\n" +
-                    "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                    "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                    "                    <div> 充电时长：</div>\n" +
-                    "                    <div>" + totalTime + "分钟</div>\n" +
-                    "                </div>\n" +
-                    "            </div>" +
-                    "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                    "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                    "                    <div> 剩余充电时长：</div>\n" +
-                    "                    <div>" + hour + "</div>\n" +
-                    "                    <div> 小时 </div>\n" +
-                    "                    <div> " + minute.toFixed(1) + "</div>\n" +
-                    "                    <div> 分钟 </div>\n" +
-                    "                </div>\n" +
-                    "            </div>\n" +
-                    "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                    "                <div style=\"display: flex; justify-content:space-between;\">\n" +
-                    "                    <div> 当前汽车电量：</div>\n" +
-                    "                    <div> " + nowCapacity.toFixed(1) + " </div>\n" +
-                    "                    <div> 度</div>\n" +
-                    "                </div>\n" +
-                    "            </div>";
+                //判断是否还在充电
+                if (status.carState == "chargingDone") { //充电结束
+                    if(flag == 0){
+                        alert("充电完成！");
+                        flag = 1;
+                    }
+
+                    chargeStatus = "充电完成！";
+                    msgButton += "<form action=\"/customer/payBill\" method=\"GET\">\n" +
+                        "            <button style=\"margin-top:10px;text-align: center\" type=\"submit\" class=\"bot\">支付账单</button>\n" +
+                        "        </form>";
+                    msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 充电类型：</div>\n" +
+                        "                    <div>" + chargingMode + "</div>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 充电度数：</div>\n" +
+                        "                    <div>" + chargingNum + "</div>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 充电时长：</div>\n" +
+                        "                    <div>" + totalTime + "分钟</div>\n" +
+                        "                </div>\n" +
+                        "            </div>" +
+                        "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 当前汽车电量：</div>\n" +
+                        "                    <div> " + nowCapacity.toFixed(1) + " </div>\n" +
+                        "                    <div> 度</div>\n" +
+                        "                </div>\n" +
+                        "            </div>";
+                } else {
+                    msgButton += "<button style=\"margin-top:10px;text-align: center\" onclick=\"endRecharge()\" class=\"bot\">取消充电</button>";
+                    msg += "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 充电类型：</div>\n" +
+                        "                    <div>" + chargingMode + "</div>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 充电度数：</div>\n" +
+                        "                    <div>" + chargingNum + "</div>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 充电时长：</div>\n" +
+                        "                    <div>" + totalTime + "分钟</div>\n" +
+                        "                </div>\n" +
+                        "            </div>" +
+                        "<div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 剩余充电时长：</div>\n" +
+                        "                    <div>" + hour + "</div>\n" +
+                        "                    <div> 小时 </div>\n" +
+                        "                    <div> " + minute.toFixed(1) + "</div>\n" +
+                        "                    <div> 分钟 </div>\n" +
+                        "                </div>\n" +
+                        "            </div>\n" +
+                        "            <div style=\"width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div style=\"display: flex; justify-content:space-between;\">\n" +
+                        "                    <div> 当前汽车电量：</div>\n" +
+                        "                    <div> " + nowCapacity.toFixed(1) + " </div>\n" +
+                        "                    <div> 度</div>\n" +
+                        "                </div>\n" +
+                        "            </div>";
+                }
                 $("#info").html(msg);
                 $("#msgButton").html(msgButton);
                 $("#chargeStatus").html(chargeStatus);
@@ -182,7 +211,7 @@
         });
     }
 
-    setInterval("getStatus()", 6000); //定时每6s（现实的1秒）获取一次消息
+    setInterval("getStatus()", 1000); //定时每6s（现实的1秒）获取一次消息
 
     function endRecharge() { // 用户主动结束充电
         //let RequestInfo = [[${requestInfo}]]
