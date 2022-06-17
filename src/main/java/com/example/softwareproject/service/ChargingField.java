@@ -49,8 +49,8 @@ public class ChargingField {
         queryWrapper.ge("enddate", myTime.getDate());
         Bill bill = billMapper.selectOne(queryWrapper);
         int chargingTime = (int) car.getChargingNum() * 60 / pilePower;
-        map.put("chargingTime", chargingTime + "分钟");
-        map.put("remainingChargeTime", chargingTime - ((myTime.getDate().getTime() - bill.getStartdate().getTime()) / 1000 / 60) + "分钟");
+        map.put("chargingTime", chargingTime);
+        map.put("remainingChargeTime", chargingTime - ((myTime.getDate().getTime() - bill.getStartdate().getTime()) / 1000 / 60));
         return map;
     }
 
