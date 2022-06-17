@@ -157,16 +157,16 @@ public class SlowChargingPile implements ChargingPile {
                 Car nowCar=chargingQueue.get(0);
                 if(car.getId()==nowCar.getId())
                 {
-                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+((float)slowPilePower)/60);
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+((float)slowPilePower)/10);
                 }
                 else
                     timer1.cancel();
             }
         };
 
-        int delay= (int) (requestInfo.getChargingNum()*3600*1000/slowPilePower);
+        int delay= (int) (requestInfo.getChargingNum()*360*1000/slowPilePower);
         timer.schedule(timerTask,delay);
-        timer.schedule(timerTask1,0,6*1000);
+        timer.schedule(timerTask1,0,1000);
         return true;
     }
     public boolean endCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
@@ -177,6 +177,7 @@ public class SlowChargingPile implements ChargingPile {
         queryWrapper.eq("userid",requestInfo.getId());
         Bill bill=billMapper.selectOne(queryWrapper);
         Detail detail=detailMapper.selectOne(queryWrapper);
+        bill.setEnddate(myTime.getDate());
         //计算费用
         double chargePrice;
         if(getChargePrice(bill.getStartdate())>getChargePrice(bill.getEnddate()))
