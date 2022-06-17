@@ -93,6 +93,7 @@ public class CustomerController {
     }
 
     @GetMapping("/getTime")
+    @ResponseBody
     public String getTime()
     {
         String time = myTime.DateFormat();
