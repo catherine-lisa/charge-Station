@@ -92,10 +92,11 @@ public class CustomerController {
         return "log_in";
     }
 
-    @GetMapping("/user")
-    public String user()
+    @GetMapping("/getTime")
+    public String getTime()
     {
-        return "user";
+        String time = myTime.DateFormat();
+        return time;
     }
 
     @GetMapping("/requestRecharge")

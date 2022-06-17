@@ -9,22 +9,16 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script type="text/javascript" src="../static/js/public.js"></script>
 </head>
 
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <!--                <ul class="nav navbar-nav">-->
-            <!--                    <form action="/goodslist" method="get">-->
-            <!--                        <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">首页</button>-->
-            <!--                    </form>-->
-            <!--                </ul>-->
-            <!--                <ul class="nav navbar-nav">-->
-            <!--                    <form action="/release" method="get">-->
-            <!--                        <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>-->
-            <!--                    </form>-->
-            <!--                </ul>-->
+            <ul id="time" class="nav navbar-nav" style="margin-left: 38%;margin-top: 10px">
+                <!--                <div style="font-size: x-large;color: white">Thu Jan 01 06:03:10 HKT 1970</div>-->
+            </ul>
         </div>
     </div>
 </nav>
@@ -122,6 +116,10 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
 <script>
+    window.onload = function () {
+        getTime();
+    }
+    setInterval("getTime()", 1000); //定时每1秒获取一次时间
     function payBill() {
         $.ajax({
             url: "/customer/payBill",
