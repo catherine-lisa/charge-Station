@@ -26,7 +26,8 @@ public class SlowChargingPile implements ChargingPile {
     public String state = "关闭"; //充电桩状态
 
     public Date startTime; //充电桩启动时间
-
+    Timer timer1=new Timer();
+    Timer timer=new Timer();
     @Resource
     DetailMapper detailMapper;
 
@@ -128,11 +129,12 @@ public class SlowChargingPile implements ChargingPile {
     }
     public boolean startCharging(MyTime myTime,HttpSession session,RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
     {
+        timer=new Timer();
+        timer1=new Timer();
         Car car =chargingQueue.get(0);
-        Timer timer1=new Timer();
-        Timer timer=new Timer();
+
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("userid", requestInfo.getId());
+        queryWrapper.eq("billid", requestInfo.getBillid());
         Detail detail = detailMapper.selectOne(queryWrapper);
         detail.setChargingpileid(id);
         detailMapper.updateById(detail);
@@ -142,6 +144,8 @@ public class SlowChargingPile implements ChargingPile {
             @Override
             public void run() {
                 System.out.println(car.getId()+"充电完成"+myTime.getDate());
+                if(chargingQueue.size()==0)
+                    return;
                 if(car.getId()==chargingQueue.get(0).getId()) {
                     timer1.cancel();
                     endCharging(myTime, session, requestInfo, detailMapper, billMapper);
@@ -168,15 +172,20 @@ public class SlowChargingPile implements ChargingPile {
 
         int delay= (int) (requestInfo.getChargingNum()*360*1000/slowPilePower);
         timer.schedule(timerTask,delay);
-        timer.schedule(timerTask1,0,1000);
+        timer1.schedule(timerTask1,0,1000);
         return true;
     }
     public boolean endCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
+        if(requestInfo.getCarState()=="chargingDoneByUser")
+        {
+            timer.cancel();
+            timer1.cancel();
+        }
         requestInfo.setCarState("chargingDone");
         this.dequeue();
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid", requestInfo.getBillid());
         Bill bill=billMapper.selectOne(queryWrapper);
         Detail detail=detailMapper.selectOne(queryWrapper);
         bill.setEnddate(myTime.getDate());

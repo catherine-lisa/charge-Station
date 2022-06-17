@@ -7,6 +7,7 @@ import java.util.Date;
 @Data
 public class RequestInfo {
     public long id;
+    public long billid;
     public String location;
     public String carType;
     public float carCapacity;

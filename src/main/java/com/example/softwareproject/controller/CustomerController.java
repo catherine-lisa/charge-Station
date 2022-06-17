@@ -102,14 +102,17 @@ public class CustomerController {
     //可以用于ajax的success函数
     public String requestRecharge(Model model,@ModelAttribute RequestInfo requestInfo,HttpSession session)
     {
-        model.addAttribute(requestInfo);
-        session.setAttribute("requestInfo",requestInfo);
+
+        session.removeAttribute("requestInfo");
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
         detail.setStartrequesttime(myTime.getDate());
         detail.setChargingtype(requestInfo.chargingMode);
         detailMapper.insert(detail);
-        System.out.println(requestInfo);
+        System.out.println(detail);
+        requestInfo.setBillid(detail.getBillid());
+        model.addAttribute(requestInfo);
+        session.setAttribute("requestInfo",requestInfo);
         return chargingStation.requestRecharge(requestInfo);
     }
 
@@ -157,8 +160,9 @@ public class CustomerController {
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         System.out.println("Start"+requestInfo);
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid",requestInfo.getBillid());
         Detail detail = detailMapper.selectOne(queryWrapper);
+        System.out.println(detail);
         int chargingPileId=(int)detail.getChargingpileid();
 
         if(requestInfo.getChargingMode().equals("fast")) {
@@ -189,15 +193,18 @@ public class CustomerController {
     @ResponseBody
     public  String endRecharge(HttpSession session)
     {
-        System.out.println("endRecharge");
         Car car;
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
-        System.out.println(requestInfo.getCarState()+"startController");
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid",requestInfo.getBillid());
         Detail detail = detailMapper.selectOne(queryWrapper);
         int chargingPileId=(int)detail.getChargingpileid();
         String chargingType=requestInfo.getChargingMode();
+        Bill bill=billMapper.selectOne(queryWrapper);
+        bill.setEnddate(myTime.getDate());
+        billMapper.updateById(bill);
+        detail.setEnddate(myTime.getDate());
+        detailMapper.updateById(detail);
         if(requestInfo.getCarState()=="chargingDone")
         {
             Date now=myTime.getDate();
@@ -212,23 +219,21 @@ public class CustomerController {
         if(chargingType.equals("fast")) {
             FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(chargingPileId);
             car=fastChargingPile.getFirstCar();
+            requestInfo.setCarState("chargingDoneByUser");
             fastChargingPile.endCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
         else
         {
             SlowChargingPile slowChargingPile=chargingField.getSlowChargingPileById(chargingPileId);
             car=slowChargingPile.getFirstCar();
+            requestInfo.setCarState("chargingDoneByUser");
             slowChargingPile.endCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
 
         car.setCarState("endcharging");
 
-        Bill bill=billMapper.selectOne(queryWrapper);
-        bill.setEnddate(myTime.getDate());
-        billMapper.updateById(bill);
-        detail.setEnddate(myTime.getDate());
-        detailMapper.updateById(detail);
-        chargingField.endRecharge(chargingPileId,chargingType);
+
+
         System.out.println("success");
         //结束充电函数
         return "success";
@@ -237,7 +242,7 @@ public class CustomerController {
     public String getBill(HttpSession session,Model model){
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid",requestInfo.getBillid());
         Detail detail=detailMapper.selectOne(queryWrapper);
         detail.setTimeout(myTime.getDate().getTime()-detail.getEnddate().getTime());
         detailMapper.updateById(detail);
@@ -250,10 +255,11 @@ public class CustomerController {
     {
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid",requestInfo.getBillid());
         Detail detail=detailMapper.selectOne(queryWrapper);
         detail.setIspay(true);
         detailMapper.updateById(detail);
+        session.removeAttribute("requestInfo");
         return "success";
     }
     @PostMapping("/changeChargingNum")
@@ -308,7 +314,7 @@ public class CustomerController {
         }
         requestInfo.setChargingMode(newMode);
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid",requestInfo.getBillid());
         Detail detail = detailMapper.selectOne(queryWrapper);
         detail.setChargingtype(newMode);
         chargingStation.requestRecharge(requestInfo);
@@ -330,7 +336,7 @@ public class CustomerController {
             }
         }
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("billid",requestInfo.getBillid());
         billMapper.delete(queryWrapper);
         detailMapper.delete(queryWrapper);
 
