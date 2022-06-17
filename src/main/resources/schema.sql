@@ -29,6 +29,8 @@ drop table `BILL`;
 create table if not exists `BILL`(
     `billid` bigint(20) not null AUTO_INCREMENT,
     `userid` bigint(20),
+    `chargingpileid` bigint(20),
+    `chargingnum` float,
     `startdate`Timestamp default null,
     `enddate`Timestamp default null,
     `totalfee` float(32),

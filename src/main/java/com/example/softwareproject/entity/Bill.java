@@ -11,7 +11,7 @@ public class Bill {
     private long billid;
     private long userid;
     private long chargingpileid;
-    private float chargingNum;
+    private float chargingnum;
     private Date startdate;
     private Date enddate;
     private float totalfee;

@@ -109,6 +109,7 @@ public class CustomerController {
     public String requestRecharge(Model model,@ModelAttribute RequestInfo requestInfo,HttpSession session)
     {
         session.removeAttribute("requestInfo");
+        requestInfo.setId((Long) session.getAttribute("userid"));
         Detail detail =new Detail();
         detail.setUserid(requestInfo.getId());
         detail.setStartrequesttime(myTime.getDate());
@@ -186,7 +187,7 @@ public class CustomerController {
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         bill.setChargingpileid(chargingPileId);
-        bill.setChargingNum(detail.getChargevol());
+        bill.setChargingnum(detail.getChargevol());
         billMapper.insert(bill);
 //        QueryWrapper queryWrapper=new QueryWrapper();
 //        queryWrapper.eq("userid",car.getId());
