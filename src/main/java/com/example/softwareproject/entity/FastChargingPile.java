@@ -192,7 +192,10 @@ public class FastChargingPile implements ChargingPile {
         if (getChargePrice(bill.getStartdate()) > getChargePrice(bill.getEnddate()))
             chargePrice = getChargePrice(bill.getStartdate());
         else chargePrice = getChargePrice(bill.getEnddate());
-        detail.setChargingtotaltime((double) (bill.getEnddate().getTime() - bill.getStartdate().getTime()));
+        double totalTime = (double) (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 60;
+        String totalTime_str = String.format("%.1f", totalTime); //以字符串形式保留位数，此处保留1位小数
+        double totalTime_1 = Double.parseDouble(totalTime_str);
+        detail.setChargingtotaltime(totalTime_1);
         detail.setChargevol((float)fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
         double serviceFee = basePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee = chargePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
