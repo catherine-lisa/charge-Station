@@ -121,16 +121,16 @@
                         "        <button style=\"margin-top:40px;\" onclick=\"getQueueInfo()\" class=\"bot\">查询队列</button>";
                 }
                 if (status.carState == "readyCharge") { //可以进行充电
-                    title = "可以充电";
-                    startButton = "<form action=\"/customer/startRecharge\" method=\"get\">\n" +
-                        "                    <button type=\"submit\" class=\"btn btn-info\" style=\"margin-top: 8px;margin-right: 15px\">开始充电</button>\n" +
-                        "                </form>";
-
-                    if (flag == 0) {
-                        alert("可以充电啦！");
-                        flag = 1;
-                    }
-                    //window.location.href = "/customer/startRecharge";
+                    // title = "可以充电";
+                    // startButton = "<form action=\"/customer/startRecharge\" method=\"get\">\n" +
+                    //     "                    <button type=\"submit\" class=\"btn btn-info\" style=\"margin-top: 8px;margin-right: 15px\">开始充电</button>\n" +
+                    //     "                </form>";
+                    //
+                    // if (flag == 0) {
+                    //     alert("可以充电啦！");
+                    //     flag = 1;
+                    // }
+                    window.location.href = "/customer/startRecharge";
                 }
                 $("#startButton").html(startButton);
                 $("#info").html(msg);
