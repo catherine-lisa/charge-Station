@@ -15,10 +15,8 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <form action="/customer/user" method="get">
-                    <button type="submit" class="btn btn-info" style="margin-top: 8px">个人主页</button>
-                </form>
+            <ul class="nav navbar-nav" id="startButton">
+
             </ul>
         </div>
     </div>
@@ -28,22 +26,22 @@
 </div>
 <div class="box2">
     <div id="info">
-<!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
-<!--            <div> 目前位于 ：</div>-->
-<!--            <div> 等待区</div>-->
-<!--        </div>-->
-<!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
-<!--            <div> 所在充电桩 ：</div>-->
-<!--            <div> 快充A</div>-->
-<!--        </div>-->
+        <!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
+        <!--            <div> 目前位于 ：</div>-->
+        <!--            <div> 等待区</div>-->
+        <!--        </div>-->
+        <!--        <div style="display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;">-->
+        <!--            <div> 所在充电桩 ：</div>-->
+        <!--            <div> 快充A</div>-->
+        <!--        </div>-->
     </div>
 
-    <div style="display: flex;width: 28vw; margin-left: 4vw;justify-content:space-between;">
-        <form action="/customer/changeRequest" method="GET">
-            <button style="margin-top:40px; "type="submit" class="bot">修改充电请求</button>
-        </form>
-        <button style="margin-top:40px;" onclick="cancelRecharge()" class="bot">取消排队</button>
-        <button style="margin-top:40px;" onclick="getQueueInfo()" class="bot">查询队列</button>
+    <div id="msgButton" style="display: flex;width: 28vw; margin-left: 4vw;justify-content:space-between;">
+<!--        <form action="/customer/changeRequest" method="GET">-->
+<!--            <button style="margin-top:40px; " type="submit" class="bot">修改充电请求</button>-->
+<!--        </form>-->
+<!--        <button style="margin-top:40px;" onclick="cancelRecharge()" class="bot">取消排队</button>-->
+<!--        <button style="margin-top:40px;" onclick="getQueueInfo()" class="bot">查询队列</button>-->
     </div>
 </div>
 
@@ -56,6 +54,7 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
 <script th:inline="javascript">
+    let flag = 0;
     window.onload = function () {
         getStatus();
     }
@@ -69,59 +68,75 @@
             success: function (result) {
                 let status = result;
                 let msg = "";
+                let msgButton = "";
+                let chargingMode;
+                let queueStatus;
+                if (status.chargingMode == "fast") {
+                    chargingMode = "快充";
+                } else if (status.chargingMode == "slow") {
+                    chargingMode = "慢充";
+                } else {
+                    chargingMode = "加载中...";
+                }
+                if (status.queue_num) {
+                    queueStatus = status.queue_num;
+                } else {
+                    queueStatus = "加载中...";
+                }
+                if (status.location == "充电区") { //位于充电区
+                    msg += "<div style=\"display: flex; justify-content:space-between;width: 20vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div> 目前位于 ：</div>\n" +
+                        "                <div> 充电区 </div>\n" +
+                        "            </div>\n" +
+                        "   <div style=\"display: flex; justify-content:space-between;width: 20vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "        <div> 充电类型 ：</div>\n" +
+                        "        <div> " + chargingMode + " </div>\n" +
+                        "    </div>" +
+                        "   <div style=\"display: flex; justify-content:space-between;width: 20vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "            <div> 队列情况 ：</div>\n" +
+                        "        <div> " + queueStatus + " </div>\n" +
+                        "   </div>";
+                    msgButton += "<form action=\"/customer/changeRequest\" method=\"GET\">\n" +
+                        "            <button style=\"margin-top:40px; \" type=\"submit\" class=\"bot\">修改充电请求</button>\n" +
+                        "        </form>\n" +
+                        "        <button style=\"margin-top:40px;\" onclick=\"cancelRecharge()\" class=\"bot\">取消排队</button>\n";
+                } else { //位于等待区
+                    msg += "<div style=\"display: flex; justify-content:space-between;width: 20vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "                <div> 目前位于 ：</div>\n" +
+                        "                <div> 等待区 </div>\n" +
+                        "            </div>" +
+                        "   <div style=\"display: flex; justify-content:space-between;width: 20vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "        <div> 充电类型 ：</div>\n" +
+                        "        <div> " + chargingMode + " </div>\n" +
+                        "    </div>" +
+                        "   <div style=\"display: flex; justify-content:space-between;width: 20vw; margin-left: 10vw; margin-top: 10px;\">\n" +
+                        "            <div> 队列情况 ：</div>\n" +
+                        "        <div> " + queueStatus + " </div>\n" +
+                        "   </div>";
+                    msgButton += "<form action=\"/customer/changeRequest\" method=\"GET\">\n" +
+                        "            <button style=\"margin-top:40px; \" type=\"submit\" class=\"bot\">修改充电请求</button>\n" +
+                        "        </form>\n" +
+                        "        <button style=\"margin-top:40px;\" onclick=\"cancelRecharge()\" class=\"bot\">取消排队</button>\n" +
+                        "        <button style=\"margin-top:40px;\" onclick=\"getQueueInfo()\" class=\"bot\">查询队列</button>";
+                }
+                $("#info").html(msg);
+                $("#msgButton").html(msgButton);
                 if (status.carState == "readyCharge") { //充电中
-                    window.location.href = "/customer/startRecharge";
-                } else { //排队中
-                    let chargingMode;
-                    let queueStatus;
-                    if(status.chargingMode == "fast"){
-                        chargingMode = "快充";
-                    } else if(status.chargingMode == "slow") {
-                        chargingMode = "慢充";
-                    } else {
-                        chargingMode = "加载中...";
+                    let startButton = "";
+                    startButton = "<form action=\"/customer/startRecharge\" method=\"get\">\n" +
+                        "                    <button type=\"submit\" class=\"btn btn-info\" style=\"margin-top: 8px;margin-right: 15px\">开始充电</button>\n" +
+                        "                </form>";
+                    $("#startButton").html(startButton);
+                    if (flag == 0) {
+                        alert("可以充电啦！");
+                        flag = 1;
                     }
-                    if(status.queue_num){
-                        queueStatus = status.queue_num;
-                    } else {
-                        queueStatus = "加载中...";
-                    }
-                    if (status.location == "充电区") { //位于充电区
-                        msg += "<div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "                <div> 目前位于 ：</div>\n" +
-                            "                <div> 充电区 </div>\n" +
-                            "            </div>\n" +
-                            "            <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "                <div> 所在充电桩 ：</div>\n" +
-                            "                <div> " + status['chargingPile'] + " </div>\n" +
-                            "            </div>" +
-                            "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "        <div> 充电类型 ：</div>\n" +
-                            "        <div> " + chargingMode + " </div>\n" +
-                            "    </div>" +
-                            "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "            <div> 队列情况 ：</div>\n" +
-                            "        <div> " + queueStatus + " </div>\n" +
-                            "   </div>";
-                    } else { //位于等待区
-                        msg += "<div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "                <div> 目前位于 ：</div>\n" +
-                            "                <div> 等待区 </div>\n" +
-                            "            </div>" +
-                            "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "        <div> 充电类型 ：</div>\n" +
-                            "        <div> " + chargingMode + " </div>\n" +
-                            "    </div>" +
-                            "   <div style=\"display: flex; justify-content:space-between;width: 15vw; margin-left: 10vw; margin-top: 10px;\">\n" +
-                            "            <div> 队列情况 ：</div>\n" +
-                            "        <div> " + queueStatus + " </div>\n" +
-                            "   </div>";
-                    }
-                    $("#info").html(msg);
+                    //window.location.href = "/customer/startRecharge";
                 }
             }
         })
     }
+
     setInterval("getStatus()", 1000); //定时每1秒获取一次消息
 
     function cancelRecharge() {
@@ -147,7 +162,7 @@
             success: function (result) {
                 if (result == "success") {
                     alert("");
-                } else if(result == "failed") {
+                } else if (result == "failed") {
                     alert("充电区不允许修改充电请求！");
                 }
             }
