@@ -141,29 +141,23 @@
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
 <script>
-    function submit() {
-        let chargingMode = document.getElementsByName("chargingMode")[0].value;
-        if (chargingMode == "快充")
-            chargingMode = "fast";
-        else
-            chargingMode = "slow";
-        let chargingNum = document.getElementsByName("chargingNum")[0].value;
-        if (chargingNum == "") {
-            alert("充电量不能为空！");
-            return;
-        }
+    function getBillList() {
         $.ajax({
-            url: "/customer/changeRequest",
+            url: "/comment",
             type: "POST",
-            data: {"newMode": chargingMode, "newChargingNum": chargingNum},
+            data: {},
             success: function (result) {
-                if (result == "success") {
-                    window.location.href = "/customer/enterQueue";
-                } else if (result == "failed") {
-                    alert("充电区不允许修改充电请求！");
+                let msg = "";
+                for (let i in result) {
+                    let bill = result[i];
+                    msg += "";
                 }
+                $("#billList").html(msg);
+            },
+            error: function () {
+                alert("获取账单失败！");
             }
-        });
+        })
     }
 </script>
 
