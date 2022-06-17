@@ -229,12 +229,11 @@ public class SlowChargingPile implements ChargingPile {
     public Car cancelRequest(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
     {
         for(int i=0;i<chargingQueue.size();++i)
-            if(chargingQueue.get(i).getId()==id)
+            if (chargingQueue.get(i).getId() == requestInfo.getId())
             {
                 if(i==0)
                 {
-
-                    if(chargingQueue.get(i).getCarState()=="readyCharge")//没有充电
+                    if(!Objects.equals(chargingQueue.get(i).getCarState(), "charging"))//没有充电
                         return chargingQueue.remove(i);
                     //当前车辆正在充电，无法改变充电模式或者取消请求
                     return null;

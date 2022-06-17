@@ -231,9 +231,9 @@ public class FastChargingPile implements ChargingPile {
 
     public Car cancelRequest(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         for (int i = 0; i < chargingQueue.size(); ++i)
-            if (chargingQueue.get(i).getId() == id) {
+            if (chargingQueue.get(i).getId() == requestInfo.getId()) {
                 if (i == 0) {
-                    if(chargingQueue.get(i).getCarState()=="readyCharge")
+                    if(!Objects.equals(chargingQueue.get(i).getCarState(), "charging"))
                         return chargingQueue.remove(i);
                     return null;
                 } else {
