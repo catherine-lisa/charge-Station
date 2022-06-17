@@ -17,6 +17,7 @@ create table if not exists `DETAIL`(
      `startdate`Timestamp default null,
      `enddate`Timestamp default null,
      `chargevol` float,
+     `timeout` double,
      `chargingtotaltime` double,
      `chargefee` float,
      `servicefee` float,

@@ -236,6 +236,8 @@ public class CustomerController {
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",requestInfo.getId());
         Detail detail=detailMapper.selectOne(queryWrapper);
+        detail.setTimeout(myTime.getDate().getTime()-detail.getEnddate().getTime());
+        detailMapper.updateById(detail);
         model.addAttribute("detail",detail);
         return "Bill";
     }
