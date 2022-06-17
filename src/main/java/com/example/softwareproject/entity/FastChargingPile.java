@@ -85,6 +85,9 @@ public class FastChargingPile implements ChargingPile {
 
     public boolean startCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         Car car = chargingQueue.get(0);
+        if (car.getId() != requestInfo.getId())
+            return false;
+
         Timer timer = new Timer();
         Timer timer1 = new Timer();
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -92,8 +95,7 @@ public class FastChargingPile implements ChargingPile {
         Detail detail = detailMapper.selectOne(queryWrapper);
         detail.setChargingpileid(id);
         detailMapper.updateById(detail);
-        if (car.getId() != requestInfo.getId())
-            return false;
+
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -219,6 +221,8 @@ public class FastChargingPile implements ChargingPile {
         for (int i = 0; i < chargingQueue.size(); ++i)
             if (chargingQueue.get(i).getId() == id) {
                 if (i == 0) {
+                    if(chargingQueue.get(i).getCarState()=="readyCharge")
+                        return chargingQueue.remove(i);
                     return null;
                 } else {
                     Car car = chargingQueue.remove(i);
