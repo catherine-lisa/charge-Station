@@ -142,8 +142,10 @@ public class SlowChargingPile implements ChargingPile {
             @Override
             public void run() {
                 System.out.println(car.getId()+"充电完成"+myTime.getDate());
-                if(car.getId()==chargingQueue.get(0).getId())
-                    endCharging(myTime,session,requestInfo,detailMapper,billMapper);//结束充电
+                if(car.getId()==chargingQueue.get(0).getId()) {
+                    timer1.cancel();
+                    endCharging(myTime, session, requestInfo, detailMapper, billMapper);
+                }//结束充电
             }
         };
         TimerTask timerTask1=new TimerTask() {
@@ -157,7 +159,7 @@ public class SlowChargingPile implements ChargingPile {
                 Car nowCar=chargingQueue.get(0);
                 if(car.getId()==nowCar.getId())
                 {
-                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+((float)slowPilePower)/10);
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+((float)slowPilePower)/360);
                 }
                 else
                     timer1.cancel();

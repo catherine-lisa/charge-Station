@@ -102,6 +102,7 @@ public class FastChargingPile implements ChargingPile {
                 System.out.println(car.getId() + "充电完成");
                 //判断用户是否提前结束充电
                 if (car.getId() == chargingQueue.get(0).getId()) {
+                    timer1.cancel();
                     endCharging(myTime,session, requestInfo, detailMapper, billMapper);
                 }//结束充电
             }
@@ -116,7 +117,7 @@ public class FastChargingPile implements ChargingPile {
                 }
                 Car nowCar = chargingQueue.get(0);
                 if (car.getId() == nowCar.getId()) {
-                chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + ((float)fastPilePower) / 10);
+                chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + ((float)fastPilePower) / 360);
                     System.out.println(chargingQueue.get(0));
                 } else//当前车辆变化
                     timer1.cancel();
@@ -125,7 +126,7 @@ public class FastChargingPile implements ChargingPile {
         int delay = (int) (requestInfo.getChargingNum() * 360 * 1000 / fastPilePower);
         System.out.println(delay);
         timer.schedule(timerTask, delay);
-        timer.schedule(timerTask1, 0, 1 * 1000);
+        timer.schedule(timerTask1, 0, 1 * 1000);//10s
         return true;
     }
 
