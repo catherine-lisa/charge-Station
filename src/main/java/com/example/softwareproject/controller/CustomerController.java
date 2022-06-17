@@ -186,6 +186,7 @@ public class CustomerController {
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         bill.setChargingpileid(chargingPileId);
+        bill.setChargingNum(detail.getChargevol());
         billMapper.insert(bill);
 //        QueryWrapper queryWrapper=new QueryWrapper();
 //        queryWrapper.eq("userid",car.getId());
