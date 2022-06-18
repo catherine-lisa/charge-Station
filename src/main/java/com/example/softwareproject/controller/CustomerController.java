@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -397,6 +399,22 @@ public class CustomerController {
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",session.getAttribute("userid"));
         List<Bill> bills= billMapper.selectList(queryWrapper);
+        //更新起始时间，使前端正确显示
+        for(int i = 0; i < bills.size(); ++i){
+            Bill tmpbill = bills.get(i);
+            Date startDate = tmpbill.getStartdate();
+            Date endDate = tmpbill.getEnddate();
+            Calendar c = Calendar.getInstance();
+            c.setTime(startDate);
+            c.add(Calendar.HOUR, 8);
+            startDate =  c.getTime();
+            c.setTime(endDate);
+            c.add(Calendar.HOUR, 8);
+            endDate =  c.getTime();
+            tmpbill.setStartdate(startDate);
+            tmpbill.setEnddate(endDate);
+            bills.set(i, tmpbill);
+        }
         return bills;
     }
 }
