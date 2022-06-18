@@ -41,11 +41,19 @@ public class ChargingField {
         int pilePower;
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
+            if (chargingPile.getChargingQueue().size() == 0) {
+                map.put("carId", -1);
+                return map;
+            }
             car = chargingPile.getFirstCar();
             pilePower = fastPilePower;
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
+            if (chargingPile.getChargingQueue().size() == 0) {
+                map.put("carId", -1);
+                return map;
+            }
             car = chargingPile.getFirstCar();
             pilePower = slowPilePower;
         }
@@ -87,9 +95,9 @@ public class ChargingField {
             map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime, detailMapper, id));
             map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime, detailMapper, id));
             map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime, detailMapper, id));
-            map.put("chargeFee",chargingPile.getChargeFee(startTime, endTime, detailMapper, id));
-            map.put("serviceFee",chargingPile.getServiceFee(startTime, endTime, detailMapper, id));
-            map.put("totalFee",chargingPile.getTotalFee(startTime, endTime, detailMapper, id));
+            map.put("chargeFee", chargingPile.getChargeFee(startTime, endTime, detailMapper, id));
+            map.put("serviceFee", chargingPile.getServiceFee(startTime, endTime, detailMapper, id));
+            map.put("totalFee", chargingPile.getTotalFee(startTime, endTime, detailMapper, id));
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
@@ -97,9 +105,9 @@ public class ChargingField {
             map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime, detailMapper, id));
             map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime, detailMapper, id));
             map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime, detailMapper, id));
-            map.put("chargeFee",chargingPile.getChargeFee(startTime, endTime, detailMapper, id));
-            map.put("serviceFee",chargingPile.getServiceFee(startTime, endTime, detailMapper, id));
-            map.put("totalFee",chargingPile.getTotalFee(startTime, endTime, detailMapper, id));
+            map.put("chargeFee", chargingPile.getChargeFee(startTime, endTime, detailMapper, id));
+            map.put("serviceFee", chargingPile.getServiceFee(startTime, endTime, detailMapper, id));
+            map.put("totalFee", chargingPile.getTotalFee(startTime, endTime, detailMapper, id));
         }
         return map;
     }
