@@ -48,15 +48,19 @@ public class SlowChargingPile implements ChargingPile {
         return list;
     }
 
-    public int getTotalChargeTimes(Date startTime, Date endTime, DetailMapper detailMapper) {
+    public int getTotalChargeTimes(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
+        queryWrapper.eq("chargingpileid", id);
+        queryWrapper.eq("chargingtype", "slow");
         return detailMapper.selectCount(queryWrapper);
     }
 
-    public double getTotalChargeTime(Date startTime, Date endTime, DetailMapper detailMapper) {
+    public double getTotalChargeTime(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
+        queryWrapper.eq("chargingpileid", id);
+        queryWrapper.eq("chargingtype", "slow");
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
         double totalChargeTime = 0;
         int size = detailList.size();
@@ -66,9 +70,11 @@ public class SlowChargingPile implements ChargingPile {
         return totalChargeTime;
     }
 
-    public float getTotalChargeVol(Date startTime, Date endTime, DetailMapper detailMapper) {
+    public float getTotalChargeVol(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
+        queryWrapper.eq("chargingpileid", id);
+        queryWrapper.eq("chargingtype", "slow");
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
         float totalChargeVol = 0;
         int size = detailList.size();
@@ -76,6 +82,48 @@ public class SlowChargingPile implements ChargingPile {
             totalChargeVol += detailList.get(i).getChargevol();
         }
         return totalChargeVol;
+    }
+
+    public float getChargeFee(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        queryWrapper.eq("chargingpileid", id);
+        queryWrapper.eq("chargingtype", "slow");
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        float chargeFee = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            chargeFee += detailList.get(i).getChargefee();
+        }
+        return chargeFee;
+    }
+
+    public float getServiceFee(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        queryWrapper.eq("chargingpileid", id);
+        queryWrapper.eq("chargingtype", "slow");
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        float serviceFee = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            serviceFee += detailList.get(i).getServicefee();
+        }
+        return serviceFee;
+    }
+
+    public float getTotalFee(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.between("enddate", startTime, endTime);
+        queryWrapper.eq("chargingpileid", id);
+        queryWrapper.eq("chargingtype", "slow");
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        float totalFee = 0;
+        int size = detailList.size();
+        for (int i = 0; i < size; ++i) {
+            totalFee += detailList.get(i).getTotalfee();
+        }
+        return totalFee;
     }
 
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
