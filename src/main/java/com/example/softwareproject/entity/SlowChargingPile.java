@@ -20,18 +20,16 @@ public class SlowChargingPile implements ChargingPile {
 
     public long id;
     public int maxChargingNum;
-    private int slowPilePower=10;
-    private double basePrice=0.8;//服务费
+    private int slowPilePower = 10;
+    private double basePrice = 0.8;//服务费
 
     public String state = "关闭"; //充电桩状态
 
     public Date startTime; //充电桩启动时间
-    Timer timer1=new Timer();
-    Timer timer=new Timer();
-    @Resource
-    DetailMapper detailMapper;
+    Timer timer1 = new Timer();
+    Timer timer = new Timer();
 
-    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime) {
+    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime, DetailMapper detailMapper) {
         List<Map<String, Object>> list = new ArrayList<>();
         int size = chargingQueue.size();
         for (int i = 1; i < size; ++i) {
@@ -50,13 +48,13 @@ public class SlowChargingPile implements ChargingPile {
         return list;
     }
 
-    public int getTotalChargeTimes(Date startTime, Date endTime) {
+    public int getTotalChargeTimes(Date startTime, Date endTime, DetailMapper detailMapper) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
         return detailMapper.selectCount(queryWrapper);
     }
 
-    public double getTotalChargeTime(Date startTime, Date endTime) {
+    public double getTotalChargeTime(Date startTime, Date endTime, DetailMapper detailMapper) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
@@ -68,7 +66,7 @@ public class SlowChargingPile implements ChargingPile {
         return totalChargeTime;
     }
 
-    public float getTotalChargeVol(Date startTime, Date endTime) {
+    public float getTotalChargeVol(Date startTime, Date endTime, DetailMapper detailMapper) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
@@ -98,7 +96,7 @@ public class SlowChargingPile implements ChargingPile {
         return date.after(begin) && date.before(end);
     }
 
-    public double getChargePrice(Date date){
+    public double getChargePrice(Date date) {
         //按照开始和结束中，价高的算
         String strTime1 = "10:00";
         String strTime2 = "15:00";
@@ -109,105 +107,101 @@ public class SlowChargingPile implements ChargingPile {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String now = sdf.format(date);
         try {
-            Date nowTime=sdf.parse(now);
-            Date time1=sdf.parse(strTime1);
-            Date time2=sdf.parse(strTime2);
-            Date time3=sdf.parse(strTime3);
-            Date time4=sdf.parse(strTime4);
-            Date time5=sdf.parse(strTime5);
-            Date time6=sdf.parse(strTime6);
-            if(isEffectiveDate(nowTime,time1,time2)||isEffectiveDate(nowTime,time3,time4))
+            Date nowTime = sdf.parse(now);
+            Date time1 = sdf.parse(strTime1);
+            Date time2 = sdf.parse(strTime2);
+            Date time3 = sdf.parse(strTime3);
+            Date time4 = sdf.parse(strTime4);
+            Date time5 = sdf.parse(strTime5);
+            Date time6 = sdf.parse(strTime6);
+            if (isEffectiveDate(nowTime, time1, time2) || isEffectiveDate(nowTime, time3, time4))
                 return 1.0;
-            if(isEffectiveDate(nowTime,time6,time1)||isEffectiveDate(nowTime,time2,time3)||isEffectiveDate(nowTime,time4,time5))
+            if (isEffectiveDate(nowTime, time6, time1) || isEffectiveDate(nowTime, time2, time3) || isEffectiveDate(nowTime, time4, time5))
                 return 0.7;
-            if(isEffectiveDate(nowTime,time5,time6))
+            if (isEffectiveDate(nowTime, time5, time6))
                 return 0.4;
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return 1.0;
     }
-    public boolean startCharging(MyTime myTime,HttpSession session,RequestInfo requestInfo,DetailMapper detailMapper,BillMapper billMapper)
-    {
-        timer=new Timer();
-        timer1=new Timer();
-        Car car =chargingQueue.get(0);
+
+    public boolean startCharging(MyTime myTime, HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+        timer = new Timer();
+        timer1 = new Timer();
+        Car car = chargingQueue.get(0);
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("billid", requestInfo.getBillid());
         Detail detail = detailMapper.selectOne(queryWrapper);
         detail.setChargingpileid(id);
         detailMapper.updateById(detail);
-        if(car.getId()!=requestInfo.getId())
+        if (car.getId() != requestInfo.getId())
             return false;
-        TimerTask timerTask=new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println(car.getId()+"充电完成"+myTime.getDate());
-                if(chargingQueue.size()==0)
+                System.out.println(car.getId() + "充电完成" + myTime.getDate());
+                if (chargingQueue.size() == 0)
                     return;
-                if(car.getId()==chargingQueue.get(0).getId()) {
+                if (car.getId() == chargingQueue.get(0).getId()) {
                     timer1.cancel();
                     endCharging(myTime, session, requestInfo, detailMapper, billMapper);
                 }//结束充电
             }
         };
-        TimerTask timerTask1=new TimerTask() {
+        TimerTask timerTask1 = new TimerTask() {
             @Override
             public void run() {
-                if(chargingQueue.size()==0)
-                {
+                if (chargingQueue.size() == 0) {
                     timer1.cancel();
                     return;
                 }
-                Car nowCar=chargingQueue.get(0);
-                if(car.getId()==nowCar.getId())
-                {
-                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity()+((float)slowPilePower)/360);
-                }
-                else
+                Car nowCar = chargingQueue.get(0);
+                if (car.getId() == nowCar.getId()) {
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + ((float) slowPilePower) / 360);
+                } else
                     timer1.cancel();
             }
         };
 
-        int delay= (int) (requestInfo.getChargingNum()*360*1000/slowPilePower);
-        timer.schedule(timerTask,delay);
-        timer1.schedule(timerTask1,0,1000);
+        int delay = (int) (requestInfo.getChargingNum() * 360 * 1000 / slowPilePower);
+        timer.schedule(timerTask, delay);
+        timer1.schedule(timerTask1, 0, 1000);
         return true;
     }
-    public boolean endCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
-    {
-        if(requestInfo.getCarState()=="chargingDoneByUser")
-        {
+
+    public boolean endCharging(MyTime myTime, HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+        if (requestInfo.getCarState() == "chargingDoneByUser") {
             timer.cancel();
             timer1.cancel();
         }
         requestInfo.setCarState("chargingDone");
         this.dequeue();
-        QueryWrapper queryWrapper=new QueryWrapper();
+        QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("billid", requestInfo.getBillid());
-        Bill bill=billMapper.selectOne(queryWrapper);
-        Detail detail=detailMapper.selectOne(queryWrapper);
+        Bill bill = billMapper.selectOne(queryWrapper);
+        Detail detail = detailMapper.selectOne(queryWrapper);
         bill.setEnddate(myTime.getDate());
         //计算费用
         double chargePrice;
-        if(getChargePrice(bill.getStartdate())>getChargePrice(bill.getEnddate()))
-            chargePrice=getChargePrice(bill.getStartdate());
-        else chargePrice=getChargePrice(bill.getEnddate());
+        if (getChargePrice(bill.getStartdate()) > getChargePrice(bill.getEnddate()))
+            chargePrice = getChargePrice(bill.getStartdate());
+        else chargePrice = getChargePrice(bill.getEnddate());
         double totalTime = (double) (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 60;
         String totalTime_str = String.format("%.1f", totalTime); //以字符串形式保留位数，此处保留1位小数
         double totalTime_1 = Double.parseDouble(totalTime_str);
         detail.setChargingtotaltime(totalTime_1);
         //detail.setChargingtotaltime((double) (bill.getEnddate().getTime() - bill.getStartdate().getTime()));
-        detail.setChargevol((float)slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
-        double serviceFee=basePrice* slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
-        double chargeFee=chargePrice* slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
-        double totalFee = serviceFee+chargeFee;//获取充电度数,再乘以服务费
+        detail.setChargevol((float) slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
+        double serviceFee = basePrice * slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double chargeFee = chargePrice * slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
+        double totalFee = serviceFee + chargeFee;//获取充电度数,再乘以服务费
 
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
-        detail.setServicefee((float)serviceFee);
-        detail.setChargefee((float)chargeFee);
+        detail.setServicefee((float) serviceFee);
+        detail.setChargefee((float) chargeFee);
         billMapper.updateById(bill);
         detail.setEnddate(myTime.getDate());
         detailMapper.updateById(detail);
@@ -215,42 +209,40 @@ public class SlowChargingPile implements ChargingPile {
         session.setAttribute("requestInfo", requestInfo);//更新到session中
         return true;
     }
-    private List<Car> chargingQueue=new LinkedList<>();
+
+    private List<Car> chargingQueue = new LinkedList<>();
+
     @Override
-    public boolean insert(Car car)
-    {
-        if(chargingQueue.size()>maxChargingNum)
+    public boolean insert(Car car) {
+        if (chargingQueue.size() > maxChargingNum)
             return false;
 
         chargingQueue.add(car);
         chargingQueue.get(0).setCarState("readyCharge");
         return true;
     }
-    public Car cancelRequest(HttpSession session,RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper)
-    {
-        for(int i=0;i<chargingQueue.size();++i)
-            if (chargingQueue.get(i).getId() == requestInfo.getId())
-            {
-                if(i==0)
-                {
-                    if(!Objects.equals(chargingQueue.get(i).getCarState(), "charging"))//没有充电
+
+    public Car cancelRequest(HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+        for (int i = 0; i < chargingQueue.size(); ++i)
+            if (chargingQueue.get(i).getId() == requestInfo.getId()) {
+                if (i == 0) {
+                    if (!Objects.equals(chargingQueue.get(i).getCarState(), "charging"))//没有充电
                         return chargingQueue.remove(i);
                     //当前车辆正在充电，无法改变充电模式或者取消请求
                     return null;
-                }
-                else
-                {
-                    Car car=chargingQueue.remove(i);
+                } else {
+                    Car car = chargingQueue.remove(i);
                     return car;
                 }
             }
         return null;
     }
-    public Car getFirstCar(){
+
+    public Car getFirstCar() {
         return chargingQueue.get(0);
     }
-    public void dequeue()
-    {
+
+    public void dequeue() {
         chargingQueue.remove(0);
     }
 }

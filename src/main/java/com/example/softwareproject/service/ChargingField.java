@@ -21,11 +21,16 @@ public class ChargingField {
     private int maxSlowPileNum = 3;
     private int fastPilePower = 30;
     private int slowPilePower = 10;
+
     private ArrayList<FastChargingPile> fastChargingPiles = new ArrayList<>();
+
     private ArrayList<SlowChargingPile> slowChargingPiles = new ArrayList<>();
 
     @Resource
     BillMapper billMapper;
+
+    @Resource
+    DetailMapper detailMapper;
 
     @Autowired
     MyTime myTime;
@@ -60,16 +65,16 @@ public class ChargingField {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
         }
         return map;
     }
@@ -79,16 +84,16 @@ public class ChargingField {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime, detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime, detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime, detailMapper));
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime, detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime, detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime, detailMapper));
         }
         return map;
     }
@@ -96,11 +101,11 @@ public class ChargingField {
     public List<Map<String, Object>> checkChargingPileQueue(int id) {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue(myTime);
+            return chargingPile.checkChargingPileQueue(myTime, detailMapper);
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue(myTime);
+            return chargingPile.checkChargingPileQueue(myTime, detailMapper);
         }
     }
 
@@ -120,10 +125,10 @@ public class ChargingField {
     }
 
     public String changeChargingPileState(int id) {
-        String info = "";
+        String info;
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
-            if (chargingPile.state == "开启") info = "关闭";
+            if (chargingPile.state.equals("开启")) info = "关闭";
             else info = "开启";
             chargingPile.state = info;
             chargingPile.startTime = myTime.getDate();
@@ -131,7 +136,7 @@ public class ChargingField {
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
-            if (chargingPile.state == "开启") info = "关闭";
+            if (chargingPile.state.equals("开启")) info = "关闭";
             else info = "开启";
             chargingPile.state = info;
             slowChargingPiles.set(id, chargingPile);
