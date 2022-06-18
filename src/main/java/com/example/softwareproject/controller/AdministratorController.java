@@ -20,19 +20,20 @@ public class AdministratorController {
     MyTime myTime;
 
     @GetMapping("/manage")
-    public String manage(){
+    public String manage() {
         return "Management";
     }
 
     @GetMapping("/showInfo")
-    public String showChargerInfo(){
+    public String showChargerInfo() {
         return "showChargerInfo";
     }
 
     @GetMapping("/showBillList")
-    public String showBillList(){
+    public String showBillList() {
         return "HistoryBill";
     }
+
     @GetMapping("/startChargeStation")
     @ResponseBody
     public String startChargeStation() {
@@ -50,30 +51,30 @@ public class AdministratorController {
     @GetMapping("/checkChargingPile/service/{id}")
     @ResponseBody
     public Map<String, Object> checkChargingPileService(@PathVariable int id) {
-        return chargingStation.checkChargingPileService(id);
+        return chargingStation.checkChargingPileService(id - 1);
     }
 
     @GetMapping("/checkChargingPile/{id}")
     @ResponseBody
     public Map<String, Object> checkChargingPile(@PathVariable int id) {
-        return chargingStation.checkChargingPile(id);
+        return chargingStation.checkChargingPile(id - 1);
     }
 
     @GetMapping("/checkChargingPileQueue/{id}")
     @ResponseBody
     public List<Map<String, Object>> checkChargingPileQueue(@PathVariable int id) {
-        return chargingStation.checkChargingPileQueue(id);
+        return chargingStation.checkChargingPileQueue(id - 1);
     }
 
     @PostMapping("/createReport")
     @ResponseBody
     public Map<String, Object> createReport(@RequestParam int id, @RequestParam Date startTime, @RequestParam Date endTime) {
-        return chargingStation.createReport(id, startTime, endTime);
+        return chargingStation.createReport(id - 1, startTime, endTime);
     }
 
     @GetMapping("/changeChargePileState/{id}")
     @ResponseBody
     public String changeChargePileState(@PathVariable int id) {
-        return chargingStation.changeChargePileState(id);
+        return chargingStation.changeChargePileState(id - 1);
     }
 }
