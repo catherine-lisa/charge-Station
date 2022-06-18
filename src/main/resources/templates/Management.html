@@ -46,11 +46,11 @@
         </div>
         <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
             <h2>个体管理：</h2>
-            <button class="bot">开启/关闭1号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭2号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭3号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭4号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭5号充电桩</button>
+            <button class="bot" onclick="changeChargePileState(1)">开启/关闭1号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(2)">开启/关闭2号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(3)">开启/关闭3号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(4)">开启/关闭4号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(5)">开启/关闭5号充电桩</button>
         </div>
         <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
             <h2>运行状态：</h2>
@@ -125,6 +125,19 @@
             },
             error: function () {
                 alert("启动失败");
+            }
+        })
+    }
+
+    function changeChargePileState(id) {
+        $.ajax({
+            url: "/administrator/changeChargePileState/" + id,
+            type: "GET",
+            success: function (result) {
+                alert(result);
+            },
+            error: function () {
+                alert("操作失败");
             }
         })
     }

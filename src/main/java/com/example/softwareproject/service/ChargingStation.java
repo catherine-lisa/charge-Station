@@ -27,6 +27,10 @@ public class ChargingStation {
         chargingField.changeChargingPileState("关闭");
     }
 
+    public String changeChargePileState(int id) {
+        return chargingField.changeChargingPileState(id);
+    }
+
     public Map<String, Object> checkChargingPileService(int id) {
         return chargingField.checkChargingPileService(id);
     }
@@ -54,7 +58,7 @@ public class ChargingStation {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(waitingQueue==null)
+                if (waitingQueue == null)
                     return;
                 if (waitingQueue.getFastWaitingQueue().size() > 0) {
                     System.out.println("开始调度fast队列");
