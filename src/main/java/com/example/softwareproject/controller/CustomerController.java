@@ -196,7 +196,6 @@ public class CustomerController {
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         bill.setChargingpileid(chargingPileId);
-        bill.setChargingnum(detail.getChargevol());
         billMapper.insert(bill);
 //        QueryWrapper queryWrapper=new QueryWrapper();
 //        queryWrapper.eq("userid",car.getId());
@@ -393,11 +392,10 @@ public class CustomerController {
     }
     @PostMapping("/requestBillList")
     @ResponseBody
-    public  List<Bill> requestBillList(@ModelAttribute RequestInfo requestInfo)
+    public List<Bill> requestBillList(HttpSession session)
     {
-        //需要配合前端界面
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("userid",session.getAttribute("userid"));
         List<Bill> bills= billMapper.selectList(queryWrapper);
         return bills;
     }
