@@ -89,35 +89,38 @@
             url: "/administrator/checkChargingPile/service/" + id,
             type: "GET",
             success: function (result) {
-                let msg = "<div style=\"margin-left: 10vw;display: flex;justify-content: flex-start;\">\n" +
-                    "                <h2>该电动桩当前用户状态：</h2>\n" +
-                    "            </div>\n" +
-                    "            <div class=\"detailedInfo\">\n" +
-                    "                <div style=\"display: flex;\">\n" +
-                    "                    <!-- 用户ID、车辆电池总容量(度)、请求充电量(度)、 -->\n" +
-                    "                    <div style=\"display: flex;flex-direction:column;\" class=\"lie1\">\n" +
-                    "                        <h3 style=\"margin-left: 20px;\">车辆ID：</h3>\n" +
-                    "                        <h3 style=\"margin-left: 20px;\">请求充电时长：</h3>\n" +
-                    "                        <h3 style=\"margin-left: 20px;\">剩余充电时间：</h3>\n" +
-                    "                    </div>\n" +
-                    "                    <div style=\"display: flex;flex-direction:column;\" class=\"lie2\">\n" +
-                    "                        <h3 style=\"margin-left: 20px;\">" + result['carId'] + "</h3>\n" +
-                    "                        <div style=\"margin-left: 20px;\">\n" +
-                    "                            <div style=\"display: flex;\">\n" +
-                    "                                <h3>" + result['chargingTime'] + "</h3>\n" +
-                    "                                <h3>分钟</h3>\n" +
-                    "                            </div>\n" +
-                    "                        </div>\n" +
-                    "                        <div style=\"margin-left: 20px;\">\n" +
-                    "                            <div style=\"display: flex;\">\n" +
-                    "                                <h3>" + result['remainingChargeTime'] + "</h3>\n" +
-                    "                                <h3>分钟</h3>\n" +
-                    "                            </div>\n" +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "                </div>\n" +
-                    "            </div>"
-                $("#info").html(msg);
+                if(result['carId'] != -1){
+                    alert("111");
+                    let msg = "<div style=\"margin-left: 10vw;display: flex;justify-content: flex-start;\">\n" +
+                        "                <h2>该电动桩当前用户状态：</h2>\n" +
+                        "            </div>\n" +
+                        "            <div class=\"detailedInfo\">\n" +
+                        "                <div style=\"display: flex;\">\n" +
+                        "                    <!-- 用户ID、车辆电池总容量(度)、请求充电量(度)、 -->\n" +
+                        "                    <div style=\"display: flex;flex-direction:column;\" class=\"lie1\">\n" +
+                        "                        <h3 style=\"margin-left: 20px;\">车辆ID：</h3>\n" +
+                        "                        <h3 style=\"margin-left: 20px;\">请求充电时长：</h3>\n" +
+                        "                        <h3 style=\"margin-left: 20px;\">剩余充电时间：</h3>\n" +
+                        "                    </div>\n" +
+                        "                    <div style=\"display: flex;flex-direction:column;\" class=\"lie2\">\n" +
+                        "                        <h3 style=\"margin-left: 20px;\">" + result['carId'] + "</h3>\n" +
+                        "                        <div style=\"margin-left: 20px;\">\n" +
+                        "                            <div style=\"display: flex;\">\n" +
+                        "                                <h3>" + result['chargingTime'] + "</h3>\n" +
+                        "                                <h3>分钟</h3>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                        <div style=\"margin-left: 20px;\">\n" +
+                        "                            <div style=\"display: flex;\">\n" +
+                        "                                <h3>" + result['remainingChargeTime'] + "</h3>\n" +
+                        "                                <h3>分钟</h3>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "            </div>"
+                    $("#info").html(msg);
+                }
             },
             error: function () {
                 alert("获取运行状态失败");
