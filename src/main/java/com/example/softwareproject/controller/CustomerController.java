@@ -218,10 +218,6 @@ public class CustomerController {
         Detail detail = detailMapper.selectOne(queryWrapper);
         int chargingPileId=(int)detail.getChargingpileid();
         String chargingType=requestInfo.getChargingMode();
-
-
-        detail.setEnddate(myTime.getDate());
-        detailMapper.updateById(detail);
         if(requestInfo.getCarState()=="chargingDone")
         {
             Date now=myTime.getDate();
@@ -233,7 +229,7 @@ public class CustomerController {
             detail.setTimeoutfee((float) timeoutFee);
             detail.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
             detailMapper.updateById(detail);
-            bill.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
+            bill.setTotalfee(detail.getTotalfee());
             billMapper.updateById(bill);
             return "success";
         }
@@ -399,6 +395,7 @@ public class CustomerController {
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",session.getAttribute("userid"));
         List<Bill> bills= billMapper.selectList(queryWrapper);
+        System.out.println(bills);
         //更新起始时间，使前端正确显示
         for(int i = 0; i < bills.size(); ++i){
             Bill tmpbill = bills.get(i);
