@@ -252,6 +252,8 @@ public class FastChargingPile implements ChargingPile {
         double serviceFee = basePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee = chargePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double totalFee = serviceFee + chargeFee;//获取充电度数,再乘以服务费
+        //System.out.println(detail.getChargevol());
+        bill.setChargingnum(detail.getChargevol());
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
         detail.setServicefee((float) serviceFee);

@@ -245,7 +245,7 @@ public class SlowChargingPile implements ChargingPile {
         double serviceFee = basePrice * slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee = chargePrice * slowPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double totalFee = serviceFee + chargeFee;//获取充电度数,再乘以服务费
-
+        bill.setChargingnum(detail.getChargevol());
         bill.setTotalfee((float) totalFee);
         detail.setTotalfee((float) totalFee);
         detail.setServicefee((float) serviceFee);
