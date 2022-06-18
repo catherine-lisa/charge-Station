@@ -224,7 +224,7 @@ public class CustomerController {
             Bill bill=billMapper.selectOne(queryWrapper);
             bill.setEnddate(myTime.getDate());
             billMapper.updateById(bill);
-            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60;
+            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60.0;
             double timeoutFee=timeout*1;//设置超时费
             detail.setTimeoutfee((float) timeoutFee);
             detail.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
@@ -395,7 +395,6 @@ public class CustomerController {
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("userid",session.getAttribute("userid"));
         List<Bill> bills= billMapper.selectList(queryWrapper);
-        System.out.println(bills);
         //更新起始时间，使前端正确显示
         for(int i = 0; i < bills.size(); ++i){
             Bill tmpbill = bills.get(i);
