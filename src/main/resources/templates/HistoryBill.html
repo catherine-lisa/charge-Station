@@ -48,21 +48,21 @@
             <button class="bot" style="margin-left: 0px;" onclick="getReport(5)">5号充电桩</button>
         </div>
 
-<!--        <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">-->
-<!--            <h2>选择查看日期：</h2>-->
-<!--            <h3 style="margin-left: 10px;">开始时间:</h3>-->
-<!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
-<!--            <h3>时</h3>-->
-<!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
-<!--            <h3>分</h3>-->
-<!--            <h3 style="margin-left:30px;" >———</h3>-->
-<!--            <h3 style="margin-left:30px;">结束时间:</h3>-->
-<!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
-<!--            <h3>时</h3>-->
-<!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
-<!--            <h3>分</h3>-->
-<!--            <button class="bot">查看</button>-->
-<!--        </div>-->
+        <!--        <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">-->
+        <!--            <h2>选择查看日期：</h2>-->
+        <!--            <h3 style="margin-left: 10px;">开始时间:</h3>-->
+        <!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
+        <!--            <h3>时</h3>-->
+        <!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
+        <!--            <h3>分</h3>-->
+        <!--            <h3 style="margin-left:30px;" >———</h3>-->
+        <!--            <h3 style="margin-left:30px;">结束时间:</h3>-->
+        <!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
+        <!--            <h3>时</h3>-->
+        <!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
+        <!--            <h3>分</h3>-->
+        <!--            <button class="bot">查看</button>-->
+        <!--        </div>-->
         <h3 style="margin-left: 10vw;display: flex;justify-content: flex-start;">历史详单如下：</h3>
 
         <div class="detailedInfo">
@@ -77,12 +77,12 @@
                     <h3 style="margin-left: 20px;">累计总费用：</h3>
                 </div>
                 <div id="info" style="display: flex;flex-direction:column;" class="lie2">
-<!--                    <h3 style="margin-left: 20px;">1</h3>-->
-<!--                    <h3 style="margin-left: 20px;display: flex;">2</h3>-->
-<!--                    <h3 style="margin-left: 20px;display: flex;">3</h3>-->
-<!--                    <h3 style="margin-left: 20px;display: flex;">4</h3>-->
-<!--                    <h3 style="margin-left: 20px;display: flex;">5</h3>-->
-<!--                    <h3 style="margin-left: 20px;display: flex;">6</h3>-->
+                    <!--                    <h3 style="margin-left: 20px;">1</h3>-->
+                    <!--                    <h3 style="margin-left: 20px;display: flex;">2</h3>-->
+                    <!--                    <h3 style="margin-left: 20px;display: flex;">3</h3>-->
+                    <!--                    <h3 style="margin-left: 20px;display: flex;">4</h3>-->
+                    <!--                    <h3 style="margin-left: 20px;display: flex;">5</h3>-->
+                    <!--                    <h3 style="margin-left: 20px;display: flex;">6</h3>-->
                 </div>
             </div>
         </div>
@@ -103,7 +103,8 @@
     window.onload = function () {
         getTime();
     }
-    function getTime(){
+
+    function getTime() {
         $.ajax({
             url: "/customer/getTime",
             type: "GET",
@@ -115,20 +116,21 @@
             }
         })
     }
+
     setInterval("getTime()", 1000); //定时每1秒获取一次时间
-    function getReport(id){
+    function getReport(id) {
         $.ajax({
             url: "/administrator/createReport/",
             type: "POST",
-            data: {"id" : id},
+            data: {"id": id, "startTimeStr": "1970-01-01", "endTimeStr": "1970-01-02"},
             success: function (result) {
                 alert('111');
-                let msg = "<h3 style=\"margin-left: 20px;\">"+ result['totalChargeTimes'] +"次</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">"+ result['totalChargeTime'] +"分钟</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">"+ result['totalChargeVol'] +"度</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">"+ result['chargeFee'] +"元</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">"+ result['serviceFee'] +"元</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">"+ result['totalFee'] +"元</h3>\n";
+                let msg = "<h3 style=\"margin-left: 20px;\">" + result['totalChargeTimes'] + "次</h3>\n" +
+                    "<h3 style=\"margin-left: 20px;\">" + result['totalChargeTime'] + "分钟</h3>\n" +
+                    "<h3 style=\"margin-left: 20px;\">" + result['totalChargeVol'] + "度</h3>\n" +
+                    "<h3 style=\"margin-left: 20px;\">" + result['chargeFee'] + "元</h3>\n" +
+                    "<h3 style=\"margin-left: 20px;\">" + result['serviceFee'] + "元</h3>\n" +
+                    "<h3 style=\"margin-left: 20px;\">" + result['totalFee'] + "元</h3>\n";
                 $("#info").html(msg);
             },
             error: function () {

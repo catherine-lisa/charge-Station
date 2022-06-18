@@ -71,7 +71,8 @@
     window.onload = function () {
         getTime();
     }
-    function getTime(){
+
+    function getTime() {
         $.ajax({
             url: "/customer/getTime",
             type: "GET",
@@ -83,15 +84,16 @@
             }
         })
     }
+
     setInterval("getTime()", 1000); //定时每1秒获取一次时间
     function checkChargingPile(id) {
         $.ajax({
             url: "/administrator/checkChargingPile/service/" + id,
             type: "GET",
             success: function (result) {
-                if(result['carId'] != -1){
-                    alert("111");
-                    let msg = "<div style=\"margin-left: 10vw;display: flex;justify-content: flex-start;\">\n" +
+                let msg = "";
+                if (result['carId'] != -1) {
+                    msg = "<div style=\"margin-left: 10vw;display: flex;justify-content: flex-start;\">\n" +
                         "                <h2>该电动桩当前用户状态：</h2>\n" +
                         "            </div>\n" +
                         "            <div class=\"detailedInfo\">\n" +
@@ -119,8 +121,8 @@
                         "                    </div>\n" +
                         "                </div>\n" +
                         "            </div>"
-                    $("#info").html(msg);
                 }
+                $("#info").html(msg);
             },
             error: function () {
                 alert("获取运行状态失败");

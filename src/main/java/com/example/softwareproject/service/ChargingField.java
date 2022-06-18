@@ -60,11 +60,11 @@ public class ChargingField {
         map.put("carId", car.getId());
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("userid", car.getId());
-        queryWrapper.ge("enddate", myTime.getDate());
-        Bill bill = billMapper.selectOne(queryWrapper);
+        queryWrapper.eq("ispay", false);
+        Detail detail = detailMapper.selectOne(queryWrapper);
         int chargingTime = (int) car.getChargingNum() * 60 / pilePower;
         map.put("chargingTime", chargingTime);
-        map.put("remainingChargeTime", chargingTime - ((myTime.getDate().getTime() - bill.getStartdate().getTime()) / 1000 / 60));
+        map.put("remainingChargeTime", chargingTime - ((myTime.getDate().getTime() - detail.getStartdate().getTime()) / 1000 / 60));
         return map;
     }
 

@@ -3,9 +3,12 @@ package com.example.softwareproject.controller;
 import com.example.softwareproject.service.ChargingStation;
 import com.example.softwareproject.service.MyTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +71,10 @@ public class AdministratorController {
 
     @PostMapping("/createReport")
     @ResponseBody
-    public Map<String, Object> createReport(@RequestParam int id, @RequestParam Date startTime, @RequestParam Date endTime) {
+    public Map<String, Object> createReport(@RequestParam int id, @RequestParam String startTimeStr, @RequestParam String endTimeStr) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startTime = sdf.parse(startTimeStr);
+        Date endTime = sdf.parse(endTimeStr);
         return chargingStation.createReport(id - 1, startTime, endTime);
     }
 
