@@ -18,14 +18,33 @@ public class AdministratorController {
     ChargingStation chargingStation;
     @Autowired
     MyTime myTime;
+
+    @GetMapping("/manage")
+    public String manage(){
+        return "Management";
+    }
+
+    @GetMapping("/showInfo")
+    public String showChargerInfo(){
+        return "showChargerInfo";
+    }
+
+    @GetMapping("/showBillList")
+    public String showBillList(){
+        return "HistoryBill";
+    }
     @GetMapping("/startChargeStation")
-    public void startChargeStation() {
+    @ResponseBody
+    public String startChargeStation() {
         chargingStation.startStation();
+        return "success";
     }
 
     @GetMapping("/stopChargeStation")
-    public void stopChargeStation() {
+    @ResponseBody
+    public String stopChargeStation() {
         chargingStation.stopStation();
+        return "success";
     }
 
     @GetMapping("/checkChargingPile/service/{id}")
@@ -50,5 +69,11 @@ public class AdministratorController {
     @ResponseBody
     public Map<String, Object> createReport(@RequestParam int id, @RequestParam Date startTime, @RequestParam Date endTime) {
         return chargingStation.createReport(id, startTime, endTime);
+    }
+
+    @GetMapping("/changeChargePileState/{id}")
+    @ResponseBody
+    public String changeChargePileState(@PathVariable int id) {
+        return chargingStation.changeChargePileState(id);
     }
 }

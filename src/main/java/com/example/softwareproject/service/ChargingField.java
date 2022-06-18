@@ -21,11 +21,16 @@ public class ChargingField {
     private int maxSlowPileNum = 3;
     private int fastPilePower = 30;
     private int slowPilePower = 10;
+
     private ArrayList<FastChargingPile> fastChargingPiles = new ArrayList<>();
+
     private ArrayList<SlowChargingPile> slowChargingPiles = new ArrayList<>();
 
     @Resource
     BillMapper billMapper;
+
+    @Resource
+    DetailMapper detailMapper;
 
     @Autowired
     MyTime myTime;
@@ -39,6 +44,7 @@ public class ChargingField {
             car = chargingPile.getFirstCar();
             pilePower = fastPilePower;
         } else {
+            id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             car = chargingPile.getFirstCar();
             pilePower = slowPilePower;
@@ -59,33 +65,35 @@ public class ChargingField {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
         } else {
+            id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate()));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate()));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(chargingPile.getStartTime(), myTime.getDate(), detailMapper));
         }
         return map;
     }
 
-    public Map<String,Object> createReport(int id, Date startTime, Date endTime) {
+    public Map<String, Object> createReport(int id, Date startTime, Date endTime) {
         Map<String, Object> map = new HashMap<>();
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime, detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime, detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime, detailMapper));
         } else {
+            id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
             map.put("state", chargingPile.getState());
-            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime));
-            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime));
-            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime));
+            map.put("totalChargeTimes", chargingPile.getTotalChargeTimes(startTime, endTime, detailMapper));
+            map.put("totalChargeTime", chargingPile.getTotalChargeTime(startTime, endTime, detailMapper));
+            map.put("totalChargeVol", chargingPile.getTotalChargeVol(startTime, endTime, detailMapper));
         }
         return map;
     }
@@ -93,10 +101,11 @@ public class ChargingField {
     public List<Map<String, Object>> checkChargingPileQueue(int id) {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue(myTime);
+            return chargingPile.checkChargingPileQueue(myTime, detailMapper);
         } else {
+            id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue(myTime);
+            return chargingPile.checkChargingPileQueue(myTime, detailMapper);
         }
     }
 
@@ -107,12 +116,32 @@ public class ChargingField {
             chargingPile.startTime = myTime.getDate();
             fastChargingPiles.set(i, chargingPile);
         }
-        for (int i = maxFastPileNum; i < maxChargingNum; ++i) {
+        for (int i = 0; i < maxSlowPileNum; ++i) {
             SlowChargingPile chargingPile = slowChargingPiles.get(i);
             chargingPile.state = state;
             chargingPile.startTime = myTime.getDate();
             slowChargingPiles.set(i, chargingPile);
         }
+    }
+
+    public String changeChargingPileState(int id) {
+        String info;
+        if (id < maxFastPileNum) {
+            FastChargingPile chargingPile = fastChargingPiles.get(id);
+            if (chargingPile.state.equals("开启")) info = "关闭";
+            else info = "开启";
+            chargingPile.state = info;
+            chargingPile.startTime = myTime.getDate();
+            fastChargingPiles.set(id, chargingPile);
+        } else {
+            id -= maxFastPileNum;
+            SlowChargingPile chargingPile = slowChargingPiles.get(id);
+            if (chargingPile.state.equals("开启")) info = "关闭";
+            else info = "开启";
+            chargingPile.state = info;
+            slowChargingPiles.set(id, chargingPile);
+        }
+        return info + "成功";
     }
 
     public ChargingField() {
@@ -192,7 +221,7 @@ public class ChargingField {
                     }
                 }
             }
-        }else {
+        } else {
             for (int i = 0; i < slowChargingPiles.size(); ++i) {
                 List<Car> cars = slowChargingPiles.get(i).getChargingQueue();
                 for (int j = 0; j < cars.size(); ++j) {
@@ -205,30 +234,22 @@ public class ChargingField {
         }
         return null;
     }
-    public long getPileIdByInfo(RequestInfo requestInfo){
-        if(Objects.equals(requestInfo.getChargingMode(), "fast"))
-        {
-            for (int i=0;i<fastChargingPiles.size();++i)
-            {
-                for(int j=0;j<fastChargingPiles.get(i).getChargingQueue().size();++j)
-                {
-                    Car car=fastChargingPiles.get(i).getChargingQueue().get(j);
-                    if(car.getId()==requestInfo.getId())
-                    {
+
+    public long getPileIdByInfo(RequestInfo requestInfo) {
+        if (Objects.equals(requestInfo.getChargingMode(), "fast")) {
+            for (int i = 0; i < fastChargingPiles.size(); ++i) {
+                for (int j = 0; j < fastChargingPiles.get(i).getChargingQueue().size(); ++j) {
+                    Car car = fastChargingPiles.get(i).getChargingQueue().get(j);
+                    if (car.getId() == requestInfo.getId()) {
                         return fastChargingPiles.get(i).getId();
                     }
                 }
             }
-        }
-        else
-        {
-            for (int i=0;i<slowChargingPiles.size();++i)
-            {
-                for(int j=0;j<slowChargingPiles.get(i).getChargingQueue().size();++j)
-                {
-                    Car car=slowChargingPiles.get(i).getChargingQueue().get(j);
-                    if(car.getId()==requestInfo.getId())
-                    {
+        } else {
+            for (int i = 0; i < slowChargingPiles.size(); ++i) {
+                for (int j = 0; j < slowChargingPiles.get(i).getChargingQueue().size(); ++j) {
+                    Car car = slowChargingPiles.get(i).getChargingQueue().get(j);
+                    if (car.getId() == requestInfo.getId()) {
                         return slowChargingPiles.get(i).getId();
                     }
                 }

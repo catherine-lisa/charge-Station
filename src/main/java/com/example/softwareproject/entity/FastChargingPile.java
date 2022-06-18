@@ -30,12 +30,10 @@ public class FastChargingPile implements ChargingPile {
     public Date startTime; //充电桩启动时间
 
     private List<Car> chargingQueue = new LinkedList<>();
-    Timer timer ;
-    Timer timer1 ;
-    @Resource
-    DetailMapper detailMapper;
+    Timer timer;
+    Timer timer1;
 
-    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime) {
+    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime, DetailMapper detailMapper) {
         List<Map<String, Object>> list = new ArrayList<>();
         int size = chargingQueue.size();
         for (int i = 1; i < size; ++i) {
@@ -54,13 +52,13 @@ public class FastChargingPile implements ChargingPile {
         return list;
     }
 
-    public int getTotalChargeTimes(Date startTime, Date endTime) {
+    public int getTotalChargeTimes(Date startTime, Date endTime, DetailMapper detailMapper) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
         return detailMapper.selectCount(queryWrapper);
     }
 
-    public double getTotalChargeTime(Date startTime, Date endTime) {
+    public double getTotalChargeTime(Date startTime, Date endTime, DetailMapper detailMapper) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
@@ -72,7 +70,7 @@ public class FastChargingPile implements ChargingPile {
         return totalChargeTime;
     }
 
-    public float getTotalChargeVol(Date startTime, Date endTime) {
+    public float getTotalChargeVol(Date startTime, Date endTime, DetailMapper detailMapper) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
@@ -84,12 +82,12 @@ public class FastChargingPile implements ChargingPile {
         return totalChargeVol;
     }
 
-    public boolean startCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean startCharging(MyTime myTime, HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
         Car car = chargingQueue.get(0);
         if (car.getId() != requestInfo.getId())
             return false;
-        timer=new Timer();
-        timer1=new Timer();
+        timer = new Timer();
+        timer1 = new Timer();
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("billid", requestInfo.getBillid());
@@ -101,26 +99,25 @@ public class FastChargingPile implements ChargingPile {
             @Override
             public void run() {
                 System.out.println(car.getId() + "充电完成");
-                if(chargingQueue.size()==0)
+                if (chargingQueue.size() == 0)
                     return;
                 //判断用户是否提前结束充电
                 if (car.getId() == chargingQueue.get(0).getId()) {
                     timer1.cancel();
-                    endCharging(myTime,session, requestInfo, detailMapper, billMapper);
+                    endCharging(myTime, session, requestInfo, detailMapper, billMapper);
                 }//结束充电
             }
         };
         TimerTask timerTask1 = new TimerTask() {
             @Override
             public void run() {
-                if(chargingQueue.size()==0)
-                {
+                if (chargingQueue.size() == 0) {
                     timer1.cancel();
                     return;
                 }
                 Car nowCar = chargingQueue.get(0);
                 if (car.getId() == nowCar.getId()) {
-                chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + ((float)fastPilePower) / 360);
+                    chargingQueue.get(0).setNowCapacity(chargingQueue.get(0).getNowCapacity() + ((float) fastPilePower) / 360);
 //                    System.out.println(chargingQueue.get(0));
                 } else//当前车辆变化
                     timer1.cancel();
@@ -181,10 +178,9 @@ public class FastChargingPile implements ChargingPile {
         return 1.0;
     }
 
-    public boolean endCharging(MyTime myTime,HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
+    public boolean endCharging(MyTime myTime, HttpSession session, RequestInfo requestInfo, DetailMapper detailMapper, BillMapper billMapper) {
 
-        if(requestInfo.getCarState()=="chargingDoneByUser")
-        {
+        if (requestInfo.getCarState() == "chargingDoneByUser") {
             timer.cancel();
             timer1.cancel();
         }
@@ -204,7 +200,7 @@ public class FastChargingPile implements ChargingPile {
         String totalTime_str = String.format("%.1f", totalTime); //以字符串形式保留位数，此处保留1位小数
         double totalTime_1 = Double.parseDouble(totalTime_str);
         detail.setChargingtotaltime(totalTime_1);
-        detail.setChargevol((float)fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
+        detail.setChargevol((float) fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600);
         double serviceFee = basePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double chargeFee = chargePrice * fastPilePower * (bill.getEnddate().getTime() - bill.getStartdate().getTime()) / 1000 / 3600;
         double totalFee = serviceFee + chargeFee;//获取充电度数,再乘以服务费
@@ -233,7 +229,7 @@ public class FastChargingPile implements ChargingPile {
         for (int i = 0; i < chargingQueue.size(); ++i)
             if (chargingQueue.get(i).getId() == requestInfo.getId()) {
                 if (i == 0) {
-                    if(!Objects.equals(chargingQueue.get(i).getCarState(), "charging"))
+                    if (!Objects.equals(chargingQueue.get(i).getCarState(), "charging"))
                         return chargingQueue.remove(i);
                     return null;
                 } else {

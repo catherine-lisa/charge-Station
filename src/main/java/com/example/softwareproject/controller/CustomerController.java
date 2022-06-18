@@ -49,7 +49,7 @@ public class CustomerController {
     {
         System.out.println(username);
         long id=username.hashCode();
-        if(customerMapper.selectById(id)!=null)
+        if(customerMapper.selectById(id)!=null || username.equals("admin"))
             return "userexist";
         Customer newCustomer=new Customer();
         newCustomer.setId(id);
@@ -69,6 +69,11 @@ public class CustomerController {
     @ResponseBody
     public  String logIn( @RequestParam String username, @RequestParam String password,
                          HttpSession session) {
+        if(username.equals("admin") && password.equals("admin")){
+            session.setAttribute("login_state", "yes");
+            session.setAttribute("admin","admin");
+            return "admin";
+        }
         int id = username.hashCode();
         Customer targetCustomer =customerMapper.selectById(id);
         if (targetCustomer == null) {

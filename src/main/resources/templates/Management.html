@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/Management.css}">
     <link rel="stylesheet" type="text/css" href="../static/css/Management.css">
     <title>开关管理系统</title>
     <!-- Bootstrap -->
@@ -15,21 +16,21 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <form action="/goodslist" method="get">
+                <form action="/administrator/manage" method="get">
                     <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">开关管理</button>
                 </form>
             </ul>
             <ul class="nav navbar-nav">
-                <form action="/release" method="get">
+                <form action="/administrator/showInfo" method="get">
                     <button type="submit" class="btn btn-info" style="margin-top: 8px">充电桩详情</button>
                 </form>
             </ul>
             <ul class="nav navbar-nav">
-                <form action="/release" method="get">
+                <form action="/administrator/showBillList" method="get">
                     <button type="submit" class="btn btn-info" style="margin-left: 15px; margin-top: 8px;">历史详单</button>
                 </form>
             </ul>
-            <ul id="time" class="nav navbar-nav" style="margin-left: 38%;margin-top: 10px">
+            <ul id="time" class="nav navbar-nav" style="margin-left: 46%;margin-top: 10px;position: absolute">
                 <!--                <div style="font-size: x-large;color: white">Thu Jan 01 06:03:10 HKT 1970</div>-->
             </ul>
         </div>
@@ -45,11 +46,11 @@
         </div>
         <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
             <h2>个体管理：</h2>
-            <button class="bot">开启/关闭1号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭2号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭3号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭4号充电桩</button>
-            <button class="bot" style="margin-left: 0px;">开启/关闭5号充电桩</button>
+            <button class="bot" onclick="changeChargePileState(1)">开启/关闭1号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(2)">开启/关闭2号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(3)">开启/关闭3号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(4)">开启/关闭4号充电桩</button>
+            <button class="bot" style="margin-left: 0px;" onclick="changeChargePileState(5)">开启/关闭5号充电桩</button>
         </div>
         <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
             <h2>运行状态：</h2>
@@ -124,6 +125,19 @@
             },
             error: function () {
                 alert("启动失败");
+            }
+        })
+    }
+
+    function changeChargePileState(id) {
+        $.ajax({
+            url: "/administrator/changeChargePileState/" + id,
+            type: "GET",
+            success: function (result) {
+                alert(result);
+            },
+            error: function () {
+                alert("操作失败");
             }
         })
     }

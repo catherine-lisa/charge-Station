@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/DetailedBill.css}">
     <link rel="stylesheet" type="text/css" href="../static/css/DetailedBill.css">
     <title>查看详单</title>
     <!-- Bootstrap -->
@@ -15,23 +16,21 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <form action="/goodslist" method="get">
-                    <button type="submit" class="btn btn-info"
-                            style="margin-top: 8px;margin-right: 15px">开关管理</button>
+                <form action="/administrator/manage" method="get">
+                    <button type="submit" class="btn btn-info" style="margin-top: 8px;margin-right: 15px">开关管理</button>
                 </form>
             </ul>
             <ul class="nav navbar-nav">
-                <form action="/release" method="get">
+                <form action="/administrator/showInfo" method="get">
                     <button type="submit" class="btn btn-info" style="margin-top: 8px">充电桩详情</button>
                 </form>
             </ul>
             <ul class="nav navbar-nav">
-                <form action="/release" method="get">
-                    <button type="submit" class="btn btn-info"
-                            style="margin-left: 15px; margin-top: 8px;">历史详单</button>
+                <form action="/administrator/showBillList" method="get">
+                    <button type="submit" class="btn btn-info" style="margin-left: 15px; margin-top: 8px;">历史详单</button>
                 </form>
             </ul>
-            <ul id="time" class="nav navbar-nav" style="margin-left: 38%;margin-top: 10px">
+            <ul id="time" class="nav navbar-nav" style="margin-left: 46%;margin-top: 10px;position: absolute">
                 <!--                <div style="font-size: x-large;color: white">Thu Jan 01 06:03:10 HKT 1970</div>-->
             </ul>
         </div>

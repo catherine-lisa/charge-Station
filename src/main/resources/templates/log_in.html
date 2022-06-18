@@ -47,6 +47,8 @@
                     window.location.href = "/customer/requestRecharge";
                 } else if (result == "usernotexist") {
                     alert("用户还未注册！");
+                } else if (result == "admin") {
+                    window.location.href = "/administrator/manage";
                 } else if (result == "logInFailed") {
                     alert("登录失败！");
                 }
