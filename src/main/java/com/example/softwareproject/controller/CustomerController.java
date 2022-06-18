@@ -219,17 +219,15 @@ public class CustomerController {
         Detail detail = detailMapper.selectOne(queryWrapper);
         int chargingPileId=(int)detail.getChargingpileid();
         String chargingType=requestInfo.getChargingMode();
-
-
-        detail.setEnddate(myTime.getDate());
-        detailMapper.updateById(detail);
+//        detail.setEnddate(myTime.getDate());
+//        detailMapper.updateById(detail);
         if(requestInfo.getCarState()=="chargingDone")
         {
             Date now=myTime.getDate();
             Bill bill=billMapper.selectOne(queryWrapper);
             bill.setEnddate(myTime.getDate());
             billMapper.updateById(bill);
-            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60;
+            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60.0;
             double timeoutFee=timeout*1;//设置超时费
             detail.setTimeoutfee((float) timeoutFee);
             detail.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
