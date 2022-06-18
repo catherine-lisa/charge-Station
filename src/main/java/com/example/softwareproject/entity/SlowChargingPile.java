@@ -40,7 +40,7 @@ public class SlowChargingPile implements ChargingPile {
             map.put("chargingNum", car.getChargingNum());
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("userid", car.getId());
-            queryWrapper.eq("startdate", null);
+            queryWrapper.isNull("startdate");
             Detail detail = detailMapper.selectOne(queryWrapper);
             map.put("queueTime", (myTime.getDate().getTime() - detail.getStartrequesttime().getTime()) / 1000 / 60 + "分钟");
             list.add(map);

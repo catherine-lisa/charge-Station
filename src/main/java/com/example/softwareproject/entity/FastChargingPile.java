@@ -44,7 +44,7 @@ public class FastChargingPile implements ChargingPile {
             map.put("chargingNum", car.getChargingNum());
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("userid", car.getId());
-            queryWrapper.eq("startdate", null);
+            queryWrapper.isNull("startdate");
             Detail detail = detailMapper.selectOne(queryWrapper);//用户重复充电会出问题
             map.put("queueTime", (myTime.getDate().getTime() - detail.getStartrequesttime().getTime()) / 1000 / 60);
             list.add(map);
