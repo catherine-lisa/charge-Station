@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 
 <head>
     <meta charset="UTF-8">
@@ -19,9 +19,9 @@
                 <form action="/customer/requestRecharge" method="get">
                     <button type="submit" class="btn btn-info" style="margin-top: 8px">请求充电</button>
                 </form>
-                <ul id="time" class="nav navbar-nav" style="margin-left: 46%;margin-top: 10px;position: absolute">
-                    <!--                <div style="font-size: x-large;color: white">Thu Jan 01 06:03:10 HKT 1970</div>-->
-                </ul>
+            </ul>
+            <ul id="time" class="nav navbar-nav" style="margin-left: 46%;margin-top: 10px">
+                <!--                <div style="font-size: x-large;color: white">Thu Jan 01 06:03:10 HKT 1970</div>-->
             </ul>
         </div>
     </div>
@@ -29,79 +29,77 @@
 
 <div class="box" id="bigbox">
     <div>
-
-        <h1>历史账单查看</h1>
-        <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
-            <h2>选择查看日期：</h2>
-            <h3 style="margin-left: 10px;">开始时间:</h3>
-            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">
-            <h3>时</h3>
-            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">
-            <h3>分</h3>
-            <h3 style="margin-left:30px;">———</h3>
-            <h3 style="margin-left:30px;">结束时间:</h3>
-            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">
-            <h3>时</h3>
-            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">
-            <h3>分</h3>
-            <button class="bot">查看</button>
-        </div>
-
+<!--        <h1>历史账单查看</h1>-->
+<!--        <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">-->
+<!--            <h2>选择查看日期：</h2>-->
+<!--            <h3 style="margin-left: 10px;">开始时间:</h3>-->
+<!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
+<!--            <h3>时</h3>-->
+<!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
+<!--            <h3>分</h3>-->
+<!--            <h3 style="margin-left:30px;">———</h3>-->
+<!--            <h3 style="margin-left:30px;">结束时间:</h3>-->
+<!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
+<!--            <h3>时</h3>-->
+<!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
+<!--            <h3>分</h3>-->
+<!--            <button class="bot">查看</button>-->
+<!--        </div>-->
         <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
             <h2>历史详单如下：</h2>
         </div>
         <div class="detailedInfo">
-            <div style="display: flex;">
-                <!-- 用户ID、车辆电池总容量(度)、请求充电量(度)、 -->
-                <div style="display: flex;flex-direction:column;" class="lie1">
-                    <h2 style="margin-left: 20px;">历史充电次数：</h2>
-                </div>
-                <div style="display: flex;flex-direction:column;" class="lie2">
-                    <div style="margin-left: 20px;">
-                        <div style="display: flex;">
-                            <h2>2</h2>
-                            <h2>次</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div style="display: flex;">-->
+<!--                &lt;!&ndash; 用户ID、车辆电池总容量(度)、请求充电量(度)、 &ndash;&gt;-->
+<!--                <div style="display: flex;flex-direction:column;" class="lie1">-->
+<!--                    <h2 style="margin-left: 20px;">历史充电次数：</h2>-->
+<!--                </div>-->
+<!--                <div style="display: flex;flex-direction:column;" class="lie2">-->
+<!--                    <div style="margin-left: 20px;">-->
+<!--                        <div style="display: flex;">-->
+<!--                            <h2>2</h2>-->
+<!--                            <h2>次</h2>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <div id="billList">
-                <div style="display: flex;">
-                    <div style="display: flex;flex-direction:column;" class="lie1">
-                        <h3 style="margin-left: 20px;font-weight: bold">账单id：</h3>
-                        <h3 style="margin-left: 20px;">充电站id：</h3>
-                        <h3 style="margin-left: 20px;">开始充电时间：</h3>
-                        <h3 style="margin-left: 20px;">结束充电时间：</h3>
-                        <h3 style="margin-left: 20px;">充电度数：</h3>
-                        <h3 style="margin-left: 20px;">充电费用：</h3>
-                    </div>
-                    <div style="display: flex;flex-direction:column;" class="lie2">
-                        <h3 style="margin-left: 20px;">XXX</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                    </div>
-                </div>
-                <div style="display: flex;">
-                    <div style="display: flex;flex-direction:column;" class="lie1">
-                        <h3 style="margin-left: 20px;font-weight: bold">账单id：</h3>
-                        <h3 style="margin-left: 20px;">充电站id：</h3>
-                        <h3 style="margin-left: 20px;">开始充电时间：</h3>
-                        <h3 style="margin-left: 20px;">结束充电时间：</h3>
-                        <h3 style="margin-left: 20px;">充电度数：</h3>
-                        <h3 style="margin-left: 20px;">充电费用：</h3>
-                    </div>
-                    <div style="display: flex;flex-direction:column;" class="lie2">
-                        <h3 style="margin-left: 20px;">XXX</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                        <h3 style="margin-left: 20px;display: flex;">X时</h3>
-                    </div>
-                </div>
+<!--                <div style="display: flex;">-->
+<!--                    <div style="display: flex;flex-direction:column;" class="lie1">-->
+<!--                        <h3 style="margin-left: 20px;font-weight: bold">账单id：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">充电站id：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">开始充电时间：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">结束充电时间：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">充电度数：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">充电费用：</h3>-->
+<!--                    </div>-->
+<!--                    <div style="display: flex;flex-direction:column;" class="lie2">-->
+<!--                        <h3 style="margin-left: 20px;">XXX</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div style="display: flex;">-->
+<!--                    <div style="display: flex;flex-direction:column;" class="lie1">-->
+<!--                        <h3 style="margin-left: 20px;font-weight: bold">账单id：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">充电站id：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">开始充电时间：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">结束充电时间：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">充电度数：</h3>-->
+<!--                        <h3 style="margin-left: 20px;">充电费用：</h3>-->
+<!--                    </div>-->
+<!--                    <div style="display: flex;flex-direction:column;" class="lie2">-->
+<!--                        <h3 style="margin-left: 20px;">XXX</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                        <h3 style="margin-left: 20px;display: flex;">X时</h3>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -119,6 +117,7 @@
 <script>
     window.onload = function () {
         getTime();
+        getBillList();
     }
     function getTime(){
         $.ajax({
@@ -135,7 +134,7 @@
     setInterval("getTime()", 1000); //定时每1秒获取一次时间
     function getBillList() {
         $.ajax({
-            url: "/comment",
+            url: "/customer/requestBillList",
             type: "POST",
             data: {},
             success: function (result) {
@@ -156,8 +155,8 @@
                         "                   <h3 style=\"margin-left: 20px;display: flex;\">"+ bill['chargingpileid'] +"</h3>\n" +
                         "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['startdate'] + "</h3>\n" +
                         "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['enddate'] + "</h3>\n" +
-                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['chargingNum'] + "</h3>\n" +
-                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['totalfee'] + "</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['chargingnum'].toFixed(1) + "度</h3>\n" +
+                        "                    <h3 style=\"margin-left: 20px;display: flex;\">" + bill['totalfee'] + "元</h3>\n" +
                         "                </div>\n" +
                         "            </div>";
                 }

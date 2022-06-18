@@ -48,21 +48,24 @@
             <button class="bot" style="margin-left: 0px;" onclick="getReport(5)">5号充电桩</button>
         </div>
 
-        <!--        <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">-->
-        <!--            <h2>选择查看日期：</h2>-->
-        <!--            <h3 style="margin-left: 10px;">开始时间:</h3>-->
-        <!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
-        <!--            <h3>时</h3>-->
-        <!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
-        <!--            <h3>分</h3>-->
-        <!--            <h3 style="margin-left:30px;" >———</h3>-->
-        <!--            <h3 style="margin-left:30px;">结束时间:</h3>-->
-        <!--            <input type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 50px;">-->
-        <!--            <h3>时</h3>-->
-        <!--            <input type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 50px;">-->
-        <!--            <h3>分</h3>-->
-        <!--            <button class="bot">查看</button>-->
-        <!--        </div>-->
+                <div style="margin-left: 10vw;display: flex;justify-content: flex-start;">
+                    <h2>选择查看日期：</h2>
+                    <h3 style="margin-left: 10px;">开始时间:</h3>
+                    <input name="startYear" type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 40px;">
+                    <h3>年</h3>
+                    <input name="startMonth" type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 20px;">
+                    <h3>月</h3>
+                    <input name="startDay" type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 20px;">
+                    <h3>日</h3>
+                    <h3 style="margin-left:30px;" >——</h3>
+                    <h3 style="margin-left:30px;">结束时间:</h3>
+                    <input name="endYear" type="text" style="margin-left: 14px;height: 30px; margin-top:20px; width: 40px;">
+                    <h3>年</h3>
+                    <input name="endMonth" type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 20px;">
+                    <h3>月</h3>
+                    <input name="endDay" type="text" style="margin-left: 4px;height: 30px; margin-top:20px; width: 20px;">
+                    <h3>日</h3>
+                </div>
         <h3 style="margin-left: 10vw;display: flex;justify-content: flex-start;">历史详单如下：</h3>
 
         <div class="detailedInfo">
@@ -119,24 +122,39 @@
 
     setInterval("getTime()", 1000); //定时每1秒获取一次时间
     function getReport(id) {
-        $.ajax({
-            url: "/administrator/createReport/",
-            type: "POST",
-            data: {"id": id, "startTimeStr": "1970-01-01", "endTimeStr": "1970-01-02"},
-            success: function (result) {
-                alert('111');
-                let msg = "<h3 style=\"margin-left: 20px;\">" + result['totalChargeTimes'] + "次</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">" + result['totalChargeTime'] + "分钟</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">" + result['totalChargeVol'] + "度</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">" + result['chargeFee'] + "元</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">" + result['serviceFee'] + "元</h3>\n" +
-                    "<h3 style=\"margin-left: 20px;\">" + result['totalFee'] + "元</h3>\n";
-                $("#info").html(msg);
-            },
-            error: function () {
-                alert("获取运行状态失败");
-            }
-        })
+        let startYear = document.getElementsByName("startYear")[0].value;
+        let startMonth = document.getElementsByName("startMonth")[0].value;
+        let startDay = document.getElementsByName("startDay")[0].value;
+        let endYear = document.getElementsByName("endYear")[0].value;
+        let endMonth = document.getElementsByName("endMonth")[0].value;
+        let endDay = document.getElementsByName("endDay")[0].value;
+
+        if(startYear != "" && startMonth != "" && startDay != "" && endYear != "" && endMonth != "" && endDay != "" &&
+            startYear <= endYear && startMonth <= endMonth && startDay < endDay){
+            let startTime = "", endTime = "";
+            startTime += startYear + "-" + startMonth + "-" + startDay;
+            endTime += endYear + "-" + endMonth + "-" + endDay;
+            $.ajax({
+                url: "/administrator/createReport/",
+                type: "POST",
+                data: {"id": id, "startTimeStr": startTime, "endTimeStr": endTime},
+                success: function (result) {
+                    let msg = "<h3 style=\"margin-left: 20px;\">" + result['totalChargeTimes'] + "次</h3>\n" +
+                        "<h3 style=\"margin-left: 20px;\">" + result['totalChargeTime'] + "分钟</h3>\n" +
+                        "<h3 style=\"margin-left: 20px;\">" + result['totalChargeVol'].toFixed(1) + "度</h3>\n" +
+                        "<h3 style=\"margin-left: 20px;\">" + result['chargeFee'].toFixed(1) + "元</h3>\n" +
+                        "<h3 style=\"margin-left: 20px;\">" + result['serviceFee'].toFixed(1) + "元</h3>\n" +
+                        "<h3 style=\"margin-left: 20px;\">" + result['totalFee'].toFixed(1) + "元</h3>\n";
+                    $("#info").html(msg);
+                },
+                error: function () {
+                    alert("获取运行状态失败");
+                }
+            })
+        }
+        else {
+            alert("时间不符合格式！")
+        }
     }
 </script>
 </html>

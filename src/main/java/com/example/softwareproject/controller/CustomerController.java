@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -196,7 +198,6 @@ public class CustomerController {
         bill.setStartdate(myTime.getDate());
         bill.setUserid(car.getId());
         bill.setChargingpileid(chargingPileId);
-        bill.setChargingnum(detail.getChargevol());
         billMapper.insert(bill);
 //        QueryWrapper queryWrapper=new QueryWrapper();
 //        queryWrapper.eq("userid",car.getId());
@@ -217,22 +218,18 @@ public class CustomerController {
         Detail detail = detailMapper.selectOne(queryWrapper);
         int chargingPileId=(int)detail.getChargingpileid();
         String chargingType=requestInfo.getChargingMode();
-
-
-        detail.setEnddate(myTime.getDate());
-        detailMapper.updateById(detail);
         if(requestInfo.getCarState()=="chargingDone")
         {
             Date now=myTime.getDate();
             Bill bill=billMapper.selectOne(queryWrapper);
             bill.setEnddate(myTime.getDate());
             billMapper.updateById(bill);
-            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60;
+            double timeout=(now.getTime()-detail.getEnddate().getTime())/1000/60.0;
             double timeoutFee=timeout*1;//设置超时费
             detail.setTimeoutfee((float) timeoutFee);
             detail.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
             detailMapper.updateById(detail);
-            bill.setTotalfee((float) (detail.getTotalfee()+timeoutFee));
+            bill.setTotalfee(detail.getTotalfee());
             billMapper.updateById(bill);
             return "success";
         }
@@ -393,12 +390,27 @@ public class CustomerController {
     }
     @PostMapping("/requestBillList")
     @ResponseBody
-    public  List<Bill> requestBillList(@ModelAttribute RequestInfo requestInfo)
+    public List<Bill> requestBillList(HttpSession session)
     {
-        //需要配合前端界面
         QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("userid",requestInfo.getId());
+        queryWrapper.eq("userid",session.getAttribute("userid"));
         List<Bill> bills= billMapper.selectList(queryWrapper);
+        //更新起始时间，使前端正确显示
+        for(int i = 0; i < bills.size(); ++i){
+            Bill tmpbill = bills.get(i);
+            Date startDate = tmpbill.getStartdate();
+            Date endDate = tmpbill.getEnddate();
+            Calendar c = Calendar.getInstance();
+            c.setTime(startDate);
+            c.add(Calendar.HOUR, 8);
+            startDate =  c.getTime();
+            c.setTime(endDate);
+            c.add(Calendar.HOUR, 8);
+            endDate =  c.getTime();
+            tmpbill.setStartdate(startDate);
+            tmpbill.setEnddate(endDate);
+            bills.set(i, tmpbill);
+        }
         return bills;
     }
 }
