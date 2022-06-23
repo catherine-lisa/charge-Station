@@ -41,6 +41,7 @@ public class CustomerController {
 
     @Autowired
     MyTime myTime;
+
     @GetMapping("/register")
     public String register(){
         return "register";
@@ -76,6 +77,7 @@ public class CustomerController {
             session.setAttribute("admin","admin");
             return "admin";
         }
+
         int id = username.hashCode();
         Customer targetCustomer =customerMapper.selectById(id);
         if (targetCustomer == null) {
@@ -126,6 +128,7 @@ public class CustomerController {
         detailMapper.insert(detail);
         System.out.println(detail);
         requestInfo.setBillid(detail.getBillid());
+        requestInfo.setRequestDate(detail.getStartrequesttime());
         model.addAttribute(requestInfo);
         session.setAttribute("requestInfo",requestInfo);
         return chargingStation.requestRecharge(requestInfo);
@@ -145,12 +148,12 @@ public class CustomerController {
     {
 
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
-
+//        RequestInfo requestInfo=(RequestInfo) model.getAttribute("requestInfo");
         if(Objects.equals(requestInfo.getCarState(), "chargingDone"))//充电完成
         {
             return requestInfo;
         }
-//        System.out.println(requestInfo);
+        System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car!=null)//还在等候区
         {

@@ -175,6 +175,7 @@ public class ChargingField {
             chargingPile.setMaxChargingNum(maxSlowPileNum);
             slowChargingPiles.add(chargingPile);
         }
+
     }
 
     public RequestInfo findTargetCarState(RequestInfo requestInfo) {

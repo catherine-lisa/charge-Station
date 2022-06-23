@@ -102,6 +102,7 @@ public class WaitingQueue {
             car.setNowCapacity(0);
             car.setCarCapacity(150);
             car.setCarState("waitingQueue");
+            requestInfo.setCarState("waitingQueue");
             System.out.println(car);
             if(requestInfo.getChargingMode().equals("fast"))
                 fastWaitingQueue.add(car);
@@ -110,18 +111,30 @@ public class WaitingQueue {
         else return "joinFailed";
         return "success";
     }
-    public Car updateWaitingQueue(String mode)
+    public void updateWaitingQueue(String mode)
     {
         if(mode.equals("fast")) {
             if(fastWaitingQueue.size()>0)
-                return fastWaitingQueue.remove(0);
+                fastWaitingQueue.remove(0);
+
+        }
+        else{
+            if(slowWaitingQueue.size()>0)
+                slowWaitingQueue.remove(0);
+
+        }
+    }
+    public Car getWaitingQueue(String mode)
+    {
+        if(mode.equals("fast")) {
+            if(fastWaitingQueue.size()>0)
+                return fastWaitingQueue.get(0);
             else return null;
         }
         else{
             if(slowWaitingQueue.size()>0)
-                return slowWaitingQueue.remove(0);
+                return slowWaitingQueue.get(0);
             else return null;
         }
     }
-
 }

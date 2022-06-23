@@ -31,8 +31,8 @@ public class FastChargingPile implements ChargingPile {
     public Date startTime; //充电桩启动时间
 
     private List<Car> chargingQueue = new LinkedList<>();
-    Timer timer;
-    Timer timer1;
+    public Timer timer;
+    public Timer timer1;
 
     public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime, DetailMapper detailMapper, CustomerMapper customerMapper) {
         List<Map<String, Object>> list = new ArrayList<>();
