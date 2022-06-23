@@ -24,7 +24,7 @@ public class MyTime {
     }
 
     public MyTime(){
-        String strTime = "06:00";
+        String strTime = "05:30";
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         try {
             date=sdf.parse(strTime);

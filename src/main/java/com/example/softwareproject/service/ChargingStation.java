@@ -85,7 +85,7 @@ public class ChargingStation {
                     List<FastChargingPile> fastChargingPiles = chargingField.getFastChargingPiles();
                     for (int i = 0; i < fastChargingPiles.size(); ++i) {
                         FastChargingPile fastChargingPile = fastChargingPiles.get(i);
-                        if (Objects.equals(fastChargingPile.getState(), "故障") && fastChargingPile.getChargingQueue().size() > 0) {
+                        if (Objects.equals(fastChargingPile.getState(), "关闭") && fastChargingPile.getChargingQueue().size() > 0) {
                             fastChargingPile.getTimer().cancel();
                             fastChargingPile.getTimer().cancel();
                             fastChargingPile.getChargingQueue().get(0).setCarState("waitingQueue");
@@ -102,7 +102,7 @@ public class ChargingStation {
                     List<SlowChargingPile> slowChargingPiles = chargingField.getSlowChargingPiles();
                     for (int i = 0; i < slowChargingPiles.size(); ++i) {
                         SlowChargingPile slowChargingPile = slowChargingPiles.get(i);
-                        if (slowChargingPile.getState() == "故障" && slowChargingPile.getChargingQueue().size() > 0) {
+                        if (slowChargingPile.getState() == "关闭" && slowChargingPile.getChargingQueue().size() > 0) {
                             slowChargingPile.getTimer().cancel();
                             slowChargingPile.getTimer().cancel();
                             slowChargingPile.getChargingQueue().get(0).setCarState("waitingQueue");
