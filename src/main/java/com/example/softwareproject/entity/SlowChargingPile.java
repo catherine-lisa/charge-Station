@@ -2,6 +2,7 @@ package com.example.softwareproject.entity;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.softwareproject.mapper.BillMapper;
+import com.example.softwareproject.mapper.CustomerMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import com.example.softwareproject.myinterface.ChargingPile;
 import com.example.softwareproject.service.MyTime;
@@ -29,16 +30,19 @@ public class SlowChargingPile implements ChargingPile {
     Timer timer1 = new Timer();
     Timer timer = new Timer();
 
-    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime, DetailMapper detailMapper) {
+    public List<Map<String, Object>> checkChargingPileQueue(MyTime myTime, DetailMapper detailMapper, CustomerMapper customerMapper) {
         List<Map<String, Object>> list = new ArrayList<>();
         int size = chargingQueue.size();
         for (int i = 1; i < size; ++i) {
             Map<String, Object> map = new HashMap<>();
             Car car = chargingQueue.get(i);
-            map.put("carId", car.getId());
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("id", car.getId());
+            Customer customer = customerMapper.selectOne(queryWrapper);
+            map.put("carId", customer.getUsername());
             map.put("carCapacity", car.getCarCapacity());
             map.put("chargingNum", car.getChargingNum());
-            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.clear();
             queryWrapper.eq("userid", car.getId());
             queryWrapper.isNull("startdate");
             Detail detail = detailMapper.selectOne(queryWrapper);

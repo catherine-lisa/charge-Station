@@ -4,6 +4,7 @@ package com.example.softwareproject.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.softwareproject.entity.*;
 import com.example.softwareproject.mapper.BillMapper;
+import com.example.softwareproject.mapper.CustomerMapper;
 import com.example.softwareproject.mapper.DetailMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ChargingField {
 
     @Resource
     DetailMapper detailMapper;
+
+    @Resource
+    CustomerMapper customerMapper;
 
     @Autowired
     MyTime myTime;
@@ -115,11 +119,11 @@ public class ChargingField {
     public List<Map<String, Object>> checkChargingPileQueue(int id) {
         if (id < maxFastPileNum) {
             FastChargingPile chargingPile = fastChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue(myTime, detailMapper);
+            return chargingPile.checkChargingPileQueue(myTime, detailMapper, customerMapper);
         } else {
             id -= maxFastPileNum;
             SlowChargingPile chargingPile = slowChargingPiles.get(id);
-            return chargingPile.checkChargingPileQueue(myTime, detailMapper);
+            return chargingPile.checkChargingPileQueue(myTime, detailMapper, customerMapper);
         }
     }
 
