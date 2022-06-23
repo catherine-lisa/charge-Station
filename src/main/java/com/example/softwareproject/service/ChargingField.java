@@ -61,8 +61,11 @@ public class ChargingField {
             car = chargingPile.getFirstCar();
             pilePower = slowPilePower;
         }
-        map.put("carId", car.getId());
         QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("id", car.getId());
+        Customer customer = customerMapper.selectOne(queryWrapper);
+        map.put("carId", customer.getUsername());
+        queryWrapper.clear();
         queryWrapper.eq("userid", car.getId());
         queryWrapper.eq("ispay", false);
         Detail detail = detailMapper.selectOne(queryWrapper);
