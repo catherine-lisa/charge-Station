@@ -28,25 +28,25 @@
     </div> -->
 </div>
 <div class="box2">
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 订单编号 ：</div>
             <div th:text="${detail.billid}"></div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 订单生成时间：</div>
             <div th:text="${detail.startrequesttime}"></div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 充电桩编号：</div>
             <div th:text="${detail.chargingpileid}"></div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 充电电量：</div>
             <div th:text="${#numbers.formatDecimal(detail.chargevol,1,'COMMA',1,'POINT')}"></div>
@@ -54,47 +54,47 @@
         </div>
     </div>
 
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 启动时间：</div>
             <div th:text="${detail.startdate}"></div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 停止时间：</div>
             <div th:text="${detail.enddate}"></div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 充电时长：</div>
             <div th:text="${detail.chargingtotaltime}"></div>
             <div> 分钟</div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 充电费用：</div>
             <div th:text="${#numbers.formatDecimal(detail.chargefee,1,'COMMA',1,'POINT')}"></div>
             <div> 元</div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw;margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 服务费用：</div>
             <div th:text="${#numbers.formatDecimal(detail.servicefee,1,'COMMA',1,'POINT')}"></div>
             <div> 元</div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 超时费用：</div>
             <div th:text="${#numbers.formatDecimal(detail.timeoutfee,1,'COMMA',1,'POINT')}"></div>
             <div> 元</div>
         </div>
     </div>
-    <div style="width: 20vw; margin-left: 10vw; margin-top: 10px;">
+    <div style="width: 25vw; margin-left: 7vw; margin-top: 10px;">
         <div style="display: flex; justify-content:space-between;">
             <div> 总费用：</div>
             <div th:text="${#numbers.formatDecimal(detail.totalfee,1,'COMMA',1,'POINT')}"></div>
