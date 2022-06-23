@@ -1,10 +1,12 @@
 package com.example.softwareproject.entity;
 
 import lombok.Data;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 @Data
+@Service
 public class RequestInfo {
     public long id;
     public long billid;

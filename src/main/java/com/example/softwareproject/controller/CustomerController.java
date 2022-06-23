@@ -11,6 +11,7 @@ import com.example.softwareproject.service.MyTime;
 import com.example.softwareproject.service.WaitingQueue;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,6 @@ public class CustomerController {
     ChargingField chargingField;
     @Autowired
     ChargingStation chargingStation;
-
     @Autowired
     MyTime myTime;
 
@@ -146,14 +146,13 @@ public class CustomerController {
     @ResponseBody
     public RequestInfo checkCarState(HttpSession session)
     {
-
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
 //        RequestInfo requestInfo=(RequestInfo) model.getAttribute("requestInfo");
         if(Objects.equals(requestInfo.getCarState(), "chargingDone"))//充电完成
         {
             return requestInfo;
         }
-        System.out.println(requestInfo);
+//        System.out.println(requestInfo);
         Car car = chargingStation.getWaitingQueue().getCarByInfo(requestInfo);
         if(car!=null)//还在等候区
         {
