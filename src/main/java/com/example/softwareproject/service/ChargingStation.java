@@ -138,7 +138,7 @@ public class ChargingStation {
         TimerTask timerTask2=new TimerTask() {
             @Override
             public void run() {
-                if(chargingField!=null)
+                if(chargingField!=null&&waitingQueue!=null)
                 {
                     System.out.println("充电站情况");
                     System.out.println();
@@ -164,6 +164,23 @@ public class ChargingStation {
                         info += "total:" + slowChargingPile.getChargingQueue().size();
                         System.out.println(info);
                     }
+
+                        String info = new String();
+
+                    info +="快充等待队列:";
+                    for(int j=0;j<waitingQueue.fastWaitingQueue.size();++j)
+                    {
+                        Car car=waitingQueue.fastWaitingQueue.get(j);
+                        info += "id:"+car.getId() + " |";
+                    }
+                    System.out.println(info);
+                    info="";
+                        info +="慢充等待队列:";
+                        for(int j=0;j<waitingQueue.slowWaitingQueue.size();++j)
+                        {
+                            Car car=waitingQueue.slowWaitingQueue.get(j);
+                            info += "id:"+car.getId() + " |";
+                        }
                 }
             }
         };
