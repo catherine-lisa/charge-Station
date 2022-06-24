@@ -199,17 +199,20 @@ public class CustomerController {
             slowChargingPile.startCharging(myTime,session,requestInfo,detailMapper,billMapper);
         }
         car.setCarState("charging");
-        Bill bill=new Bill();
-        bill.setBillid(detail.getBillid());
-        bill.setStartdate(myTime.getDate());
-        bill.setUserid(car.getId());
-        bill.setChargingpileid(chargingPileId);
-        billMapper.insert(bill);
+        if(detail.getStartdate()==null) {
+            Bill bill = new Bill();
+            bill.setBillid(detail.getBillid());
+            bill.setStartdate(myTime.getDate());
+            bill.setUserid(car.getId());
+            bill.setChargingpileid(chargingPileId);
+            billMapper.insert(bill);
+            detail.setStartdate(myTime.getDate());
+            detailMapper.updateById(detail);
+        }
 //        QueryWrapper queryWrapper=new QueryWrapper();
 //        queryWrapper.eq("userid",car.getId());
 //        Detail detail = detailMapper.selectOne(queryWrapper);
-        detail.setStartdate(myTime.getDate());
-        detailMapper.updateById(detail);
+
         return "success";
     }
     //主动结束充电
