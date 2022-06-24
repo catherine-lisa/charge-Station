@@ -91,13 +91,14 @@ public class ChargingStation {
                             fastChargingPile.getChargingQueue().get(0).setCarState("waitingQueue");
                             List<Car> tmpCars = waitingQueue.fastWaitingQueue;
                             waitingQueue.fastWaitingQueue.clear();
-                            for (int j = 0; j < fastChargingPile.getChargingQueue().size(); ++j) {
+                            System.out.println(tmpCars);
+                            int max=fastChargingPile.getChargingQueue().size();
+                            for (int j = 0; j < max; ++j) {
                                 waitingQueue.fastWaitingQueue.add(fastChargingPile.getChargingQueue().remove(0));
                             }
                             waitingQueue.fastWaitingQueue.addAll(tmpCars);
-                            System.out.println(i+"号快充发生故障，正在重新调度");
+                            System.out.println(i+"号快充发生故障，正在重新调度"+waitingQueue.fastWaitingQueue);
                         }
-
                     }
                     List<SlowChargingPile> slowChargingPiles = chargingField.getSlowChargingPiles();
                     for (int i = 0; i < slowChargingPiles.size(); ++i) {
@@ -108,7 +109,8 @@ public class ChargingStation {
                             slowChargingPile.getChargingQueue().get(0).setCarState("waitingQueue");
                             List<Car> tmpCars = waitingQueue.slowWaitingQueue;
                             waitingQueue.slowWaitingQueue.clear();
-                            for (int j = 0; j < slowChargingPile.getChargingQueue().size(); ++j) {
+                            int max=slowChargingPile.getChargingQueue().size();
+                            for (int j = 0; j < max; ++j) {
                                 waitingQueue.slowWaitingQueue.add(slowChargingPile.getChargingQueue().remove(0));
                             }
                             waitingQueue.slowWaitingQueue.addAll(tmpCars);

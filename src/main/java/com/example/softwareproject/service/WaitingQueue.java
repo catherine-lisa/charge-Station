@@ -6,10 +6,7 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 
 @Data
@@ -20,7 +17,7 @@ public class WaitingQueue {
     List<Car> slowWaitingQueue=new LinkedList<>();
 
     public boolean isAvailabe(String mode){
-        if(mode=="fast") {
+        if(Objects.equals(mode, "fast")) {
             if (fastWaitingQueue.size() < maxWaitingNum) {
                 return true;
             } else return false;
