@@ -19,12 +19,18 @@ public class WaitingQueue {
     List<Car> fastWaitingQueue=new LinkedList<>();
     List<Car> slowWaitingQueue=new LinkedList<>();
 
-    public boolean isAvailabe(){
-        if(slowWaitingQueue.size()+fastWaitingQueue.size()<maxWaitingNum)
-        {
-            return true;
+    public boolean isAvailabe(String mode){
+        if(mode=="fast") {
+            if (fastWaitingQueue.size() < maxWaitingNum) {
+                return true;
+            } else return false;
         }
-        else return false;
+        else
+        {
+            if (slowWaitingQueue.size() < maxWaitingNum) {
+                return true;
+            } else return false;
+        }
     }
     public Car getCarByInfo(RequestInfo requestInfo)
     {
@@ -90,7 +96,7 @@ public class WaitingQueue {
     }
     public String fastJoin(RequestInfo requestInfo)
     {
-        if(isAvailabe())
+        if(isAvailabe(requestInfo.getChargingMode()))
         {
             Car car=new Car();
             car.setId(requestInfo.getId());
