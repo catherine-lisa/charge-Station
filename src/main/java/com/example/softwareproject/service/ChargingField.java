@@ -213,7 +213,7 @@ public class ChargingField {
                         requestInfo.setQueue_num(i + 1 + "号慢充电桩第" + j + "位");
                         requestInfo.setLocation("充电区");
                         requestInfo.setNowCapacity(cars.get(j).getNowCapacity());
-                        System.out.println(requestInfo);
+//                        System.out.println(requestInfo);
                         return requestInfo;
                     }
                 }

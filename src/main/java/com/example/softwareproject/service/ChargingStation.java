@@ -181,6 +181,7 @@ public class ChargingStation {
                             Car car=waitingQueue.slowWaitingQueue.get(j);
                             info += "id:"+car.getId() + " |";
                         }
+                    System.out.println(info);
                 }
             }
         };
@@ -190,7 +191,7 @@ public class ChargingStation {
     public String updateWaitingQueue(String chargingMode) {
 
         Car car = waitingQueue.getWaitingQueue(chargingMode);//从等待区队列中对应的充电类型移除第一辆车
-        System.out.println(car);
+//        System.out.println(car);
         //获取对应充电类型的所有等待桩队列信息
         //对应匹配充电模式下（快充/慢充），被调度车辆完成充电所需时长（等待时间+自己充电时间）最短。（等待时间=选定充电桩队列中所有车辆完成充电时间之和；自己充电时间=请求充电量/充电桩功率）
         //获取对应充电类型的所有等待桩队列信息，以判断插入哪一桩

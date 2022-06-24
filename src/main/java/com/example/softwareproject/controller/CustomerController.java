@@ -79,6 +79,7 @@ public class CustomerController {
         }
 
         int id = username.hashCode();
+        long userid=Long.valueOf(username);
         Customer targetCustomer =customerMapper.selectById(id);
         if (targetCustomer == null) {
             return "usernotexist";
@@ -86,7 +87,7 @@ public class CustomerController {
         if (targetCustomer.getPassword().equals(password)) {
             session.setAttribute("login_state", "yes");
             session.setAttribute("username", username);
-            session.setAttribute("userid",targetCustomer.getId());
+            session.setAttribute("userid",userid);
             return "success";
         }
         return "log_in_failed";
