@@ -296,5 +296,7 @@ public class SlowChargingPile implements ChargingPile {
 
     public void dequeue() {
         chargingQueue.remove(0);
+        if (chargingQueue.size() > 0)
+            chargingQueue.get(0).setCarState("readyCharge");
     }
 }
