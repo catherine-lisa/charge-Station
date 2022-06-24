@@ -133,6 +133,41 @@ public class ChargingStation {
         };
 
         timer1.schedule(timerTask1,0,1000);
+
+        Timer timer2=new Timer();
+        TimerTask timerTask2=new TimerTask() {
+            @Override
+            public void run() {
+                if(chargingField!=null)
+                {
+                    System.out.println("充电站情况");
+                    System.out.println();
+                    for (int i = 0; i < 2; ++i) {
+                        FastChargingPile fastChargingPile = chargingField.getFastChargingPileById(i);
+                        String info = new String();
+                        info += "第" + (i+1) + "快充桩:";
+                        for (int j = 0; j < fastChargingPile.getChargingQueue().size(); ++j) {
+                            Car car = fastChargingPile.getChargingQueue().get(j);
+                            info += "id"+car.getId() + " |";
+                        }
+                        info += "total:" + fastChargingPile.getChargingQueue().size();
+                        System.out.println(info);
+                    }
+                    for (int i = 0; i < 3; ++i) {
+                        SlowChargingPile slowChargingPile = chargingField.getSlowChargingPileById(i);
+                        String info = new String();
+                        info += "第" + (i+1) + "慢充桩:";
+                        for (int j = 0; j < slowChargingPile.getChargingQueue().size(); ++j) {
+                            Car car = slowChargingPile.getChargingQueue().get(j);
+                            info += "id:"+car.getId() + " |";
+                        }
+                        info += "total:" + slowChargingPile.getChargingQueue().size();
+                        System.out.println(info);
+                    }
+                }
+            }
+        };
+        timer2.schedule(timerTask2,0,3000);
     }
 
     public String updateWaitingQueue(String chargingMode) {

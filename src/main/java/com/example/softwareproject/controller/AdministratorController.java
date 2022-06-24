@@ -68,7 +68,6 @@ public class AdministratorController {
     public List<Map<String, Object>> checkChargingPileQueue(@PathVariable int id) {
         return chargingStation.checkChargingPileQueue(id - 1);
     }
-
     @PostMapping("/createReport")
     @ResponseBody
     public Map<String, Object> createReport(@RequestParam int id, @RequestParam String startTimeStr, @RequestParam String endTimeStr) throws ParseException {
