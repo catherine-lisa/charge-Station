@@ -148,6 +148,9 @@ public class CustomerController {
     {
         RequestInfo requestInfo=(RequestInfo) session.getAttribute("requestInfo");
 //        RequestInfo requestInfo=(RequestInfo) model.getAttribute("requestInfo");
+        if(requestInfo == null) {
+            return null;
+        }
         if(Objects.equals(requestInfo.getCarState(), "chargingDone"))//充电完成
         {
             return requestInfo;
