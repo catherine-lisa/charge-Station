@@ -61,15 +61,20 @@ public class ChargingField {
             car = chargingPile.getFirstCar();
             pilePower = slowPilePower;
         }
+        System.out.println("\n");
+        System.out.println(id);
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("id", car.getId());
+        System.out.println(car.getId());
         List<Customer> customerList = customerMapper.selectList(queryWrapper);
+        System.out.println(customerList);
         Customer customer = customerList.get(0);
         map.put("carId", customer.getUsername());
         queryWrapper.clear();
         queryWrapper.eq("userid", car.getId());
         queryWrapper.eq("ispay", false);
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        System.out.println(detailList);
         Detail detail = detailList.get(0);
         int chargingTime = (int) car.getChargingNum() * 60 / pilePower;
         map.put("chargingTime", chargingTime);
