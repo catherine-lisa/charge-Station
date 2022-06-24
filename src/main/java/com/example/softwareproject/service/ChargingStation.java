@@ -89,7 +89,7 @@ public class ChargingStation {
                             fastChargingPile.getTimer().cancel();
                             fastChargingPile.getTimer().cancel();
                             fastChargingPile.getChargingQueue().get(0).setCarState("waitingQueue");
-                            List<Car> tmpCars = waitingQueue.fastWaitingQueue;
+                            List<Car> tmpCars = waitingQueue.getFastWaitingQueue();
                             waitingQueue.fastWaitingQueue.clear();
                             System.out.println(tmpCars);
                             int max=fastChargingPile.getChargingQueue().size();
@@ -107,7 +107,7 @@ public class ChargingStation {
                             slowChargingPile.getTimer().cancel();
                             slowChargingPile.getTimer().cancel();
                             slowChargingPile.getChargingQueue().get(0).setCarState("waitingQueue");
-                            List<Car> tmpCars = waitingQueue.slowWaitingQueue;
+                            List<Car> tmpCars = waitingQueue.getSlowWaitingQueue();
                             waitingQueue.slowWaitingQueue.clear();
                             int max=slowChargingPile.getChargingQueue().size();
                             for (int j = 0; j < max; ++j) {
