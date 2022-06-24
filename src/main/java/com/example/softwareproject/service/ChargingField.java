@@ -160,6 +160,7 @@ public class ChargingField {
             if (chargingPile.state.equals("开启")) info = "关闭";
             else info = "开启";
             chargingPile.state = info;
+            chargingPile.startTime = myTime.getDate();
             slowChargingPiles.set(id, chargingPile);
         }
         return info + "成功";
