@@ -63,12 +63,14 @@ public class ChargingField {
         }
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("id", car.getId());
-        Customer customer = customerMapper.selectOne(queryWrapper);
+        List<Customer> customerList = customerMapper.selectList(queryWrapper);
+        Customer customer = customerList.get(0);
         map.put("carId", customer.getUsername());
         queryWrapper.clear();
         queryWrapper.eq("userid", car.getId());
         queryWrapper.eq("ispay", false);
-        Detail detail = detailMapper.selectOne(queryWrapper);
+        List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        Detail detail = detailList.get(0);
         int chargingTime = (int) car.getChargingNum() * 60 / pilePower;
         map.put("chargingTime", chargingTime);
         map.put("remainingChargeTime", chargingTime - ((myTime.getDate().getTime() - detail.getStartdate().getTime()) / 1000 / 60));
