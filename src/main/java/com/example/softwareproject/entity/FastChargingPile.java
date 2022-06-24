@@ -26,7 +26,7 @@ public class FastChargingPile implements ChargingPile {
     private int fastPilePower = 30;
     private double basePrice = 0.8;//服务费
 
-    public String state = "开启"; //充电桩状态
+    public String state = "关闭"; //充电桩状态
 
     public Date startTime; //充电桩启动时间
 
@@ -67,9 +67,11 @@ public class FastChargingPile implements ChargingPile {
     public double getTotalChargeTime(Date startTime, Date endTime, DetailMapper detailMapper, int id) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.between("enddate", startTime, endTime);
+        System.out.println(startTime+" "+endTime);
         queryWrapper.eq("chargingpileid", id);
         queryWrapper.eq("chargingtype", "fast");
         List<Detail> detailList = detailMapper.selectList(queryWrapper);
+        System.out.println(detailList);
         double totalChargeTime = 0;
         int size = detailList.size();
         for (int i = 0; i < size; ++i) {

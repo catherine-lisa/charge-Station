@@ -24,7 +24,7 @@ public class SlowChargingPile implements ChargingPile {
     private int slowPilePower = 10;
     private double basePrice = 0.8;//服务费
 
-    public String state = "开启"; //充电桩状态
+    public String state = "关闭"; //充电桩状态
 
     public Date startTime; //充电桩启动时间
     Timer timer1 = new Timer();
